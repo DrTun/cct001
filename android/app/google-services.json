@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "691588793720",
+    "project_id": "clean-code-template",
+    "storage_bucket": "clean-code-template.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:691588793720:android:833973b7fc03d442bfb48d",
+        "android_client_info": {
+          "package_name": "com.nirvasoft.cct001"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyC-PD6DY1QpdzaL75TPCAbwwAs3m1GM2cA"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:691588793720:android:273662e26cca1741bfb48d",
+        "android_client_info": {
+          "package_name": "com.nirvasoft.cct003"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyC-PD6DY1QpdzaL75TPCAbwwAs3m1GM2cA"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

@@ -5,7 +5,7 @@ import 'src/myapp.dart';
 import 'src/mynotifier.dart';
 import 'src/settings/settings_controller.dart';
 import 'src/settings/settings_service.dart';
-//  -------------------------------------    Main (Property of Nirvasoft.com)
+//  -------------------------------------    Main (Property of Nirvasoft.com) Rebased
 void main() async { 
   // Native Splash
   WidgetsBinding widgetsBinding = WidgetsFlutterBinding.ensureInitialized(); 

@@ -20,6 +20,11 @@ void main() async {
   await settingsController.loadSettings();
 
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform,);
+  logger.e("Firebase Initialized");
+  //final fcmToken = await FirebaseMessaging.instance.getToken();
+  //logger.e("FCMToken $fcmToken");
+
+
   FirebaseMessaging messaging = FirebaseMessaging.instance; 
 
   NotificationSettings settings = await messaging.requestPermission(

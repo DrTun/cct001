@@ -1,3 +1,4 @@
+import 'package:cct001/src/signindemo.dart';
 import 'package:flutter/material.dart';   
 import 'api/api_auth.dart';
 import 'helpers/env.dart';
@@ -54,6 +55,7 @@ class _SigninState extends State<SigninPage> {
             ),
           const SizedBox(height: 30,),
           TextButton( onPressed: _performGuest,child: const Text('Join as Guest User', style: TextStyle(decoration: TextDecoration.underline)),), 
+          TextButton( onPressed: _performSocial,child: const Text('Social', style: TextStyle(decoration: TextDecoration.underline)),), 
           TextButton( onPressed: _performSkip,child: const Text('Skip', style: TextStyle(decoration: TextDecoration.underline)),), 
         ],
       ), 
@@ -99,6 +101,9 @@ class _SigninState extends State<SigninPage> {
       if (GlobalData.log>=1) logger.e("Connectivity #50xx (Guest): $e\n$stacktrace");
       MyHelpers.msg("Connectivity [50xx]"); 
     } 
+  }
+  Future<void> _performSocial() async {
+    await signInWithGoogle();
   }
   Future<void> _performSkip() async {
     if (GlobalData.log>=3) logger.i('Skip login');

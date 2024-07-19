@@ -30,8 +30,7 @@ https://firebase.google.com/docs/flutter/setup?platform=ios
 
 TBC:
 1. SQFLite
-2. Firebase
-3. Log File
+2. Log File
 4. Native Code
 5. Authentication / ID Federation
 

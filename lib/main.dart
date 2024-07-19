@@ -18,10 +18,9 @@ void main() async {
   //​ Preloading 
   final settingsController = SettingsController(SettingsService()); 
   await settingsController.loadSettings();
-  
-  await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform,);
 
-  FirebaseMessaging messaging = FirebaseMessaging.instance;
+  await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform,);
+  FirebaseMessaging messaging = FirebaseMessaging.instance; 
 
   NotificationSettings settings = await messaging.requestPermission(
     alert: true,

@@ -33,7 +33,8 @@ TBC:
 2. Log File
 4. Native Code
 5. Authentication / ID Federation
+ 
 
 Platform  Firebase App Id
 android   1:691588793720:android:833973b7fc03d442bfb48d
-ios       1:691588793720:ios:0b93e6399a75a01fbfb48d
+ios       1:691588793720:ios:2ad564d21264ed02bfb48d

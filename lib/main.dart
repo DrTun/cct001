@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:cct001/src/helpers/env.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'firebase_options.dart';
@@ -20,13 +22,10 @@ void main() async {
   await settingsController.loadSettings();
 
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform,);
-  logger.e("Firebase Initialized");
-  //final fcmToken = await FirebaseMessaging.instance.getToken();
-  //logger.e("FCMToken $fcmToken");
-
+  final fcmToken = await FirebaseMessaging.instance.getToken();
+  logger.e("FCM Token $fcmToken");
 
   FirebaseMessaging messaging = FirebaseMessaging.instance; 
-
   NotificationSettings settings = await messaging.requestPermission(
     alert: true,
     announcement: false,
@@ -37,6 +36,7 @@ void main() async {
     sound: true,
   );
   logger.e('User granted permission: ${settings.authorizationStatus}'); 
+  
   FirebaseMessaging.onMessage.listen((RemoteMessage message) {
     logger.e('Got a message whilst in the foreground!');
     logger.e('Message data: ${message.data}');

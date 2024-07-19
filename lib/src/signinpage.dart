@@ -102,8 +102,7 @@ class _SigninState extends State<SigninPage> {
       MyHelpers.msg("Connectivity [50xx]"); 
     } 
   }
-  Future<void> _performSocial() async {
-    await signInWithGoogle();
+  Future<void> _performSocial() async { 
   }
   Future<void> _performSkip() async {
     if (GlobalData.log>=3) logger.i('Skip login');

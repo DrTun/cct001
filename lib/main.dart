@@ -17,9 +17,7 @@ void main() async {
   final settingsController = SettingsController(SettingsService()); 
   await settingsController.loadSettings();
   
-  await Firebase.initializeApp(
-  options: DefaultFirebaseOptions.currentPlatform,
-  );
+  await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform,);
 
   // Run App
   runApp(

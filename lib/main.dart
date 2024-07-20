@@ -20,7 +20,7 @@ void main() async {
   //​ Preloading 
     AppConfig.create(
     appName: "CCT 001",
-    appDesc: "Clean Code Template 001",
+    appDesc: "Production CCT1",
     appID: "com.nirvasoft.cct001.dev",
     primaryColor: Colors.yellow,
     flavor: Flavor.prod,

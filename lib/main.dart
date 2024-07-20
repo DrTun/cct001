@@ -1,4 +1,5 @@
 import 'package:cct001/src/helpers/env.dart';
+import 'package:cct001/src/helpers/helpers.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'firebase_options.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
@@ -37,6 +38,7 @@ logger.e('User granted permission: ${settings.authorizationStatus}');
     logger.e('Got a message whilst in the foreground!');
     logger.e('Message data: ${message.data}');
     if (message.notification != null) {
+      MyHelpers.msg("Foreground $message.notification.body");
       logger.e('Message also contained a notification: ${message.notification}');
     }
   });
@@ -57,7 +59,8 @@ logger.e('User granted permission: ${settings.authorizationStatus}');
 
   //Get token # for testing. 
   final fcmToken = await FirebaseMessaging.instance.getToken();
-  logger.e("FCMToken $fcmToken");
+  MyHelpers.msg("FCM Token  $fcmToken");
+  logger.e("FCM Token $fcmToken");
 
 
 
@@ -65,6 +68,6 @@ logger.e('User granted permission: ${settings.authorizationStatus}');
 Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
   // If you're going to use other Firebase services in the background, such as Firestore,
   // make sure you call `initializeApp` before using other Firebase services.
-  await Firebase.initializeApp();
+  await Firebase.initializeApp(); 
   logger.e("Handling a background message: ${message.messageId}");
 }

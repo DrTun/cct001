@@ -18,6 +18,31 @@ void main() async {
   //​ Preloading 
   final settingsController = SettingsController(SettingsService()); 
   await settingsController.loadSettings();
+
+  await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform, );
+  await FirebaseMessaging.instance.setAutoInitEnabled(true);
+  FirebaseMessaging messaging = FirebaseMessaging.instance;
+  NotificationSettings settings = await messaging.requestPermission(
+  alert: true,
+  announcement: false,
+  badge: true,
+  carPlay: false,
+  criticalAlert: false,
+  provisional: false,
+  sound: true,
+);
+
+logger.e('User granted permission: ${settings.authorizationStatus}');
+  FirebaseMessaging.onMessage.listen((RemoteMessage message) {
+    logger.e('Got a message whilst in the foreground!');
+    logger.e('Message data: ${message.data}');
+    if (message.notification != null) {
+      logger.e('Message also contained a notification: ${message.notification}');
+    }
+  });
+
+  FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
+
   // Run App
   runApp(
       MultiProvider(
@@ -27,16 +52,19 @@ void main() async {
       child:  MyApp(settingsController: settingsController))
   );
 
-  await Firebase.initializeApp(
-    options: DefaultFirebaseOptions.currentPlatform,
-  );
-  final fcmToken = await FirebaseMessaging.instance.getToken();
-  await FirebaseMessaging.instance.setAutoInitEnabled(true);
-  logger.e("FCMToken $fcmToken");
-
 
   FlutterNativeSplash.remove(); // Native Splash
 
+  //Get token # for testing. 
+  final fcmToken = await FirebaseMessaging.instance.getToken();
+  logger.e("FCMToken $fcmToken");
+
+
 
 }
-
+Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
+  // If you're going to use other Firebase services in the background, such as Firestore,
+  // make sure you call `initializeApp` before using other Firebase services.
+  await Firebase.initializeApp();
+  logger.e("Handling a background message: ${message.messageId}");
+}

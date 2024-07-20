@@ -25,8 +25,9 @@ final args = ModalRoute.of(context)!.settings.arguments as ClassName
 Do not use restorable push 
 
 5) Firebase
-https://firebase.google.com/docs/flutter/setup?platform=ios
 https://firebase.flutter.dev/docs/messaging/overview/
+https://firebase.flutter.dev/docs/messaging/apple-integration/
+https://firebase.google.com/docs/flutter/setup?platform=ios 
 
 TBC:
 1. SQFLite
@@ -38,3 +39,8 @@ TBC:
 Platform  Firebase App Id
 android   1:691588793720:android:833973b7fc03d442bfb48d
 ios       1:691588793720:ios:2ad564d21264ed02bfb48d
+
+Name:FirebaseAPN
+Key ID:6A9HF2BG9U
+Services:Apple Push Notifications service (APNs)
+Team ID: C88K3MQESJ

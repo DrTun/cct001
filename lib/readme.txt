@@ -29,12 +29,16 @@ https://firebase.flutter.dev/docs/messaging/overview/
 https://firebase.flutter.dev/docs/messaging/apple-integration/
 https://firebase.google.com/docs/flutter/setup?platform=ios 
 
-TBC:
-1. SQFLite
-2. Log File
-4. Native Code
-5. Authentication / ID Federation
- 
+6) Flavor
+https://dwirandyh.medium.com/create-build-flavor-in-flutter-application-ios-android-fb35a81a9fac
+
+flutter run -t lib/main.dart --flavor prod
+flutter run -t lib/main_dev.dart --flavor dev
+flutter run --profile -t lib/main.dart --flavor prod
+flutter run --profile -t lib/main_dev.dart --flavor dev
+flutter run --release -t lib/main.dart --flavor prod
+flutter run --release -t lib/main_dev.dart --flavor dev
+
 
 Platform  Firebase App Id
 android   1:691588793720:android:833973b7fc03d442bfb48d

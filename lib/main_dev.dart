@@ -1,4 +1,3 @@
-import 'package:cct001/appconfig.dart';
 import 'package:cct001/src/helpers/env.dart';
 import 'package:cct001/src/helpers/helpers.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -18,14 +17,6 @@ void main() async {
   WidgetsBinding widgetsBinding = WidgetsFlutterBinding.ensureInitialized(); 
   FlutterNativeSplash.preserve(widgetsBinding: widgetsBinding); 
   //​ Preloading 
-    AppConfig.create(
-    appName: "CCT 001",
-    appDesc: "Clean Code Template 001",
-    appID: "com.nirvasoft.cct001.dev",
-    primaryColor: Colors.yellow,
-    flavor: Flavor.prod,
-  );
-  
   final settingsController = SettingsController(SettingsService()); 
   await settingsController.loadSettings();
 

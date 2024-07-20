@@ -1,4 +1,5 @@
 
+import 'package:cct001/appconfig.dart';
 import 'package:flutter/material.dart';  
 import 'package:confirm_dialog/confirm_dialog.dart';
 import 'package:provider/provider.dart'; 
@@ -28,7 +29,7 @@ class _RootPageState extends State<RootPage> with WidgetsBindingObserver {
     provider = Provider.of<MyNotifier>(context,listen: false);
     WidgetsBinding.instance.addObserver(this);
     WidgetsBinding.instance.addPostFrameCallback((_){ 
-      provider.updateData01("CCT 1", "Clean Code Template 1");  // Provider update
+      provider.updateData01(AppConfig.shared.appName, AppConfig.shared.appDesc);  // Provider update
     }); 
   }
   @override

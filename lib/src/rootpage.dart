@@ -70,7 +70,7 @@ class _RootPageState extends State<RootPage> with WidgetsBindingObserver {
             child: ListView(
               padding: EdgeInsets.zero,
               children: [
-                const DrawerHeader(decoration: BoxDecoration(color: Colors.orange,),child: Text('Menu', style: TextStyle(color: Colors.white,fontSize: 24,),),),
+                DrawerHeader(decoration: BoxDecoration(color: AppConfig.shared.primaryColor,),child: const Text('Menu', style: TextStyle(color: Colors.white,fontSize: 24,),),),
                 ListTile( title:  const Text('Home',), onTap: () async {MyHelpers.msg("You are home");},    ),
                 ListTile( title:  Text('${GlobalAccess.mode=="Guest"?"Sign In":"Sign Out"} ',),  onTap: () async { _gotoSignIn(context); },),
               ],

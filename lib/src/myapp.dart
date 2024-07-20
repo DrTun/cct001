@@ -1,4 +1,5 @@
 
+import 'package:cct001/appconfig.dart';
 import 'package:cct001/src/views/view_data_details.dart';
 import 'package:cct001/src/views/view_data_list.dart';
 import 'package:flutter/material.dart';
@@ -36,9 +37,9 @@ class MyApp extends StatelessWidget {
               AppLocalizations.of(context)!.appTitle, 
           debugShowCheckedModeBanner: false,
           theme: ThemeData(
-                    appBarTheme: const AppBarTheme( color: Colors.orange, centerTitle: true, titleTextStyle: TextStyle(color: Colors.white, fontSize: 20, fontWeight: FontWeight.bold)),
-                    floatingActionButtonTheme: const FloatingActionButtonThemeData(backgroundColor: Colors.orange ),
-                    tabBarTheme: const TabBarTheme(labelColor: Colors.deepOrangeAccent,unselectedLabelColor: Colors.grey,indicator: BoxDecoration( border: Border( top: BorderSide( color: Colors.deepOrangeAccent, width: 2.0, ),),),),
+                    appBarTheme:  AppBarTheme( color: AppConfig.shared.primaryColor, centerTitle: true, titleTextStyle: const TextStyle(color: Colors.white, fontSize: 20, fontWeight: FontWeight.bold)),
+                    floatingActionButtonTheme:  FloatingActionButtonThemeData(backgroundColor: AppConfig.shared.primaryColor),
+                    tabBarTheme:  TabBarTheme(labelColor: AppConfig.shared.primaryColor,unselectedLabelColor: Colors.grey,indicator:  BoxDecoration( border: Border( top: BorderSide( color: AppConfig.shared.primaryColor, width: 2.0, ),),),),
           ), 
           darkTheme: ThemeData.dark(),
           themeMode: settingsController.themeMode, 

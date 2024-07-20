@@ -1,0 +1,82 @@
+{
+  "project_info": {
+    "project_number": "691588793720",
+    "project_id": "clean-code-template",
+    "storage_bucket": "clean-code-template.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:691588793720:android:833973b7fc03d442bfb48d",
+        "android_client_info": {
+          "package_name": "com.nirvasoft.cct001"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "691588793720-q0vp59iaeb72vi8ek5ua8enea4tls777.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyC-PD6DY1QpdzaL75TPCAbwwAs3m1GM2cA"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "691588793720-88816l44p4hbq6mtjfvvn6mivrmndo11.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "691588793720-70hu0co34u0dl2kfi5krn87mciuuctsr.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.nirvasoft.cct001"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:691588793720:android:273662e26cca1741bfb48d",
+        "android_client_info": {
+          "package_name": "com.nirvasoft.cct003"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "691588793720-q0vp59iaeb72vi8ek5ua8enea4tls777.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyC-PD6DY1QpdzaL75TPCAbwwAs3m1GM2cA"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "691588793720-88816l44p4hbq6mtjfvvn6mivrmndo11.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "691588793720-70hu0co34u0dl2kfi5krn87mciuuctsr.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.nirvasoft.cct001"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

@@ -19,13 +19,17 @@ void main() async {
   WidgetsBinding widgetsBinding = WidgetsFlutterBinding.ensureInitialized(); 
   FlutterNativeSplash.preserve(widgetsBinding: widgetsBinding); 
   //​ Preloading 
-    AppConfig.create(
-    appName: "CCT 001",
+  AppConfig.create(
+    appName: "CCT 001", // PRD
     appDesc: "Production CCT1",
-    appID: "com.nirvasoft.cct001.dev",
-    primaryColor: Colors.orange, // prd
-    //primaryColor: Colors.blue, // dev and staging 
-    flavor: Flavor.prod,
+    appID: "com.nirvasoft.cct001",
+    primaryColor: Colors.orange, 
+    flavor: Flavor.prod, 
+    //appName: "CCT1 DEV",
+    //appDesc: "Development CCT1",
+    //appID: "com.nirvasoft.cct001.dev",
+    //primaryColor: Colors.blue, 
+    //flavor: Flavor.prod,
   );
   
   final settingsController = SettingsController(SettingsService()); 

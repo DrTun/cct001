@@ -1,6 +1,7 @@
 import 'package:cct001/appconfig.dart';
 import 'package:cct001/src/helpers/env.dart';
 import 'package:cct001/src/helpers/helpers.dart';
+import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'firebase_options.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
@@ -30,6 +31,7 @@ void main() async {
   await settingsController.loadSettings();
 
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform, );
+  FirebaseAnalytics.instance.setAnalyticsCollectionEnabled(true);
   await FirebaseMessaging.instance.setAutoInitEnabled(true);
   FirebaseMessaging messaging = FirebaseMessaging.instance;
   NotificationSettings settings = await messaging.requestPermission(

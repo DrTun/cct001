@@ -23,7 +23,8 @@ void main() async {
     appName: "CCT 001",
     appDesc: "Production CCT1",
     appID: "com.nirvasoft.cct001.dev",
-    primaryColor: Colors.orange,
+    primaryColor: Colors.orange, // prd
+    //primaryColor: Colors.blue, // dev and staging 
     flavor: Flavor.prod,
   );
   

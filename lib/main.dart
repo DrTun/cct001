@@ -1,16 +1,16 @@
-import 'package:cct001/appconfig.dart';
-import 'package:cct001/src/helpers/env.dart';
-import 'package:cct001/src/helpers/helpers.dart';
 import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'firebase_options.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_native_splash/flutter_native_splash.dart'; 
 import 'package:provider/provider.dart';
+
+import 'appconfig.dart';
 import 'src/myapp.dart';
 import 'src/mynotifier.dart';
+import 'src/helpers/env.dart';
+import 'src/helpers/helpers.dart';
 import 'src/settings/settings_controller.dart';
 import 'src/settings/settings_service.dart';
 //  -------------------------------------    Main (Property of Nirvasoft.com) Rebased
@@ -37,6 +37,7 @@ void main() async {
 
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform, );
   FirebaseAnalytics.instance.setAnalyticsCollectionEnabled(true);
+
   await FirebaseMessaging.instance.setAutoInitEnabled(true);
   FirebaseMessaging messaging = FirebaseMessaging.instance;
   NotificationSettings settings = await messaging.requestPermission(
@@ -47,9 +48,9 @@ void main() async {
   criticalAlert: false,
   provisional: false,
   sound: true,
-);
+  );
 
-logger.e('User granted permission: ${settings.authorizationStatus}');
+  logger.e('User granted permission: ${settings.authorizationStatus}');
   FirebaseMessaging.onMessage.listen((RemoteMessage message) {
     logger.e('Got a message whilst in the foreground!');
     logger.e('Foreground data: ${message.data}');
@@ -67,15 +68,11 @@ logger.e('User granted permission: ${settings.authorizationStatus}');
       ],
       child:  MyApp(settingsController: settingsController))
   );
-
-
   FlutterNativeSplash.remove(); // Native Splash
 
   //Get token # for testing. 
   final fcmToken = await FirebaseMessaging.instance.getToken();
   MyHelpers.msg("FCM Token  $fcmToken");
   logger.e("FCM Token $fcmToken");
-
-
 
 } 

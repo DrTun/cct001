@@ -29,6 +29,9 @@ https://firebase.flutter.dev/docs/messaging/overview/
 https://firebase.flutter.dev/docs/messaging/apple-integration/
 https://firebase.google.com/docs/flutter/setup?platform=ios 
 
+https://pub.dev/packages/firebase_analytics
+https://firebase.google.com/docs/crashlytics/get-started?platform=flutter
+
 6) Flavor
 https://docs.flutter.dev/deployment/flavors
 

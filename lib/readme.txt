@@ -30,14 +30,28 @@ https://firebase.flutter.dev/docs/messaging/apple-integration/
 https://firebase.google.com/docs/flutter/setup?platform=ios 
 
 6) Flavor
-https://dwirandyh.medium.com/create-build-flavor-in-flutter-application-ios-android-fb35a81a9fac
+https://docs.flutter.dev/deployment/flavors
 
-flutter run -t lib/main.dart --flavor prod
-flutter run -t lib/main_dev.dart --flavor dev
-flutter run --profile -t lib/main.dart --flavor prod
-flutter run --profile -t lib/main_dev.dart --flavor dev
-flutter run --release -t lib/main.dart --flavor prod
-flutter run --release -t lib/main_dev.dart --flavor dev
+iOS
+- Schemes 
+- Runner Project - Configurations
+- Runner Target - Product Bundle Identifier, Product Name, Primary App Icon
+- Info Plist - Bundle Display Name - $(PRODUCT_NAME)
+- ios.Runner > Assets.xcassets > AppIcon
+
+Android
+- App > build.gradle - Flafor Dimension, productFlavors
+- srs > sub folders - res and google-servers.json
+
+.vscode > luanch.json
+    
+flutter run  -t  lib/main_dev.dart --flavor dev
+flutter run  -t  lib/main_dev.dart --flavor staging  
+flutter run  -t  lib/main.dart --flavor prd
+ 
+flutter run  --release  lib/main_dev.dart --flavor dev
+flutter run  --release  lib/main_dev.dart --flavor staging
+flutter run  --release  lib/main.dart --flavor prd   
 
 
 Platform  Firebase App Id

@@ -14,6 +14,14 @@
       },
       "oauth_client": [
         {
+          "client_id": "691588793720-g2p7bk8ecc4pauagti15b5b76b2cvplp.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.nirvasoft.cct001",
+            "certificate_hash": "433c0eb41c0b0997d9f35246b2855d994d6b6601"
+          }
+        },
+        {
           "client_id": "691588793720-q0vp59iaeb72vi8ek5ua8enea4tls777.apps.googleusercontent.com",
           "client_type": 3
         }
@@ -31,10 +39,10 @@
               "client_type": 3
             },
             {
-              "client_id": "691588793720-70hu0co34u0dl2kfi5krn87mciuuctsr.apps.googleusercontent.com",
+              "client_id": "691588793720-29g6jljjk32mvq4on4i2q500qajnpfe6.apps.googleusercontent.com",
               "client_type": 2,
               "ios_info": {
-                "bundle_id": "com.nirvasoft.cct001"
+                "bundle_id": "com.example.t001"
               }
             }
           ]
@@ -43,9 +51,9 @@
     },
     {
       "client_info": {
-        "mobilesdk_app_id": "1:691588793720:android:273662e26cca1741bfb48d",
+        "mobilesdk_app_id": "1:691588793720:android:e948debb9b5ddfecbfb48d",
         "android_client_info": {
-          "package_name": "com.nirvasoft.cct003"
+          "package_name": "com.nirvasoft.cct001.dev"
         }
       },
       "oauth_client": [
@@ -67,10 +75,118 @@
               "client_type": 3
             },
             {
-              "client_id": "691588793720-70hu0co34u0dl2kfi5krn87mciuuctsr.apps.googleusercontent.com",
+              "client_id": "691588793720-29g6jljjk32mvq4on4i2q500qajnpfe6.apps.googleusercontent.com",
               "client_type": 2,
               "ios_info": {
-                "bundle_id": "com.nirvasoft.cct001"
+                "bundle_id": "com.example.t001"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:691588793720:android:d0ad24548970a337bfb48d",
+        "android_client_info": {
+          "package_name": "com.nirvasoft.cct001.staging"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "691588793720-q0vp59iaeb72vi8ek5ua8enea4tls777.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyC-PD6DY1QpdzaL75TPCAbwwAs3m1GM2cA"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "691588793720-88816l44p4hbq6mtjfvvn6mivrmndo11.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "691588793720-29g6jljjk32mvq4on4i2q500qajnpfe6.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.t001"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:691588793720:android:db04c096e284d543bfb48d",
+        "android_client_info": {
+          "package_name": "com.nirvasoft.ns001"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "691588793720-q0vp59iaeb72vi8ek5ua8enea4tls777.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyC-PD6DY1QpdzaL75TPCAbwwAs3m1GM2cA"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "691588793720-88816l44p4hbq6mtjfvvn6mivrmndo11.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "691588793720-29g6jljjk32mvq4on4i2q500qajnpfe6.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.t001"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:691588793720:android:9f984e6bef398617bfb48d",
+        "android_client_info": {
+          "package_name": "com.nirvasoft.ns001.dev"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "691588793720-q0vp59iaeb72vi8ek5ua8enea4tls777.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyC-PD6DY1QpdzaL75TPCAbwwAs3m1GM2cA"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "691588793720-88816l44p4hbq6mtjfvvn6mivrmndo11.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "691588793720-29g6jljjk32mvq4on4i2q500qajnpfe6.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.t001"
               }
             }
           ]

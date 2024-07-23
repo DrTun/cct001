@@ -82,7 +82,7 @@ void main() async {
   );
   FlutterNativeSplash.remove(); // Native Splash
 
-  //Get token # for testing. 
+  // Get token # for testing.
   final fcmToken = await FirebaseMessaging.instance.getToken();
   MyHelpers.msg("FCM Token  $fcmToken");
   logger.e("FCM Token $fcmToken");

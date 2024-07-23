@@ -61,18 +61,17 @@ android {
     productFlavors {
         prd {
             dimension 'default'
-            resValue "string", "app_name", "CCT 003"
+            resValue "string", "app_name", "CCT1"
         }
         dev {
             dimension 'default'
             applicationIdSuffix '.dev'
-            resValue "string", "app_name", "CCT3-DEV"
+            resValue "string", "app_name", "CCT1 DEV"
         }
-
         staging {
             dimension 'default'
             applicationIdSuffix '.staging'
-            resValue "string", "app_name", "CCT3-UAT"
+            resValue "string", "app_name", "CCT1 UAT"
         }
     }
 }

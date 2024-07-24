@@ -26,6 +26,18 @@
         ]
       },
       {
+        "name": "sit",
+        "request": "launch",
+        "type": "dart",
+        "program": "lib/main.dart",
+        "args": [
+          "--flavor",
+          "sit",
+          "--target",
+          "lib/main.dart"
+        ]
+      },
+      {
         "name": "prd",
         "request": "launch",
         "type": "dart",

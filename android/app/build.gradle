@@ -73,6 +73,11 @@ android {
             applicationIdSuffix '.staging'
             resValue "string", "app_name", "CCT1 UAT"
         }
+        sit {
+            dimension 'default'
+            applicationIdSuffix '.sit'
+            resValue "string", "app_name", "CCT1 SIT"
+        }
     }
 }
 

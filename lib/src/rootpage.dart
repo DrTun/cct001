@@ -100,6 +100,8 @@ class _RootPageState extends State<RootPage> with WidgetsBindingObserver {
                           const SizedBox(height: 10), 
                           TextButton( onPressed: () { Navigator.pushNamed(context,ViewList.routeName, ); }, child: const Text('Form List', 
                             style: TextStyle(decoration: TextDecoration.underline)),),
+                          TextButton( onPressed: () => throw Exception(), child: const Text('Crash Me', 
+                            style: TextStyle(decoration: TextDecoration.underline)),),
                           TextButton( onPressed: () { Navigator.pushNamed(context,ViewData.routeName, ); }, child: const Text('SQFlite', 
                             style: TextStyle(decoration: TextDecoration.underline)),),
                       ]

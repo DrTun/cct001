@@ -10,7 +10,9 @@
           "--flavor",
           "dev",
           "--target",
-          "lib/main.dart"
+          "lib/main.dart",
+          "--dart-define",  "FLV=dev",
+          "--dart-define", "KEY1=KEYDEV123123",
         ]
       },
       {
@@ -22,7 +24,9 @@
           "--flavor",
           "staging",
           "--target",
-          "lib/main.dart"
+          "lib/main.dart",
+          "--dart-define", "FLV=staging",
+          "--dart-define", "KEY1=KEYUAT123123",
         ]
       },
       {
@@ -34,7 +38,9 @@
           "--flavor",
           "sit",
           "--target",
-          "lib/main.dart"
+          "lib/main.dart",
+          "--dart-define",  "FLV=sit", 
+          "--dart-define", "KEY1=KEYSIT123123",
         ]
       },
       {
@@ -46,7 +52,9 @@
           "--flavor",
           "prd",
           "--target",
-          "lib/main.dart"
+          "lib/main.dart",
+          "--dart-define", "FLV=prd",
+          "--dart-define", "KEY1=KEYPRD123123",
         ]
       }
     ]

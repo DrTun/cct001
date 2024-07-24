@@ -21,19 +21,12 @@ void main() async {
   // Native Splash
   WidgetsBinding widgetsBinding = WidgetsFlutterBinding.ensureInitialized(); 
   FlutterNativeSplash.preserve(widgetsBinding: widgetsBinding); 
-  //​ Preloading 
-  AppConfig.create(
-    appName: "CCT 001", // PRD
-    appDesc: "Production CCT1",
-    appID: "com.nirvasoft.cct001",
-    primaryColor: Colors.orange, 
-    flavor: Flavor.prod, 
-    //appName: "CCT1 DEV",
-    //appDesc: "Development CCT1",
-    //appID: "com.nirvasoft.cct001.dev",
-    //primaryColor: Colors.blue, 
-    //flavor: Flavor.prod,
-  );
+  //​ Preloading   
+  const envFlv = String.fromEnvironment('FLV', defaultValue: 'prd');
+  setFlavor( envFlv);
+  const envAPIK = String.fromEnvironment('KEY1', defaultValue: 'empty');
+  MyHelpers.msg(envAPIK, sec: 5, bcolor: Colors.blue);
+
   
   final settingsController = SettingsController(SettingsService()); 
   await settingsController.loadSettings();
@@ -83,8 +76,52 @@ void main() async {
   FlutterNativeSplash.remove(); // Native Splash
 
   // Get token # for testing.
-  final fcmToken = await FirebaseMessaging.instance.getToken();
-  MyHelpers.msg("FCM Token  $fcmToken");
-  logger.e("FCM Token $fcmToken");
+  //final fcmToken = await FirebaseMessaging.instance.getToken();
+  //MyHelpers.msg("FCM Token  $fcmToken");
+  //logger.e("FCM Token $fcmToken");
 
 } 
+
+void setFlavor(String env){ 
+  if (env == 'prod') {
+    AppConfig.create(
+      appName: "CCT 001", // PRD
+      appDesc: "Production CCT1",
+      appID: "com.nirvasoft.cct001",
+      primaryColor: Colors.orange, 
+      flavor: Flavor.prod, 
+    );
+  } else if (env == 'dev'){
+    AppConfig.create(
+      appName: "CCT1 DEV",
+      appDesc: "Development CCT1",
+      appID: "com.nirvasoft.cct001.dev",
+      primaryColor: Colors.blue, 
+      flavor: Flavor.prod,
+    );
+  } else if (env == 'staging'){
+    AppConfig.create(
+      appName: "CCT1 UAT",
+      appDesc: "Development CCT1",
+      appID: "com.nirvasoft.cct001.staging",
+      primaryColor: Colors.green, 
+      flavor: Flavor.prod,
+    );
+  }  else if (env == 'sit'){
+    AppConfig.create(
+      appName: "CCT1 SIT",
+      appDesc: "System Integration Testing CCT1",
+      appID: "com.nirvasoft.cct001.sit",
+      primaryColor: Colors.purple, 
+      flavor: Flavor.prod,
+    );
+  }  else {
+    AppConfig.create(
+      appName: "CCT1 DEV*",
+      appDesc: "Development CCT1*",
+      appID: "com.nirvasoft.cct001.dev",
+      primaryColor: Colors.blue, 
+      flavor: Flavor.prod,
+    );
+  }
+}

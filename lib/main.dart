@@ -56,9 +56,7 @@ void main() async {
   );
 
   logger.e('User granted permission: ${settings.authorizationStatus}');
-  FirebaseMessaging.onMessage.listen((RemoteMessage message) {
-    logger.e('Got a message whilst in the foreground!');
-    logger.e('Foreground data: ${message.data}');
+  FirebaseMessaging.onMessage.listen((RemoteMessage message) { 
     if (message.notification?.title!=null && message.notification?.body!=null) { 
       var t = message.notification!.title ;
       var b = message.notification!.body ;
@@ -66,7 +64,7 @@ void main() async {
       MyHelpers.msg("Foreground Msg: $t $b"); 
     }
   }); 
-
+  FirebaseMessaging.onBackgroundMessage(firebaseMessagingBackgroundHandler);
   // Run App
   runApp(
       MultiProvider(
@@ -83,6 +81,16 @@ void main() async {
   logger.e("FCM Token $fcmToken");
 
 } 
+
+Future<void> firebaseMessagingBackgroundHandler(RemoteMessage message) async {
+  await Firebase.initializeApp();
+    if (message.notification?.title!=null && message.notification?.body!=null) { 
+      var t = message.notification!.title ;
+      var b = message.notification!.body ;
+      MyHelpers.msg("BG Msg: $t $b"); 
+      logger.e("BG Msg: $t $b");
+    }
+}
 
 void setFlavor(String env){ 
   if (env == 'prd') {
@@ -104,7 +112,7 @@ void setFlavor(String env){
   } else if (env == 'staging'){
     AppConfig.create(
       appName: "CCT1 UAT",
-      appDesc: "Development CCT1",
+      appDesc: "UAT CCT1",
       appID: "com.nirvasoft.cct001.staging",
       primaryColor: Colors.green, 
       flavor: Flavor.prod,
@@ -112,7 +120,7 @@ void setFlavor(String env){
   }  else if (env == 'sit'){
     AppConfig.create(
       appName: "CCT1 SIT",
-      appDesc: "System Integration Testing CCT1",
+      appDesc: "System  CCT1",
       appID: "com.nirvasoft.cct001.sit",
       primaryColor: Colors.purple, 
       flavor: Flavor.prod,

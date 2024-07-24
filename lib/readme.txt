@@ -65,3 +65,11 @@ Name:FirebaseAPN
 Key ID:6A9HF2BG9U
 Services:Apple Push Notifications service (APNs)
 Team ID: C88K3MQESJ
+
+TBC
+1. socket
+2. bubbles
+- app icons
+- tabs
+- card
+

@@ -59,9 +59,11 @@ void main() async {
   FirebaseMessaging.onMessage.listen((RemoteMessage message) {
     logger.e('Got a message whilst in the foreground!');
     logger.e('Foreground data: ${message.data}');
-    if (message.data.isNotEmpty) { 
-      String c1 = message.data['c1'];
-      MyHelpers.msg("Foreground (c1) > $c1"); 
+    if (message.notification?.title!=null && message.notification?.body!=null) { 
+      var t = message.notification!.title ;
+      var b = message.notification!.body ;
+
+      MyHelpers.msg("Foreground Msg: $t $b"); 
     }
   }); 
 
@@ -76,14 +78,14 @@ void main() async {
   FlutterNativeSplash.remove(); // Native Splash
 
   // Get token # for testing.
-  //final fcmToken = await FirebaseMessaging.instance.getToken();
-  //MyHelpers.msg("FCM Token  $fcmToken");
-  //logger.e("FCM Token $fcmToken");
+  final fcmToken = await FirebaseMessaging.instance.getToken();
+  MyHelpers.msg("FCM Token  $fcmToken");
+  logger.e("FCM Token $fcmToken");
 
 } 
 
 void setFlavor(String env){ 
-  if (env == 'prod') {
+  if (env == 'prd') {
     AppConfig.create(
       appName: "CCT 001", // PRD
       appDesc: "Production CCT1",

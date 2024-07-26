@@ -34,6 +34,8 @@ https://firebase.google.com/docs/crashlytics/get-started?platform=flutter
 
 6) Flavor
 https://docs.flutter.dev/deployment/flavors
+https://ahmedyusuf.medium.com/setup-flavors-in-ios-flutter-with-different-firebase-config-43c4c4823e6b
+APN is needed for each iOS app under messaging
 
 iOS
 - Schemes 

@@ -56,20 +56,6 @@
           "--dart-define", "FLV=prd",
           "--dart-define", "KEY1=KEYPRD123123",
         ]
-      },
-      {
-        "name": "prd+",
-        "request": "launch",
-        "type": "dart",
-        "program": "lib/main.dart",
-        "args": [
-          "--flavor",
-          "prd",
-          "--target",
-          "lib/main.dart",
-          "--dart-define", "FLV=prd",
-          "KEY1=KEYPRD123123",
-        ]
       }
     ]
   }

@@ -7,17 +7,13 @@ android.app.src.main.AndroidManifest.xml > android:label
 
 2) App Icon
 ios.Runner.Assets.xcassets.AppIcon.appiconset
-Contents.json
-...png
 (Icon Set Creator >  replace AppIcon.appiconset folder)
 
 android.app.src.main.AndroidManifest.xml > android:Icon : "@mipmap/ic_launcher"
 anroid.app.src.main.res.mipmap-xxx
 (replace ic_launcher.png)
 
-3)
-flutter run --release   
-Select iOS device
+3) Notification - Provider and Consumer
 
 4) Arguments
 pass with construtor
@@ -43,6 +39,7 @@ iOS
 - Runner Target - Product Bundle Identifier, Product Name, Primary App Icon
 - Info Plist - Bundle Display Name - $(PRODUCT_NAME)
 - ios.Runner > Assets.xcassets > AppIcon
+- For Each iOS App ID in Firebase Messging Tab
 
 Android
 - App > build.gradle - Flafor Dimension, productFlavors
@@ -58,6 +55,11 @@ flutter run  --release  lib/main_dev.dart --flavor dev
 flutter run  --release  lib/main_dev.dart --flavor staging
 flutter run  --release  lib/main.dart --flavor prd   
 
+8) Dart Define and AppConfig
+
+9)
+
+___________
 
 Platform  Firebase App Id
 android   1:691588793720:android:833973b7fc03d442bfb48d
@@ -68,9 +70,11 @@ Key ID:6A9HF2BG9U
 Services:Apple Push Notifications service (APNs)
 Team ID: C88K3MQESJ
 
+
 TBC
-1. socket
-2. bubbles
+1) GPS / Map
+2) socket
+3) bubbles
 - app icons
 - tabs
 - card

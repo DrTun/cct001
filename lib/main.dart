@@ -27,7 +27,7 @@ void main() async {
   await settingsController.loadSettings(); 
   // 2) Dart Define Flavor and Secret Key
   const envFlv = String.fromEnvironment('FLV', defaultValue: 'prd');
-  setAppConfig( envFlv);
+  setAppConfig(envFlv);
   const envAPIK = String.fromEnvironment('KEY1', defaultValue: 'empty');
   MyHelpers.msg(envAPIK, sec: 5, bcolor: Colors.blue);
   // 3) Firebase - Anaytics, Crashlytics
@@ -45,9 +45,7 @@ void main() async {
   FirebaseMessaging messaging = FirebaseMessaging.instance;
   NotificationSettings settings = await messaging.requestPermission( alert: true, announcement: false,  badge: true, carPlay: false,criticalAlert: false,  provisional: false,  sound: true,);
   logger.i('User granted permission: ${settings.authorizationStatus}');
-  // 4.1) Get token # for testing. 
-    FirebaseMessaging.instance.getToken().then((value) =>  MyHelpers.showIt(value,label: "FCM Token"));
-  // 4.2) Message Handlers
+  // 4.2) Message Handlers - foregournd and background
   FirebaseMessaging.onMessage.listen((RemoteMessage message) { 
     if (message.notification?.title!=null && message.notification?.body!=null) { 
       var t = message.notification!.title ;
@@ -68,6 +66,8 @@ void main() async {
   // (C) All done - Remove Native Splash
   FlutterNativeSplash.remove(); // Native Splash
   // (D) Background stuff if any
+  // 1) Get token # for testing. 
+    FirebaseMessaging.instance.getToken().then((value) =>  MyHelpers.showIt(value,label: "FCM Token"));
 } 
 
 // ---------------------------------------------------
@@ -82,8 +82,8 @@ Future<void> firebaseMessagingBackgroundHandler(RemoteMessage message) async {
     }
 }
 
-void setAppConfig(String env){ 
-  if (env == 'prd') {
+void setAppConfig(String envFlv){ 
+  if (envFlv == 'prd') {
     AppConfig.create(
       appName: "CCT 001", // PRD
       appDesc: "Production CCT1",
@@ -91,7 +91,7 @@ void setAppConfig(String env){
       primaryColor: Colors.orange, 
       flavor: Flavor.prod, 
     );
-  } else if (env == 'dev'){
+  } else if (envFlv == 'dev'){
     AppConfig.create(
       appName: "CCT1 DEV",
       appDesc: "Development CCT1",
@@ -99,7 +99,7 @@ void setAppConfig(String env){
       primaryColor: Colors.blue, 
       flavor: Flavor.prod,
     );
-  } else if (env == 'staging'){
+  } else if (envFlv == 'staging'){
     AppConfig.create(
       appName: "CCT1 UAT",
       appDesc: "UAT CCT1",
@@ -107,7 +107,7 @@ void setAppConfig(String env){
       primaryColor: Colors.green, 
       flavor: Flavor.prod,
     );
-  }  else if (env == 'sit'){
+  }  else if (envFlv == 'sit'){
     AppConfig.create(
       appName: "CCT1 SIT",
       appDesc: "System  CCT1",

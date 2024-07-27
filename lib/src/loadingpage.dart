@@ -2,9 +2,7 @@
 import 'api/api_auth.dart';
 
 import 'globaldata.dart';
-import 'rootpage.dart';
-import 'helpers/helpers.dart'; 
-import 'helpers/env.dart';
+import 'rootpage.dart'; 
 import 'signinpage.dart';
 import 'package:flutter/material.dart'; 
 //  -------------------------------------    Loading (Property of Nirvasoft.com)
@@ -23,7 +21,9 @@ class _LoadingState extends State<LoadingPage> {
   Future loading(BuildContext context) async { 
     // Read Global Data from Secure Storage
     await GlobalAccess.readSecToken();
-    await ApiAuthService.checkRefreshToken(); // Loading, Resume etc
+    if (GlobalAccess.accessToken.isNotEmpty){  // should not refresh if guest coming back. let sign in again
+      await ApiAuthService.checkRefreshToken(); 
+    }
 
     // Decide where to go based on Global Data read from secure storage.
     setState(() {

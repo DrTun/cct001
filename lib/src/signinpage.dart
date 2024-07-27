@@ -91,6 +91,7 @@ class _SigninState extends State<SigninPage> {
         GlobalAccess.reset();               // Reset Global Data
         await GlobalAccess.resetSecToken(); // Reset Secure Storage
         GlobalAccess.updateGToken(apiResponse['data']['guest_token']); // Use guest token
+        
         setState(() {  Navigator.pushReplacementNamed(context, RootPage.routeName);   }); // SetState to Route
       } else if (apiResponse['status'] == 500) { // Other Exceptions from Class
         MyHelpers.msg("Connectivity [50x]"); 

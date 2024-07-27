@@ -1,4 +1,6 @@
 import 'dart:convert';
+import 'package:cct001/src/helpers/helpers.dart';
+
 import '../globaldata.dart';
 import 'package:http/http.dart' as http;
 import 'package:logger/logger.dart';
@@ -6,10 +8,12 @@ import '../helpers/env.dart';
 //  -------------------------------------    API (Property of Nirvasoft.com)
 class ApiAuthService {
   static String authUrl = EnvService.getEnvVariable('AUTH_URL', "URL not found."); 
-  static String clientId = EnvService.getEnvVariable('CLIENT_ID', 'Client ID not found');
-  static String secretKey = EnvService.getEnvVariable('SECRET_KEY', 'Secret Key not found');
+  static String clientId = EnvService.getEnvVariable('CLIENT_ID', 'Client ID not found'); 
+  static String secretKey = EnvService.getEnvVariable('SECRET_KEY', 'Secret Key not found');  
   final Logger logger = Logger();
+  // 
   Future<Map<String, dynamic>> guestSignIn() async {
+    MyHelpers.msg(secretKey,sec:5);
     final url = Uri.parse("$authUrl/guest/login");
     try {
       final response = await http.post(

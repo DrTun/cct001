@@ -1,3 +1,4 @@
+import 'package:cct001/src/api/api_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
@@ -15,6 +16,7 @@ import 'src/helpers/env.dart';
 import 'src/helpers/helpers.dart';
 import 'src/settings/settings_controller.dart';
 import 'src/settings/settings_service.dart';
+
 //  -------------------------------------    Main (Property of Nirvasoft.com) Rebased
 void main() async { 
   // (A) Native Splash
@@ -25,12 +27,14 @@ void main() async {
   // 1) Settings  
   final settingsController = SettingsController(SettingsService()); 
   await settingsController.loadSettings(); 
-  // 2) Dart Define Flavor and Secret Key
-  const envFlv = String.fromEnvironment('FLV', defaultValue: 'prd');
+  // 2) Load Environments from Config
+    if ( await EnvService.loadEnv()!= 200) MyHelpers.showIt("Environment Config Errors");
+  // 3) Retrieve Secret Key from Dart Define and overwrite Secret Key
+  ApiAuthService.secretKey = const String.fromEnvironment('KEY1', defaultValue: "empty");
+  // 4) Retrieve App Config from Dart Define
+  const envFlv = String.fromEnvironment('FLV', defaultValue: 'dev');
   setAppConfig(envFlv);
-  const envAPIK = String.fromEnvironment('KEY1', defaultValue: 'empty');
-  MyHelpers.msg(envAPIK, sec: 5, bcolor: Colors.blue);
-  // 3) Firebase - Anaytics, Crashlytics
+  // 5) Firebase - Anaytics, Crashlytics
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform, );
   FirebaseAnalytics.instance.setAnalyticsCollectionEnabled(true);
   FlutterError.onError = (errorDetails) {
@@ -70,7 +74,7 @@ void main() async {
     FirebaseMessaging.instance.getToken().then((value) =>  MyHelpers.showIt(value,label: "FCM Token"));
 } 
 
-// ---------------------------------------------------
+// --------------------------------------------------- END of main() ------------------
 
 Future<void> firebaseMessagingBackgroundHandler(RemoteMessage message) async {
   await Firebase.initializeApp();

@@ -9,6 +9,7 @@ class AppConfig {
   String baseURL="";
   String authURL="";
   String clientID="";
+  String secretKey="";
   MaterialColor primaryColor = Colors.blue;
   Flavor flavor = Flavor.dev;
 
@@ -23,9 +24,10 @@ class AppConfig {
     String clientID="",
     String baseURL="",
     String authURL="",
+    String secretKey="",
   }) {
-    return shared = AppConfig(appName, appDesc,appID, primaryColor, flavor,clientID,baseURL,authURL);
+    return shared = AppConfig(appName, appDesc,appID, primaryColor, flavor,clientID,baseURL,authURL,secretKey);
   }
 
-  AppConfig(this.appName, this.appDesc, this.appID, this.primaryColor, this.flavor, this.clientID, this.baseURL, this.authURL);
+  AppConfig(this.appName, this.appDesc, this.appID, this.primaryColor, this.flavor, this.clientID, this.baseURL, this.authURL,this.secretKey);
 }

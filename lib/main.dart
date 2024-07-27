@@ -1,4 +1,3 @@
-import 'package:cct001/src/api/api_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
@@ -31,7 +30,7 @@ void main() async {
   const envFlv = String.fromEnvironment('FLV', defaultValue: 'dev');
   setAppConfig(envFlv);
   // 3) Retrieve Secret Key from Dart Define and overwrite Secret Key
-  ApiAuthService.secretKey = const String.fromEnvironment('KEY1', defaultValue: "empty");
+  
   // 4) Firebase - Anaytics, Crashlytics
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform, );
   FirebaseAnalytics.instance.setAnalyticsCollectionEnabled(true);
@@ -86,6 +85,7 @@ Future<void> firebaseMessagingBackgroundHandler(RemoteMessage message) async {
 
 
 void setAppConfig(String envFlv) async{ 
+  String sKey = const String.fromEnvironment('KEY1', defaultValue: "empty");
   if (await EnvService.loadEnv(ext: envFlv)!= 200) MyHelpers.showIt("Environment Config Errors");
   if (envFlv == 'prd') {
     AppConfig.create(
@@ -97,6 +97,7 @@ void setAppConfig(String envFlv) async{
       clientID: EnvService.getEnvVariable('CLIENT_ID', "123"),
       baseURL: EnvService.getEnvVariable('BASE_URL', "www.base.com"),
       authURL: EnvService.getEnvVariable('AUTH_URL', "www.auth.com"),
+      secretKey: sKey,
     );
   } else if (envFlv == 'dev'){
     AppConfig.create(
@@ -108,6 +109,7 @@ void setAppConfig(String envFlv) async{
       clientID: EnvService.getEnvVariable('CLIENT_ID', "123"),
       baseURL: EnvService.getEnvVariable('BASE_URL', "www.base.com"),
       authURL: EnvService.getEnvVariable('AUTH_URL', "www.auth.com"),
+      secretKey: sKey,
     );
   } else if (envFlv == 'staging'){
     AppConfig.create(
@@ -119,6 +121,7 @@ void setAppConfig(String envFlv) async{
       clientID: EnvService.getEnvVariable('CLIENT_ID', "123"),
       baseURL: EnvService.getEnvVariable('BASE_URL', "www.base.com"),
       authURL: EnvService.getEnvVariable('AUTH_URL', "www.auth.com"),
+      secretKey: sKey,
     );
   }  else if (envFlv == 'sit'){
     AppConfig.create(
@@ -130,6 +133,7 @@ void setAppConfig(String envFlv) async{
       clientID: EnvService.getEnvVariable('CLIENT_ID', "123"),
       baseURL: EnvService.getEnvVariable('BASE_URL', "www.base.com"),
       authURL: EnvService.getEnvVariable('AUTH_URL', "www.auth.com"),
+      secretKey: sKey,
     );
   }  else {
     AppConfig.create(
@@ -141,6 +145,7 @@ void setAppConfig(String envFlv) async{
       clientID: EnvService.getEnvVariable('CLIENT_ID', "123"),
       baseURL: EnvService.getEnvVariable('BASE_URL', "www.base.com"),
       authURL: EnvService.getEnvVariable('AUTH_URL', "www.auth.com"),
+      secretKey: sKey,
     );
   }
 }

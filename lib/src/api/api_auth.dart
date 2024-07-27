@@ -2,14 +2,13 @@ import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:logger/logger.dart'; 
 
-import '/appconfig.dart';
-import '/src/helpers/helpers.dart';
+import '/appconfig.dart'; 
 import '/src/globaldata.dart';
 //  -------------------------------------    API (Property of Nirvasoft.com)
 class ApiAuthService {
-  static String authURL = AppConfig.shared.authURL;
-  static String clientID = AppConfig.shared.clientID;
-  static String secretKey = "";
+  static String authURL = AppConfig.shared.authURL;     // config.env
+  static String clientID = AppConfig.shared.clientID;   // config.env
+  static String secretKey = AppConfig.shared.secretKey; // dart define
   final Logger logger = Logger();
   // 
   Future<Map<String, dynamic>> guestSignIn() async {

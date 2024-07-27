@@ -17,19 +17,20 @@ import 'src/settings/settings_controller.dart';
 import 'src/settings/settings_service.dart';
 //  -------------------------------------    Main (Property of Nirvasoft.com) Rebased
 void main() async { 
-  // Native Splash
+  // (A) Native Splash
   WidgetsBinding widgetsBinding = WidgetsFlutterBinding.ensureInitialized(); 
   FlutterNativeSplash.preserve(widgetsBinding: widgetsBinding); 
+
   //​ Preloading  
-  //  Settings  
+  // 1) Settings  
   final settingsController = SettingsController(SettingsService()); 
   await settingsController.loadSettings(); 
-  //  Dart Define
+  // 2) Dart Define Flavor and Secret Key
   const envFlv = String.fromEnvironment('FLV', defaultValue: 'prd');
   setAppConfig( envFlv);
   const envAPIK = String.fromEnvironment('KEY1', defaultValue: 'empty');
   MyHelpers.msg(envAPIK, sec: 5, bcolor: Colors.blue);
-  //   Firebase - Anaytics, Crashlytics
+  // 3) Firebase - Anaytics, Crashlytics
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform, );
   FirebaseAnalytics.instance.setAnalyticsCollectionEnabled(true);
   FlutterError.onError = (errorDetails) {
@@ -39,22 +40,14 @@ void main() async {
     FirebaseCrashlytics.instance.recordError(error, stack, fatal: true);
     return true;
   };
-  //   Firebase - Messging FCM
+  // 4) Firebase - Messging FCM
   await FirebaseMessaging.instance.setAutoInitEnabled(true);
   FirebaseMessaging messaging = FirebaseMessaging.instance;
-  NotificationSettings settings = await messaging.requestPermission(
-    alert: true,
-    announcement: false,
-    badge: true,
-    carPlay: false,
-    criticalAlert: false,
-    provisional: false,
-    sound: true,
-  );
-  logger.e('User granted permission: ${settings.authorizationStatus}');
-  //  Get token # for testing. 
+  NotificationSettings settings = await messaging.requestPermission( alert: true, announcement: false,  badge: true, carPlay: false,criticalAlert: false,  provisional: false,  sound: true,);
+  logger.i('User granted permission: ${settings.authorizationStatus}');
+  // 4.1) Get token # for testing. 
     FirebaseMessaging.instance.getToken().then((value) =>  MyHelpers.showIt(value,label: "FCM Token"));
-  //  Message Handler
+  // 4.2) Message Handlers
   FirebaseMessaging.onMessage.listen((RemoteMessage message) { 
     if (message.notification?.title!=null && message.notification?.body!=null) { 
       var t = message.notification!.title ;
@@ -64,7 +57,7 @@ void main() async {
   }); 
   FirebaseMessaging.onBackgroundMessage(firebaseMessagingBackgroundHandler);
 
-  // Run App 
+  // (B) Run App 
   runApp(
       MultiProvider(
       providers: [
@@ -72,18 +65,23 @@ void main() async {
       ],
       child:  MyApp(settingsController: settingsController))
   );
+  // (C) All done - Remove Native Splash
   FlutterNativeSplash.remove(); // Native Splash
-
+  // (D) Background stuff if any
 } 
+
+// ---------------------------------------------------
+
 Future<void> firebaseMessagingBackgroundHandler(RemoteMessage message) async {
   await Firebase.initializeApp();
     if (message.notification?.title!=null && message.notification?.body!=null) { 
       var t = message.notification!.title ;
       var b = message.notification!.body ;
       MyHelpers.msg("BG Msg: $t $b"); 
-      logger.e("BG Msg: $t $b");
+      logger.i("BG Msg: $t $b");
     }
 }
+
 void setAppConfig(String env){ 
   if (env == 'prd') {
     AppConfig.create(

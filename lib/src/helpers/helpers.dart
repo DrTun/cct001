@@ -15,7 +15,7 @@ class MyHelpers{
   static showIt(String? value, {String? label}){
   label ??= "Value";
   MyHelpers.msg("$label:  $value",bcolor: Colors.orange);   
-  logger.e("$label: $value");
+  logger.i("$label: $value");
 }
 }
 

@@ -1,12 +1,11 @@
 //  -------------------------------------   Global Data (Property of Nirvasoft.com)
+import '/appconfig.dart';
+
 import 'helpers/env.dart';
 
 import 'helpers/helpers.dart';
 
-class GlobalData{
-  static const _log = 1;  // (0 no logs; 1 only if errors; 3 trace;)
-  static int get log => _log;
-}
+
 class GlobalAccess {
   static String _mode="";
   static String _userid="";
@@ -43,7 +42,7 @@ class GlobalAccess {
    SecureStorage store = SecureStorage();
    String userid,username,accesstoken,refreshtoken;
     userid = await store.readSecureData("userid");
-    if (GlobalData.log>=3) logger.i('From Secure Data Read: $userid');
+    if (AppConfig.shared.log>=3) logger.i('From Secure Data Read: $userid');
     if (userid.isNotEmpty && !userid.startsWith("No data")) {   
       username = await store.readSecureData("username");
       accesstoken = await store.readSecureData("accesstoken");

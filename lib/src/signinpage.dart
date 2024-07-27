@@ -1,4 +1,5 @@
 
+import 'package:cct001/appconfig.dart';
 import 'package:flutter/material.dart';   
 import 'api/api_auth.dart';
 import 'helpers/env.dart';
@@ -20,7 +21,7 @@ class _SigninState extends State<SigninPage> {
   void initState() {
     super.initState();
     apiAuthService = ApiAuthService();
-    if (GlobalData.log>=3) logger.i('API initialized');
+    if (AppConfig.shared.log>=3) logger.i('API initialized');
     userIdController.text = EnvService.getEnvVariable('DEMO_ID', "Demo ID not found.");          // set default value with demo 
     passwordController.text = EnvService.getEnvVariable('DEMO_PW', "Demo ID not found.");    
   }
@@ -66,7 +67,7 @@ class _SigninState extends State<SigninPage> {
       String userid = userIdController.text ;
       String password = passwordController.text ;
       final apiResponse = await apiAuthService.userSignIn(userid, password);
-      if (GlobalData.log>=3) logger.i('User login response: $apiResponse');
+      if (AppConfig.shared.log>=3) logger.i('User login response: $apiResponse');
       if (apiResponse['status'] == 200) { 
         GlobalAccess.updateUToken(userid,apiResponse['data']['user_name'],apiResponse['data']['user_token'],apiResponse['data']['refresh_token']);
         logger.i("gdata  $GlobalAccess.refreshToken");
@@ -79,14 +80,14 @@ class _SigninState extends State<SigninPage> {
         MyHelpers.msg("Invalid User ID or Password.");
       }
     } catch (e, stacktrace) { // Other Exceptions from Widget
-      if (GlobalData.log>=1) logger.e("Connectivity #40x (User): $e\n$stacktrace");
+      if (AppConfig.shared.log>=1) logger.e("Connectivity #40x (User): $e\n$stacktrace");
       MyHelpers.msg("Connectivity [50xx]"); 
     }
   }
   Future<void> _performGuest() async {  
     try { 
       final apiResponse = await apiAuthService.guestSignIn();
-      if (GlobalData.log>=3) logger.i('Guest login response: $apiResponse');
+      if (AppConfig.shared.log>=3) logger.i('Guest login response: $apiResponse');
       if (apiResponse['status'] == 200) {   
         GlobalAccess.reset();               // Reset Global Data
         await GlobalAccess.resetSecToken(); // Reset Secure Storage
@@ -99,14 +100,14 @@ class _SigninState extends State<SigninPage> {
         MyHelpers.msg("Unauthorized Access (Guest)"); 
       }
     } catch (e, stacktrace) { // Other Exceptions from Widget
-      if (GlobalData.log>=1) logger.e("Connectivity #50xx (Guest): $e\n$stacktrace");
+      if (AppConfig.shared.log>=1) logger.e("Connectivity #50xx (Guest): $e\n$stacktrace");
       MyHelpers.msg("Connectivity [50xx]"); 
     } 
   }
   Future<void> _performSocial() async { 
   }
   Future<void> _performSkip() async {
-    if (GlobalData.log>=3) logger.i('Skip login');
+    if (AppConfig.shared.log>=3) logger.i('Skip login');
     GlobalAccess.reset();
     GlobalAccess.updateGToken(""); 
     Navigator.pushReplacementNamed(context, RootPage.routeName);

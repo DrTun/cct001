@@ -98,6 +98,7 @@ void setAppConfig(String envFlv) async{
       baseURL: EnvService.getEnvVariable('BASE_URL', "www.base.com"),
       authURL: EnvService.getEnvVariable('AUTH_URL', "www.auth.com"),
       secretKey: sKey,
+      log: int.parse(EnvService.getEnvVariable('LOG', "1")),
     );
   } else if (envFlv == 'dev'){
     AppConfig.create(
@@ -110,6 +111,7 @@ void setAppConfig(String envFlv) async{
       baseURL: EnvService.getEnvVariable('BASE_URL', "www.base.com"),
       authURL: EnvService.getEnvVariable('AUTH_URL', "www.auth.com"),
       secretKey: sKey,
+      log: int.parse(EnvService.getEnvVariable('LOG', "1")),
     );
   } else if (envFlv == 'staging'){
     AppConfig.create(
@@ -122,6 +124,7 @@ void setAppConfig(String envFlv) async{
       baseURL: EnvService.getEnvVariable('BASE_URL', "www.base.com"),
       authURL: EnvService.getEnvVariable('AUTH_URL', "www.auth.com"),
       secretKey: sKey,
+      log: int.parse(EnvService.getEnvVariable('LOG', "1")),
     );
   }  else if (envFlv == 'sit'){
     AppConfig.create(
@@ -134,6 +137,7 @@ void setAppConfig(String envFlv) async{
       baseURL: EnvService.getEnvVariable('BASE_URL', "www.base.com"),
       authURL: EnvService.getEnvVariable('AUTH_URL', "www.auth.com"),
       secretKey: sKey,
+      log: int.parse(EnvService.getEnvVariable('LOG', "1")),
     );
   }  else {
     AppConfig.create(
@@ -146,6 +150,7 @@ void setAppConfig(String envFlv) async{
       baseURL: EnvService.getEnvVariable('BASE_URL', "www.base.com"),
       authURL: EnvService.getEnvVariable('AUTH_URL', "www.auth.com"),
       secretKey: sKey,
+      log: int.parse(EnvService.getEnvVariable('LOG', "1")),
     );
   }
 }

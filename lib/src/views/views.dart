@@ -1,11 +1,12 @@
+import '/appconfig.dart';
+
 import '../signinpage.dart';
 
 import '../mynotifier.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../api/api_data.dart';
-import '../helpers/env.dart';
-import '../globaldata.dart';  
+import '../helpers/env.dart'; 
 import '../helpers/helpers.dart';   
 //  -------------------------------------    Forms (Property of Nirvasoft.com)
 class Form001 extends StatefulWidget {
@@ -58,7 +59,7 @@ class _Form001State extends State<Form001> {
         MyHelpers.msg("Session Expired. Sign In");
       }
     } catch (e, stacktrace) { // Other Exceptions from Widget
-      if (GlobalData.log>=1) logger.e("Connectivity #50xx (Data List): $e\n$stacktrace");
+      if (AppConfig.shared.log>=1) logger.e("Connectivity #50xx (Data List): $e\n$stacktrace");
       MyHelpers.msg("Connectivity [50xx]"); 
     }
     }

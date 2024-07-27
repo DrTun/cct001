@@ -25,7 +25,7 @@ class _RootPageState extends State<RootPage> with WidgetsBindingObserver {
   @override
   void initState() {          // Init
     super.initState(); 
-    if (GlobalData.log>=3) logger.i('Root initialized'); 
+    if (AppConfig.shared.log>=3) logger.i('Root initialized'); 
     provider = Provider.of<MyNotifier>(context,listen: false);
     WidgetsBinding.instance.addObserver(this);
     WidgetsBinding.instance.addPostFrameCallback((_){ 
@@ -35,7 +35,7 @@ class _RootPageState extends State<RootPage> with WidgetsBindingObserver {
   @override
   void didChangeAppLifecycleState(AppLifecycleState state) { // Lifecycle
     super.didChangeAppLifecycleState(state);
-    if (GlobalData.log>=3) logger.e("LifeCycle State: $state");
+    if (AppConfig.shared.log>=3) logger.e("LifeCycle State: $state");
     if (state == AppLifecycleState.paused) {logger.e("Background");} 
     else if (state == AppLifecycleState.resumed) { 
       logger.e("Foreground");

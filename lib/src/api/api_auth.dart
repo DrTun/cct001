@@ -26,11 +26,11 @@ class ApiAuthService {
       if (response.statusCode == 200) {
         return jsonDecode(response.body);
       } else {
-        if (GlobalData.log>=1) logger.e("Unauthorized Access (Guest): ${response.body}");
+        if (AppConfig.shared.log>=1) logger.e("Unauthorized Access (Guest): ${response.body}");
         return {"status": response.statusCode, "message": "Unauthorized Access (Guest)"};
       }
     } catch (e, stacktrace) {
-      if (GlobalData.log>=1) logger.e("Exception in guestLogin: $e\n$stacktrace");
+      if (AppConfig.shared.log>=1) logger.e("Exception in guestLogin: $e\n$stacktrace");
       return {"status": 500, "message": "Exception in guestLogin: $e"};
     }
   }
@@ -45,11 +45,11 @@ class ApiAuthService {
       if (response.statusCode == 200) {
         return jsonDecode(response.body);
       } else {
-        if (GlobalData.log>=1) logger.e("Unautorized Access (Login): ${response.body}");
+        if (AppConfig.shared.log>=1) logger.e("Unautorized Access (Login): ${response.body}");
         return {"status": response.statusCode, "message": "Unauthorized Access (Login)"};
       }
     } catch (e, stacktrace) {
-      if (GlobalData.log>=1) logger.e("Other Exceptions (Login)): $e\n$stacktrace");
+      if (AppConfig.shared.log>=1) logger.e("Other Exceptions (Login)): $e\n$stacktrace");
       return {"status": 500, "message": "Other Exceptions (Login): $e"};
     }
   }
@@ -66,11 +66,11 @@ class ApiAuthService {
       if (response.statusCode == 200) {
         return jsonDecode(response.body);
       } else {
-        if (GlobalData.log>=1) logger.e("Unauthorized Access (Refresh): ${response.body}");
+        if (AppConfig.shared.log>=1) logger.e("Unauthorized Access (Refresh): ${response.body}");
         return { "status": response.statusCode, "message": "Unauthorized Access (Refresh)"};
       }
     } catch (e, stacktrace) {
-      if (GlobalData.log>=1) logger.e("Other Exceptions (Refresh)): $e\n$stacktrace");
+      if (AppConfig.shared.log>=1) logger.e("Other Exceptions (Refresh)): $e\n$stacktrace");
       return {"status": 500, "message": "Other Exceptions (Refresh): $e"};
     }
   }

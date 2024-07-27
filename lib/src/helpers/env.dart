@@ -1,4 +1,5 @@
-import '../globaldata.dart';
+import '/appconfig.dart';
+ 
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:logger/logger.dart';
 //  -------------------------------------    Environment (Property of Nirvasoft.com)
@@ -8,10 +9,10 @@ class EnvService {
     String f= 'config/.env.$ext';
     try {
       await dotenv.load(fileName: f);
-      if (GlobalData.log>=3) logger.i('Environment Init successful.');
+      if (AppConfig.shared.log>=3) logger.i('Environment Init successful.');
       return 200;
     } catch (error) {
-      if (GlobalData.log>=1) logger.e('Environment Init Error ($f): $error'); 
+      if (AppConfig.shared.log>=1) logger.e('Environment Init Error ($f): $error'); 
       return 400;
     }
   }

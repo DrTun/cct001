@@ -4,13 +4,14 @@ import 'package:logger/logger.dart';
 //  -------------------------------------    Environment (Property of Nirvasoft.com)
 final logger = Logger();
 class EnvService {
-  static Future<int> loadEnv() async {
+  static Future<int> loadEnv({String? ext}) async {
+    String f= 'config/.env.$ext';
     try {
-      await dotenv.load(fileName: 'config/.env');
+      await dotenv.load(fileName: f);
       if (GlobalData.log>=3) logger.i('Environment Init successful.');
       return 200;
     } catch (error) {
-      if (GlobalData.log>=1) logger.e('Environment Init Error: $error'); 
+      if (GlobalData.log>=1) logger.e('Environment Init Error ($f): $error'); 
       return 400;
     }
   }

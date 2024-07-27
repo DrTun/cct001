@@ -47,5 +47,9 @@ flutter:
     # Add assets from the images directory to the application.
     - assets/images/  
     - config/.env
+    - config/.env.dev
+    - config/.env.staging
+    - config/.env.sit
+    - config/.env.prd
 flutter_native_splash: 
   color: "#42a5f5"

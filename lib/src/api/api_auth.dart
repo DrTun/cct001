@@ -1,26 +1,26 @@
 import 'dart:convert';
-import 'package:cct001/src/helpers/helpers.dart';
-
-import '../globaldata.dart';
 import 'package:http/http.dart' as http;
-import 'package:logger/logger.dart';
-import '../helpers/env.dart';
+import 'package:logger/logger.dart'; 
+
+import '/appconfig.dart';
+import '/src/helpers/helpers.dart';
+import '/src/globaldata.dart';
 //  -------------------------------------    API (Property of Nirvasoft.com)
 class ApiAuthService {
-  static String authUrl = EnvService.getEnvVariable('AUTH_URL', "URL not found."); 
-  static String clientId = EnvService.getEnvVariable('CLIENT_ID', 'Client ID not found'); 
-  static String secretKey = EnvService.getEnvVariable('SECRET_KEY', 'Secret Key not found');  
+  static String authURL = AppConfig.shared.authURL;
+  static String clientID = AppConfig.shared.clientID;
+  static String secretKey = "";
   final Logger logger = Logger();
   // 
   Future<Map<String, dynamic>> guestSignIn() async {
-    MyHelpers.msg(secretKey,sec:5);
-    final url = Uri.parse("$authUrl/guest/login");
+    //  MyHelpers.msg(secretKey,sec:5);
+    final url = Uri.parse("$authURL/guest/login");
     try {
       final response = await http.post(
         url,
         headers: {"Content-Type": "application/json"},
         body: jsonEncode({
-          "client_id": clientId,
+          "client_id": clientID,
           "secret_key": secretKey,
         }),
       );
@@ -36,7 +36,7 @@ class ApiAuthService {
     }
   }
   Future<Map<String, dynamic>> userSignIn(String username, String password) async {
-    final url = Uri.parse("$authUrl/user/login");
+    final url = Uri.parse("$authURL/user/login");
     try {
       final response = await http.post(
         url,
@@ -55,7 +55,7 @@ class ApiAuthService {
     }
   }
   Future<Map<String, dynamic>> refreshTokenWith( String userId, String refreshToken) async {
-    final url = Uri.parse("$authUrl/generate/refreshToken");
+    final url = Uri.parse("$authURL/generate/refreshToken");
     try {
       final response = await http.post(url,
         headers: {

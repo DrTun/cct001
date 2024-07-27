@@ -27,14 +27,12 @@ void main() async {
   // 1) Settings  
   final settingsController = SettingsController(SettingsService()); 
   await settingsController.loadSettings(); 
-  // 2) Load Environments from Config
-    if ( await EnvService.loadEnv()!= 200) MyHelpers.showIt("Environment Config Errors");
-  // 3) Retrieve Secret Key from Dart Define and overwrite Secret Key
-  ApiAuthService.secretKey = const String.fromEnvironment('KEY1', defaultValue: "empty");
-  // 4) Retrieve App Config from Dart Define
+  // 2) Retrieve App Config from Dart Define
   const envFlv = String.fromEnvironment('FLV', defaultValue: 'dev');
   setAppConfig(envFlv);
-  // 5) Firebase - Anaytics, Crashlytics
+  // 3) Retrieve Secret Key from Dart Define and overwrite Secret Key
+  ApiAuthService.secretKey = const String.fromEnvironment('KEY1', defaultValue: "empty");
+  // 4) Firebase - Anaytics, Crashlytics
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform, );
   FirebaseAnalytics.instance.setAnalyticsCollectionEnabled(true);
   FlutterError.onError = (errorDetails) {
@@ -86,46 +84,63 @@ Future<void> firebaseMessagingBackgroundHandler(RemoteMessage message) async {
     }
 }
 
-void setAppConfig(String envFlv){ 
+
+void setAppConfig(String envFlv) async{ 
+  if (await EnvService.loadEnv(ext: envFlv)!= 200) MyHelpers.showIt("Environment Config Errors");
   if (envFlv == 'prd') {
     AppConfig.create(
-      appName: "CCT 001", // PRD
-      appDesc: "Production CCT1",
+      appName: "CCT 001", // PRD 
       appID: "com.nirvasoft.cct001",
       primaryColor: Colors.orange, 
       flavor: Flavor.prod, 
+      appDesc: EnvService.getEnvVariable('APP_TITLE', "CCT001"),
+      clientID: EnvService.getEnvVariable('CLIENT_ID', "123"),
+      baseURL: EnvService.getEnvVariable('BASE_URL', "www.base.com"),
+      authURL: EnvService.getEnvVariable('AUTH_URL', "www.auth.com"),
     );
   } else if (envFlv == 'dev'){
     AppConfig.create(
       appName: "CCT1 DEV",
-      appDesc: "Development CCT1",
       appID: "com.nirvasoft.cct001.dev",
       primaryColor: Colors.blue, 
-      flavor: Flavor.prod,
+      flavor: Flavor.dev,
+      appDesc: EnvService.getEnvVariable('APP_TITLE', "Development CCT1"),
+      clientID: EnvService.getEnvVariable('CLIENT_ID', "123"),
+      baseURL: EnvService.getEnvVariable('BASE_URL', "www.base.com"),
+      authURL: EnvService.getEnvVariable('AUTH_URL', "www.auth.com"),
     );
   } else if (envFlv == 'staging'){
     AppConfig.create(
-      appName: "CCT1 UAT",
-      appDesc: "UAT CCT1",
+      appName: "CCT1 UAT", 
       appID: "com.nirvasoft.cct001.staging",
       primaryColor: Colors.green, 
-      flavor: Flavor.prod,
+      flavor: Flavor.staging,
+      appDesc: EnvService.getEnvVariable('APP_TITLE', "UAT CCT1"),
+      clientID: EnvService.getEnvVariable('CLIENT_ID', "123"),
+      baseURL: EnvService.getEnvVariable('BASE_URL', "www.base.com"),
+      authURL: EnvService.getEnvVariable('AUTH_URL', "www.auth.com"),
     );
   }  else if (envFlv == 'sit'){
     AppConfig.create(
-      appName: "CCT1 SIT",
-      appDesc: "System  CCT1",
+      appName: "CCT1 SIT", 
       appID: "com.nirvasoft.cct001.sit",
       primaryColor: Colors.purple, 
-      flavor: Flavor.prod,
+      flavor: Flavor.sit,
+      appDesc: EnvService.getEnvVariable('APP_TITLE', "System CCT1"),
+      clientID: EnvService.getEnvVariable('CLIENT_ID', "123"),
+      baseURL: EnvService.getEnvVariable('BASE_URL', "www.base.com"),
+      authURL: EnvService.getEnvVariable('AUTH_URL', "www.auth.com"),
     );
   }  else {
     AppConfig.create(
-      appName: "CCT1 DEV*",
-      appDesc: "Development CCT1*",
+      appName: "CCT1 DEV*", 
       appID: "com.nirvasoft.cct001.dev",
       primaryColor: Colors.blue, 
-      flavor: Flavor.prod,
+      flavor: Flavor.dev,
+      appDesc: EnvService.getEnvVariable('APP_TITLE', "Development CCT1?"),
+      clientID: EnvService.getEnvVariable('CLIENT_ID', "123"),
+      baseURL: EnvService.getEnvVariable('BASE_URL', "www.base.com"),
+      authURL: EnvService.getEnvVariable('AUTH_URL', "www.auth.com"),
     );
   }
 }

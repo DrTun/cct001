@@ -1,13 +1,12 @@
 import 'dart:convert';
-
-import '../globaldata.dart';
+import 'package:cct001/appconfig.dart';
 import 'package:http/http.dart' as http;
-import 'package:logger/logger.dart';
-import '../helpers/env.dart';
+import 'package:logger/logger.dart'; 
 import 'api_auth.dart';
+import '/src/globaldata.dart';
 //  -------------------------------------    API (Property of Nirvasoft.com)
 class ApiDataService {
-  static String baseUrl = EnvService.getEnvVariable('BASE_URL', "URL not found.");
+  static String baseURL = AppConfig.shared.baseURL;
   final Logger logger = Logger();
   
   Future<Map<String, dynamic>> getList() async {
@@ -15,7 +14,7 @@ class ApiDataService {
   }
 
   Future<Map<String, dynamic>> getApiDataMap(String path, String nick) async {
-    final url = Uri.parse("$baseUrl/$path"); 
+    final url = Uri.parse("$baseURL/$path"); 
     try {   
       ApiAuthService.checkRefreshToken(); // check if token is expired on client side
       final response1 = await http.get(

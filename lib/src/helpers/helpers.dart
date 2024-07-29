@@ -1,9 +1,11 @@
 
-import 'package:cct001/src/helpers/env.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:logger/logger.dart';
 //  -------------------------------------    Helpers (Property of Nirvasoft.com)
+
+final logger = Logger();
 class MyHelpers{
   static msg(String txt, {int? sec, Color? bcolor}){
     sec ??= 2;

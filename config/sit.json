@@ -1,0 +1,15 @@
+{
+    "FLV": "dev",
+    "APP_TITLE":"CCT1 SIT",
+
+    "CLIENT_ID":"53bedecefeghijk01",
+    "KEY1": "jRxaPLUjcm210BiPDey7kMM7",
+
+    "AUTH_URL": "http://128.199.204.19:8080/api",
+    "BASE_URL":"http://128.199.204.19:8080/api",
+
+    "DEMO_ID":"demo",
+    "DEMO_PW":"1020304050",
+
+    "LOG":"3"
+  }

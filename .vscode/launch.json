@@ -11,8 +11,7 @@
           "dev",
           "--target",
           "lib/main.dart",
-          "--dart-define",  "FLV=dev",
-          "--dart-define", "KEY1=jRxaPLUjcm210BiPDey7kMM7",
+          "--dart-define-from-file", "config/dev.json",
         ]
       },
       {
@@ -25,8 +24,7 @@
           "staging",
           "--target",
           "lib/main.dart",
-          "--dart-define", "FLV=staging",
-          "--dart-define", "KEY1=jRxaPLUjcm210BiPDey7kMM7",
+          "--dart-define-from-file", "config/staging.json",
         ]
       },
       {
@@ -39,8 +37,7 @@
           "sit",
           "--target",
           "lib/main.dart",
-          "--dart-define",  "FLV=sit", 
-          "--dart-define", "KEY1=jRxaPLUjcm210BiPDey7kMM7",
+          "--dart-define-from-file", "config/sit.json",
         ]
       },
       {
@@ -53,8 +50,34 @@
           "prd",
           "--target",
           "lib/main.dart",
-          "--dart-define", "FLV=prd",
-          "--dart-define", "KEY1=jRxaPLUjcm210BiPDey7kMM7",
+          "--dart-define-from-file", "config/prd.json",
+        ]
+      },
+      {
+        "name": "prd release",
+        "request": "launch",
+        "type": "dart",
+        "program": "lib/main.dart",
+        "args": [
+          "--flavor",
+          "prd",
+          "--release",
+          "--target",
+          "lib/main.dart",
+          "--dart-define-from-file", "config/prd.json",
+        ]
+      },
+      {
+        "name": "prd *",
+        "request": "launch",
+        "type": "dart",
+        "program": "lib/main.dart",
+        "args": [
+          "--flavor",
+          "prd",
+          "--target",
+          "lib/main.dart",
+          "--dart-define-from-file", "config/prd.json",
         ]
       }
     ]

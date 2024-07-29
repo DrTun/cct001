@@ -1,8 +1,7 @@
 
 import 'package:cct001/appconfig.dart';
 import 'package:flutter/material.dart';   
-import 'api/api_auth.dart';
-import 'helpers/env.dart';
+import 'api/api_auth.dart'; 
 import 'globaldata.dart';  
 import 'helpers/helpers.dart';  
 import 'rootpage.dart'; 
@@ -22,8 +21,8 @@ class _SigninState extends State<SigninPage> {
     super.initState();
     apiAuthService = ApiAuthService();
     if (AppConfig.shared.log>=3) logger.i('API initialized');
-    userIdController.text = EnvService.getEnvVariable('DEMO_ID', "Demo ID not found.");          // set default value with demo 
-    passwordController.text = EnvService.getEnvVariable('DEMO_PW', "Demo ID not found.");    
+    userIdController.text = "demo";          // set default value with demo 
+    passwordController.text = "1020304050";    
   }
   @override
   Widget build(BuildContext context) {

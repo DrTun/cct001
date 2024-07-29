@@ -1,7 +1,7 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
-import 'package:firebase_messaging/firebase_messaging.dart';
+//import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_native_splash/flutter_native_splash.dart'; 
 import 'package:provider/provider.dart';
@@ -42,19 +42,20 @@ void main() async {
     return true;
   };
   // 4) Firebase - Messging FCM
-  await FirebaseMessaging.instance.setAutoInitEnabled(true);
-  FirebaseMessaging messaging = FirebaseMessaging.instance;
-  NotificationSettings settings = await messaging.requestPermission( alert: true, announcement: false,  badge: true, carPlay: false,criticalAlert: false,  provisional: false,  sound: true,);
-  logger.i('User granted permission: ${settings.authorizationStatus}');
+  //await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform, );
+  //await FirebaseMessaging.instance.setAutoInitEnabled(true);
+  //FirebaseMessaging messaging = FirebaseMessaging.instance;
+  //NotificationSettings settings = await messaging.requestPermission( alert: true, announcement: false,  badge: true, carPlay: false,criticalAlert: false,  provisional: false,  sound: true,);
+  //logger.i('User granted permission: ${settings.authorizationStatus}');
   // 4.2) Message Handlers - foregournd and background
-  FirebaseMessaging.onMessage.listen((RemoteMessage message) { 
-    if (message.notification?.title!=null && message.notification?.body!=null) { 
-      var t = message.notification!.title ;
-      var b = message.notification!.body ;
-      MyHelpers.msg("Foreground Msg: $t $b"); 
-    }
-  }); 
-  FirebaseMessaging.onBackgroundMessage(firebaseMessagingBackgroundHandler);
+  //FirebaseMessaging.onMessage.listen((RemoteMessage message) { 
+  //  if (message.notification?.title!=null && message.notification?.body!=null) { 
+  //    var t = message.notification!.title ;
+  //    var b = message.notification!.body ;
+  //    MyHelpers.msg("Foreground Msg: $t $b"); 
+  //  }
+  //}); 
+  //FirebaseMessaging.onBackgroundMessage(firebaseMessagingBackgroundHandler);
 
   // (B) Run App 
   runApp(
@@ -68,20 +69,20 @@ void main() async {
   FlutterNativeSplash.remove(); // Native Splash
   // (D) Background stuff if any
   // 1) Get token # for testing. 
-    FirebaseMessaging.instance.getToken().then((value) =>  MyHelpers.showIt(value,label: "FCM Token"));
+  //  FirebaseMessaging.instance.getToken().then((value) =>  MyHelpers.showIt(value,label: "FCM Token"));
 } 
 
 // --------------------------------------------------- END of main() ------------------
 
-Future<void> firebaseMessagingBackgroundHandler(RemoteMessage message) async {
-  await Firebase.initializeApp();
-    if (message.notification?.title!=null && message.notification?.body!=null) { 
-      var t = message.notification!.title ;
-      var b = message.notification!.body ;
-      MyHelpers.msg("BG Msg: $t $b"); 
-      logger.i("BG Msg: $t $b");
-    }
-}
+//Future<void> firebaseMessagingBackgroundHandler(RemoteMessage message) async {
+//  await Firebase.initializeApp();
+//    if (message.notification?.title!=null && message.notification?.body!=null) { 
+//      var t = message.notification!.title ;
+//      var b = message.notification!.body ;
+//      MyHelpers.msg("BG Msg: $t $b"); 
+//      logger.i("BG Msg: $t $b");
+//    }
+//}
 
 
 void setAppConfig(String envFlv) async{ 

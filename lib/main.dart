@@ -21,25 +21,21 @@ void main() async {
   WidgetsBinding widgetsBinding = WidgetsFlutterBinding.ensureInitialized(); 
   FlutterNativeSplash.preserve(widgetsBinding: widgetsBinding); 
 
-  //​ Preloading  
+  //​ (B) Preloading  
   // 1) Settings  
   final settingsController = SettingsController(SettingsService()); 
   await settingsController.loadSettings(); 
   // 2) Retrieve App Config from Dart Define 
   setAppConfig();
-  // 3) Retrieve Secret Key from Dart Define and overwrite Secret Key
-  
-  // 4) Firebase - Anaytics, Crashlytics
+  // 3) Firebase - Anaytics, Crashlytics
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform, );
   FirebaseAnalytics.instance.setAnalyticsCollectionEnabled(true);
-  FlutterError.onError = (errorDetails) {
-    FirebaseCrashlytics.instance.recordFlutterFatalError(errorDetails);
-  };
+  FlutterError.onError = (errorDetails) {FirebaseCrashlytics.instance.recordFlutterFatalError(errorDetails);};
   PlatformDispatcher.instance.onError = (error, stack) {
     FirebaseCrashlytics.instance.recordError(error, stack, fatal: true);
     return true;
   };
-  // 4) Firebase - Messging FCM
+  // 4.1) Firebase - Messging FCM
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform, );
   await FirebaseMessaging.instance.setAutoInitEnabled(true);
   FirebaseMessaging messaging = FirebaseMessaging.instance;
@@ -55,7 +51,7 @@ void main() async {
   }); 
   FirebaseMessaging.onBackgroundMessage(firebaseMessagingBackgroundHandler);
 
-  // (B) Run App 
+  // (C) Run App 
   runApp(
       MultiProvider(
       providers: [
@@ -63,14 +59,13 @@ void main() async {
       ],
       child:  MyApp(settingsController: settingsController))
   );
-  // (C) All done - Remove Native Splash
+  // (D) All done - Remove Native Splash
   FlutterNativeSplash.remove(); // Native Splash
-  // (D) Background stuff if any
+  // (E) Background stuff if any
   // 1) Get token # for testing. 
   if (AppConfig.shared.fcm) {
     FirebaseMessaging.instance.getToken().then((value) =>   showToken(value));
-  }
-  
+  }  
 } 
 
 // --------------------------------------------------- END of main() ------------------

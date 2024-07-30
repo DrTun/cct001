@@ -28,6 +28,26 @@ https://firebase.google.com/docs/flutter/setup?platform=ios
 https://pub.dev/packages/firebase_analytics
 https://firebase.google.com/docs/crashlytics/get-started?platform=flutter
 
+flutter pub add firebase_core
+flutter pub add firebase_analytics
+flutter pub add firebase_crashlytics && flutter pub add firebase_analytics
+flutter pub add firebase_messaging
+
+- App > build.gradle - plugins 
+  + more
+- App > src > kotlin - main activities and package re-name if needed
+
+flutterfire cli 
+flutterfire configure
+
+(if needed)
+flutterfire configure \
+  --project=??? \
+  --out=lib/firebase_options.dart \
+  --ios-bundle-id=com.nirvasoft.???\
+  --android-package-name=com.nirvasoft.???
+
+
 6) Flavor
 https://docs.flutter.dev/deployment/flavors
 https://ahmedyusuf.medium.com/setup-flavors-in-ios-flutter-with-different-firebase-config-43c4c4823e6b
@@ -37,26 +57,22 @@ iOS
 - Schemes 
 - Runner Project - Configurations
 - Runner Target - Product Bundle Identifier, Product Name, Primary App Icon
-- Info Plist - Bundle Display Name - $(PRODUCT_NAME)
-- ios.Runner > Assets.xcassets > AppIcon
+- Info Plist - Bundle Display Name 
+- ios.Runner > Assets.xcassets > AppIcon sub folders dev/staging/sit/prd
+- config - sub folders dev/staging/sit/prd Google Service Info.plist
 - For Each iOS App ID in Firebase Messging Tab
+- APN
 
 Android
-- App > build.gradle - Flafor Dimension, productFlavors
+- App > build.gradle - Flavor Dimension, productFlavors
 - srs > sub folders - res and google-servers.json
 
 .vscode > luanch.json
     
-flutter run  -t  lib/main_dev.dart --flavor dev
-flutter run  -t  lib/main_dev.dart --flavor staging  
-flutter run  -t  lib/main.dart --flavor prd
- 
-flutter run  --release  lib/main_dev.dart --flavor dev
-flutter run  --release  lib/main_dev.dart --flavor staging
-flutter run  --release  lib/main.dart --flavor prd   
+flutter run  -t  lib/main_dev.dart --flavor dev --dart-define-from-file   
 
-8) Dart Define and AppConfig
-
+7) AppConfig
+8) 
 9)
 
 ___________

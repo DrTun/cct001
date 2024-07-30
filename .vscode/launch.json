@@ -66,19 +66,6 @@
           "lib/main.dart",
           "--dart-define-from-file", "config/prd.json",
         ]
-      },
-      {
-        "name": "prd *",
-        "request": "launch",
-        "type": "dart",
-        "program": "lib/main.dart",
-        "args": [
-          "--flavor",
-          "prd",
-          "--target",
-          "lib/main.dart",
-          "--dart-define-from-file", "config/prd.json",
-        ]
       }
     ]
   }

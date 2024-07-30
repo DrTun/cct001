@@ -25,9 +25,8 @@ void main() async {
   // 1) Settings  
   final settingsController = SettingsController(SettingsService()); 
   await settingsController.loadSettings(); 
-  // 2) Retrieve App Config from Dart Define
-  const envFlv = String.fromEnvironment('FLV', defaultValue: 'dev');
-  setAppConfig(envFlv);
+  // 2) Retrieve App Config from Dart Define 
+  setAppConfig();
   // 3) Retrieve Secret Key from Dart Define and overwrite Secret Key
   
   // 4) Firebase - Anaytics, Crashlytics
@@ -84,8 +83,8 @@ Future<void> firebaseMessagingBackgroundHandler(RemoteMessage message) async {
 }
 
 
-void setAppConfig(String envFlv) async{  
-  //if (await EnvService.loadEnv(ext: envFlv)!= 200) MyHelpers.showIt("Environment Config Errors");
+void setAppConfig() async{  
+  String envFlv = const String.fromEnvironment('FLV', defaultValue: 'dev');
   if (envFlv == 'prd') {
     AppConfig.create(
       appName: "CCT 001", // PRD 

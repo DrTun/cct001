@@ -5,6 +5,9 @@ ios.Runner.Info.plist > CFBundleDisplayName
 
 android.app.src.main.AndroidManifest.xml > android:label
 
+flutter pub add -d change_app_package_name          
+dart run change_app_package_name:main com.nirvasoft.cc001     
+
 2) App Icon
 ios.Runner.Assets.xcassets.AppIcon.appiconset
 (Icon Set Creator >  replace AppIcon.appiconset folder)
@@ -74,6 +77,19 @@ flutter run  -t  lib/main_dev.dart --flavor dev --dart-define-from-file
 7) AppConfig
 8) 
 9)
+Terminal
+flutter clean 
+flutter pub get
+flutter pub outdated
+flutter pub cache repair
+flutter doctor
+
+dart fix --apply (be careful. pls back up)
+
+git clean -xfd                                                        
+git stash save --keep-index
+git stash drop
+git pull
 
 ___________
 
@@ -94,4 +110,6 @@ TBC
 - app icons
 - tabs
 - card
+
+
 

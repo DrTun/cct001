@@ -11,6 +11,7 @@ class AppConfig {
   String clientID="";
   String secretKey="";
   int log=1;
+  bool fcm=false;
   MaterialColor primaryColor = Colors.blue;
   Flavor flavor = Flavor.dev;
 
@@ -27,9 +28,10 @@ class AppConfig {
     String authURL="",
     String secretKey="",
     int log=1,
+    bool fcm=false,
   }) {
-    return shared = AppConfig(appName, appDesc,appID, primaryColor, flavor,clientID,baseURL,authURL,secretKey,log);
+    return shared = AppConfig(appName, appDesc,appID, primaryColor, flavor,clientID,baseURL,authURL,secretKey,log,fcm);
   }
 
-  AppConfig(this.appName, this.appDesc, this.appID, this.primaryColor, this.flavor, this.clientID, this.baseURL, this.authURL,this.secretKey, this.log);
+  AppConfig(this.appName, this.appDesc, this.appID, this.primaryColor, this.flavor, this.clientID, this.baseURL, this.authURL,this.secretKey, this.log,this.fcm);
 }

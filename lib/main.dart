@@ -67,10 +67,16 @@ void main() async {
   FlutterNativeSplash.remove(); // Native Splash
   // (D) Background stuff if any
   // 1) Get token # for testing. 
-    FirebaseMessaging.instance.getToken().then((value) =>  MyHelpers.showIt(value,label: "FCM Token"));
+  if (AppConfig.shared.fcm) {
+    FirebaseMessaging.instance.getToken().then((value) =>   showToken(value));
+  }
+  
 } 
 
 // --------------------------------------------------- END of main() ------------------
+void showToken(token){
+  MyHelpers.showIt(token,label: "FCM Token");   
+}
 
 Future<void> firebaseMessagingBackgroundHandler(RemoteMessage message) async {
   await Firebase.initializeApp();
@@ -97,6 +103,7 @@ void setAppConfig() async{
       authURL: const String.fromEnvironment('AUTH_URL',defaultValue: "www.auth.com"),
       secretKey: const String.fromEnvironment('KEY1', defaultValue: "empty"),
       log: int.parse(const String.fromEnvironment('LOG', defaultValue: "1")),
+      fcm:  const bool.fromEnvironment('FCM', defaultValue: false),
     );
   } else if (envFlv == 'staging'){
     AppConfig.create(
@@ -110,6 +117,7 @@ void setAppConfig() async{
       authURL: const String.fromEnvironment('AUTH_URL',defaultValue: "www.auth.com"),
       secretKey: const String.fromEnvironment('KEY1', defaultValue: "empty"),
       log: int.parse(const String.fromEnvironment('LOG', defaultValue: "1")),
+      fcm:  const bool.fromEnvironment('FCM', defaultValue: false),
     );
   }  else if (envFlv == 'sit'){
     AppConfig.create(
@@ -123,8 +131,10 @@ void setAppConfig() async{
       authURL: const String.fromEnvironment('AUTH_URL',defaultValue: "www.auth.com"),
       secretKey: const String.fromEnvironment('KEY1', defaultValue: "empty"),
       log: int.parse(const String.fromEnvironment('LOG', defaultValue: "1")),
+      fcm:  const bool.fromEnvironment('FCM', defaultValue: false),
     );
   }  else {
+
     AppConfig.create(
       appName: "CCT1 DEV*", 
       appID: "com.nirvasoft.cct001.dev",
@@ -136,6 +146,7 @@ void setAppConfig() async{
       authURL: const String.fromEnvironment('AUTH_URL',defaultValue: "www.auth.com"),
       secretKey: const String.fromEnvironment('KEY1', defaultValue: "empty"),
       log: int.parse(const String.fromEnvironment('LOG', defaultValue: "3")),
+      fcm:  const bool.fromEnvironment('FCM', defaultValue: false),
     );
   }
 }

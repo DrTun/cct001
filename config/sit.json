@@ -11,5 +11,6 @@
     "DEMO_ID":"demo",
     "DEMO_PW":"1020304050",
 
-    "LOG":"3"
+    "LOG":"3",
+    "FCM":true
   }

@@ -1,18 +1,18 @@
 
-import 'package:cct001/appconfig.dart';
-import 'package:cct001/src/views/view_data_details.dart';
-import 'package:cct001/src/views/view_data_list.dart';
+import '/appconfig.dart';
+import '/src/views/view_data_details.dart';
+import '/src/views/view_data_list.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
-import 'views/view_sample_details.dart';
-import 'views/view_sample_list.dart';
-import 'settings/settings_controller.dart';
-import 'settings/settings_view.dart'; 
-import 'loadingpage.dart';
-import 'signinpage.dart';
-import 'rootpage.dart'; 
-import 'views/view_data.dart'; 
+import '../views/view_sample_details.dart';
+import '../views/view_sample_list.dart';
+import '../settings/settings_controller.dart';
+import '../settings/settings_view.dart'; 
+import '../loadingpage.dart';
+import '../signin/signinpage.dart';
+import '../rootpage.dart'; 
+import '../views/view_data.dart'; 
 //  -------------------------------------    My App (Property of Nirvasoft.com)
 class MyApp extends StatelessWidget {
   const MyApp({  super.key,  required this.settingsController,});

@@ -1,9 +1,9 @@
 //  -------------------------------------    Loading 
 import 'api/api_auth.dart';
 
-import 'globaldata.dart';
+import 'shared/globaldata.dart';
 import 'rootpage.dart'; 
-import 'signinpage.dart';
+import 'signin/signinpage.dart';
 import 'package:flutter/material.dart'; 
 //  -------------------------------------    Loading (Property of Nirvasoft.com)
 class LoadingPage extends StatefulWidget {

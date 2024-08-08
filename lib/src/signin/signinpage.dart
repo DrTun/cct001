@@ -1,10 +1,10 @@
 
-import 'package:cct001/appconfig.dart';
+import '/appconfig.dart';
 import 'package:flutter/material.dart';   
-import 'api/api_auth.dart'; 
-import 'globaldata.dart';  
-import 'helpers/helpers.dart';  
-import 'rootpage.dart'; 
+import '../api/api_auth.dart'; 
+import '../shared/globaldata.dart';  
+import '../helpers/helpers.dart';  
+import '../rootpage.dart'; 
 //  -------------------------------------    Sign In Page (Property of Nirvasoft.com)
 class SigninPage extends StatefulWidget {
   static const routeName = '/signin';
@@ -74,13 +74,13 @@ class _SigninState extends State<SigninPage> {
         GlobalAccess.updateSecToken(); 
         setState(() {Navigator.pushReplacementNamed(context, RootPage.routeName);});
       } else if (apiResponse['status'] == 500) { // Other Exceptions from Class
-        MyHelpers.msg("Connectivity [50x]"); 
+        MyHelpers.showIt("Connectivity [50x]"); 
       } else { 
-        MyHelpers.msg("Invalid User ID or Password.");
+        MyHelpers.showIt("Invalid User ID or Password.");
       }
     } catch (e, stacktrace) { // Other Exceptions from Widget
       if (AppConfig.shared.log>=1) logger.e("Connectivity #40x (User): $e\n$stacktrace");
-      MyHelpers.msg("Connectivity [50xx]"); 
+      MyHelpers.showIt("Connectivity [50xx]"); 
     }
   }
   Future<void> _performGuest() async {  

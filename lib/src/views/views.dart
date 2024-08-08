@@ -1,8 +1,8 @@
 import '/appconfig.dart';
 
-import '../signinpage.dart';
+import '../signin/signinpage.dart';
 
-import '../mynotifier.dart';
+import '../providers/mynotifier.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../api/api_data.dart'; 

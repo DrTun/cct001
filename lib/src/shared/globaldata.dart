@@ -2,7 +2,7 @@
 import '/appconfig.dart';
  
 
-import 'helpers/helpers.dart';
+import '../helpers/helpers.dart';
 
 
 class GlobalAccess {

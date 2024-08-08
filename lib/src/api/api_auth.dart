@@ -3,7 +3,7 @@ import 'package:http/http.dart' as http;
 import 'package:logger/logger.dart'; 
 
 import '/appconfig.dart'; 
-import '/src/globaldata.dart';
+import '../shared/globaldata.dart';
 //  -------------------------------------    API (Property of Nirvasoft.com)
 class ApiAuthService {
   static String authURL = AppConfig.shared.authURL;     // config.env

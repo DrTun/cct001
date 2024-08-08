@@ -1,12 +1,12 @@
 
-import 'package:cct001/appconfig.dart';
+import '/appconfig.dart';
 import 'package:flutter/material.dart';  
 import 'package:confirm_dialog/confirm_dialog.dart';
 import 'package:provider/provider.dart';  
-import 'mynotifier.dart';
-import 'globaldata.dart'; 
+import 'providers/mynotifier.dart';
+import 'shared/globaldata.dart'; 
 import 'helpers/helpers.dart';
-import 'signinpage.dart';
+import 'signin/signinpage.dart';
 import 'views/views.dart';
 import 'views/view_sample_list.dart';
 import 'views/view_data.dart';

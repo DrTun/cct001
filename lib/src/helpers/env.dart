@@ -1,4 +1,4 @@
-import '/appconfig.dart';
+import '../shared/appconfig.dart';
  
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:logger/logger.dart';

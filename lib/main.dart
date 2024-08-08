@@ -8,9 +8,9 @@ import 'package:provider/provider.dart';
 import 'dart:ui';
 
 import 'firebase_options.dart';
-import 'appconfig.dart';
-import 'src/myapp.dart';
-import 'src/mynotifier.dart'; 
+import 'src/shared/appconfig.dart';
+import 'myapp.dart';
+import 'src/providers/mynotifier.dart'; 
 import 'src/helpers/helpers.dart';
 import 'src/settings/settings_controller.dart';
 import 'src/settings/settings_service.dart';

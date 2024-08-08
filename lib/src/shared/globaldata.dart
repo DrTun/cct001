@@ -1,5 +1,5 @@
 //  -------------------------------------   Global Data (Property of Nirvasoft.com)
-import '/appconfig.dart';
+import 'appconfig.dart';
  
 
 import '../helpers/helpers.dart';

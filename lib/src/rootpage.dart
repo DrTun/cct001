@@ -1,5 +1,5 @@
 
-import '/appconfig.dart';
+import 'shared/appconfig.dart';
 import 'package:flutter/material.dart';  
 import 'package:confirm_dialog/confirm_dialog.dart';
 import 'package:provider/provider.dart';  

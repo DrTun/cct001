@@ -1,5 +1,5 @@
 
-import '/appconfig.dart';
+import '../shared/appconfig.dart';
 import 'package:flutter/material.dart';   
 import '../api/api_auth.dart'; 
 import '../shared/globaldata.dart';  

@@ -1,4 +1,4 @@
-import '/appconfig.dart';
+import '../shared/appconfig.dart';
 
 import '../signin/signinpage.dart';
 

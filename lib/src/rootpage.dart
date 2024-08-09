@@ -8,8 +8,6 @@ import 'shared/globaldata.dart';
 import 'helpers/helpers.dart';
 import 'signin/signinpage.dart';
 import 'views/views.dart';
-import 'views/view_sample_list.dart';
-import 'views/view_data.dart';
 import 'settings/settings_view.dart';
 import 'api/api_auth.dart';
 //  -------------------------------------    Root Page (Property of Nirvasoft.com)

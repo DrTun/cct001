@@ -1,3 +1,6 @@
+import '../views/view_data.dart';
+import '../views/view_sample_list.dart';
+
 import '../shared/appconfig.dart';
 
 import '../signin/signinpage.dart';
@@ -8,12 +11,56 @@ import 'package:provider/provider.dart';
 import '../api/api_data.dart'; 
 import '../helpers/helpers.dart';   
 //  -------------------------------------    Forms (Property of Nirvasoft.com)
-class Form001 extends StatefulWidget {
-  const Form001({super.key});
+class ViewBlank extends StatelessWidget {
+  const ViewBlank({super.key});
   @override
-  State<Form001> createState() => _Form001State();
+  Widget build(BuildContext context) {
+    // Consumer Declaration #1
+    return Consumer<MyNotifier>(
+      builder: (context, provider , child) {
+    // Consumer #1 
+      return  const Text(" ");
+      },
+    );
+   }
 }
-class _Form001State extends State<Form001> {
+class ViewApps extends StatelessWidget {
+  const ViewApps({super.key});
+  @override
+  Widget build(BuildContext context) {
+    return Column( children: [ 
+        const SizedBox(height: 20),
+        const Text('Samples Apps', style: TextStyle(fontSize: 20),),
+        
+
+        const SizedBox(height: 20), 
+        TextButton( onPressed: () => throw Exception(), child: const Text('Crash Test', 
+          style: TextStyle(decoration: TextDecoration.underline)),),
+
+        const SizedBox(height: 20), 
+        TextButton( onPressed: () { Navigator.pushNamed(context,ViewList.routeName, ); }, child: const Text('Form List', 
+          style: TextStyle(decoration: TextDecoration.underline)),),
+
+        
+        const SizedBox(height: 20), 
+        TextButton( onPressed: () { Navigator.pushNamed(context,ViewData.routeName, ); }, child: const Text('SQFlite', 
+          style: TextStyle(decoration: TextDecoration.underline)),),
+
+        const SizedBox(height: 20), 
+        TextButton( onPressed: () { Navigator.pushNamed(context,View001.routeName, ); }, child: const Text('API Data', 
+          style: TextStyle(decoration: TextDecoration.underline)),),
+    ]
+    );
+  }
+}
+
+class View001 extends StatefulWidget {
+  static const routeName = 'form001';
+  const View001({super.key});
+  @override
+  State<View001> createState() => _View001State();
+}
+class _View001State extends State<View001> {
   late final ApiDataService apiDataService;  
   final dataController = TextEditingController(); 
   @override
@@ -28,6 +75,12 @@ class _Form001State extends State<Form001> {
       builder: (BuildContext context, MyNotifier value, Widget? child) { 
       // add this for Consumer *************************************** //
       return 
+        Scaffold(
+        appBar: AppBar(
+        title: const Text('Database'),
+        ), 
+        body:
+
         Column(
         children: [
         const SizedBox(height: 10),
@@ -37,8 +90,9 @@ class _Form001State extends State<Form001> {
         TextField(controller: dataController,maxLines: 8,),
         TextButton(onPressed: (){dataController.text="";},child: const Text('Clear', style: TextStyle(decoration: TextDecoration.underline)),),
         const SizedBox(height: 50),
-        const Form002(), 
+        const View002(), 
         ],
+        )
         );
       // add this for Consumer *************************************** //
       }
@@ -63,9 +117,10 @@ class _Form001State extends State<Form001> {
     }
     }
 }
-class Form002 extends StatelessWidget {
+
+class View002 extends StatelessWidget {
   static const routeName = '/root/form002';
-  const Form002({super.key});
+  const View002({super.key});
   @override
   Widget build(BuildContext context) {
     // Consumer Declaration #1
@@ -89,3 +144,6 @@ class Form002 extends StatelessWidget {
     // Consumer 
    }
 }
+
+
+

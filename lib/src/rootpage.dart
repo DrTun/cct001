@@ -89,22 +89,9 @@ class _RootPageState extends State<RootPage> with WidgetsBindingObserver {
                         SizedBox(height: MediaQuery.of(context).size.height * 0.05,),
                       ], ),
                       // Tab 2 content
-                      const Padding(
-                        padding: EdgeInsets.symmetric(horizontal: 16), // Add padding left and right
-                        child: Form001()), 
+                      const ViewBlank(),
                       // Tab 3 content
-                        Column( children: [ 
-                          const SizedBox(height: 10),
-                          const Text('Samples Applications', style: TextStyle(fontSize: 20),),
-                          const SizedBox(height: 10), 
-                          TextButton( onPressed: () { Navigator.pushNamed(context,ViewList.routeName, ); }, child: const Text('Form List', 
-                            style: TextStyle(decoration: TextDecoration.underline)),),
-                          TextButton( onPressed: () => throw Exception(), child: const Text('Crash Me', 
-                            style: TextStyle(decoration: TextDecoration.underline)),),
-                          TextButton( onPressed: () { Navigator.pushNamed(context,ViewData.routeName, ); }, child: const Text('SQFlite', 
-                            style: TextStyle(decoration: TextDecoration.underline)),),
-                      ]
-                      ),
+                      const ViewApps(),
                     ],
                   ),
                 ),

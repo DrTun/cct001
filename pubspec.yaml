@@ -40,6 +40,8 @@ dependencies:
   flutter_map: ^7.0.2
   location: ^7.0.0
   flutter_map_cancellable_tile_provider: ^3.0.0
+  flutter_native_splash: ^2.4.1
+
 
 dev_dependencies:
   flutter_test:
@@ -57,3 +59,13 @@ flutter:
     # Add assets from the images directory to the application.
     - assets/images/geo/
     - assets/images/
+
+
+
+
+flutter_native_splash:
+  color: "#ffffff"
+  image: assets/images/loading/loading.png
+  android_12:
+    image: assets/images/loading/loading.png
+    icon_background_color: "#ffffff"

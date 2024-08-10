@@ -3,6 +3,7 @@ import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_native_splash/flutter_native_splash.dart';
 import '/src/geolocation/geodata.dart'; 
 import 'package:provider/provider.dart';
 import 'dart:ui';
@@ -15,10 +16,10 @@ import 'src/settings/settings_controller.dart';
 import 'src/settings/settings_service.dart';
 //  Version 1.0.2
 //  -------------------------------------    Main (Property of Nirvasoft.com) 
-void main() async {  
-  WidgetsFlutterBinding.ensureInitialized();
+void main() async {   
   // (A) Native Splash Screen if needed
-
+  WidgetsBinding widgetsBinding = WidgetsFlutterBinding.ensureInitialized();
+  FlutterNativeSplash.preserve(widgetsBinding: widgetsBinding);
   //​ (B) Preloading  
   // 1) Settings  
   final settingsController = SettingsController(SettingsService()); 
@@ -63,6 +64,9 @@ void main() async {
   if (AppConfig.shared.fcm) {
     FirebaseMessaging.instance.getToken().then((value) =>   showToken(value));
   }  
+  // (E) Remove Splash Screen
+
+    FlutterNativeSplash.remove();
 } 
 
 // --------------------------------------------------- END of main() ------------------

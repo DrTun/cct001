@@ -50,5 +50,11 @@
 		<string>UIInterfaceOrientationLandscapeLeft</string>
 		<string>UIInterfaceOrientationLandscapeRight</string>
 	</array>
+	<key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
+	<string>This app always needs access to your location while driving to provide accurate
+		navigation.</string>
+	<key>NSLocationWhenInUseUsageDescription</key>
+	<string>This app needs access to your location while driving to provide accurate navigation.</string>
+
 </dict>
 </plist>

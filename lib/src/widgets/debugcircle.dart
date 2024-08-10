@@ -28,7 +28,7 @@ class DebugCircle extends StatelessWidget {
         : CircularButton( // show refresh icon onclick go refreshing (rotate)
             color: Colors.lightBlue,
             width: 40, height: 40,
-            icon: const Icon( Icons.add_comment, color: Colors.white,),
+            icon: const Icon( Icons.comment, color: Colors.white,),
             onClick: () async { 
                 onClick!(); 
             },

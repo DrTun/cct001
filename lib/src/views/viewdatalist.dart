@@ -1,6 +1,6 @@
 
 import 'package:flutter/material.dart';
-import 'view_data_details.dart';
+import 'viewdatadetails.dart';
 import '../sqflite/sqf_helpers.dart';
 import '../sqflite/sqf_models.dart';
 

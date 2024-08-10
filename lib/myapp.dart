@@ -1,18 +1,22 @@
 
+import '/src/geolocation/geopara.dart'; 
+
+import 'src/geolocation/mapview.dart';
 import 'src/shared/appconfig.dart';
-import '/src/views/view_data_details.dart';
-import '/src/views/view_data_list.dart';
+import 'src/views/viewdatadetails.dart';
+import 'src/views/viewdatalist.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
-import 'src/views/view_sample_details.dart';
-import 'src/views/view_sample_list.dart';
+import 'src/views/viewsampledetails.dart';
+import 'src/views/viewsamplelist.dart';
 import 'src/settings/settings_controller.dart';
 import 'src/settings/settings_view.dart'; 
 import 'src/loadingpage.dart';
 import 'src/signin/signinpage.dart';
 import 'src/rootpage.dart'; 
-import 'src/views/view_data.dart'; 
+import 'src/views/viewdata.dart';
+import 'src/views/views.dart'; 
 //  -------------------------------------    My App (Property of Nirvasoft.com)
 class MyApp extends StatelessWidget {
   const MyApp({  super.key,  required this.settingsController,});
@@ -51,11 +55,14 @@ class MyApp extends StatelessWidget {
                   case RootPage.routeName: return const RootPage(); 
                   case SettingsView.routeName: return SettingsView(controller: settingsController);
                   case ViewDetails.routeName:return  const ViewDetails();
+                  case View001.routeName: return const View001();
                   case ViewList.routeName: return const ViewList();
                   case ViewData.routeName: return const ViewData();
                   case ViewDataList.routeName: return const ViewDataList();
                   case ViewDataDetails.routeName: return const ViewDataDetails();
                   case SigninPage.routeName:  return const SigninPage();
+                  case MapView.routeName:  return  const MapView();
+                  case GeoPara.routeName:  return  const GeoPara();
                   default:  return const LoadingPage();
                 }
                 

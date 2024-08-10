@@ -1,6 +1,7 @@
 {
     "FLV": "staging",
-    "APP_TITLE":"CCT1 UAT",
+    "APP_NAME":"CCT UAT",
+    "APP_DESC":"CCT UAT",
 
     "CLIENT_ID":"53bedecefeghijk01",
     "KEY1": "jRxaPLUjcm210BiPDey7kMM7",

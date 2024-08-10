@@ -4,6 +4,7 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:logger/logger.dart';
 import 'package:prompt_dialog/prompt_dialog.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 //  -------------------------------------    Helpers (Property of Nirvasoft.com)
 
 final logger = Logger();
@@ -67,5 +68,12 @@ class SecureStorage {
 
   deleteSecureData(String key) async {
     await storage.delete(key: key);
+  }
+}
+
+class Shared {
+  static dynamic prefs;
+  static Future<void> init() async {
+    prefs = await SharedPreferences.getInstance();
   }
 }

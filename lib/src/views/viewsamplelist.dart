@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart'; 
-import 'view_sample_details.dart'; 
-import 'arguments.dart';
+import 'viewsampledetails.dart'; 
+import '../shared/arguments.dart';
 class ViewList extends StatelessWidget {
   const ViewList({
     super.key,

@@ -1,4 +1,4 @@
-import 'arguments.dart';
+import '../shared/arguments.dart';
 import 'package:flutter/material.dart'; 
 class ViewDetails extends StatelessWidget { 
   const ViewDetails({super.key});

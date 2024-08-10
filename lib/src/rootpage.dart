@@ -1,4 +1,10 @@
 
+import 'dart:async'; 
+import '/src/views/tabmain.dart';
+import 'package:url_launcher/url_launcher.dart';
+
+import 'geolocation/mapview001.dart';
+import 'geolocation/geodata.dart';
 import 'shared/appconfig.dart';
 import 'package:flutter/material.dart';  
 import 'package:confirm_dialog/confirm_dialog.dart';
@@ -6,7 +12,7 @@ import 'package:provider/provider.dart';
 import 'providers/mynotifier.dart';
 import 'shared/globaldata.dart'; 
 import 'helpers/helpers.dart';
-import 'signin/signinpage.dart';
+import 'signin/signinpage.dart'; 
 import 'views/views.dart';
 import 'settings/settings_view.dart';
 import 'api/api_auth.dart';
@@ -19,6 +25,8 @@ class RootPage extends StatefulWidget {
 }
 class _RootPageState extends State<RootPage> with WidgetsBindingObserver {
   late MyNotifier provider ;  // Provider Declaration and init
+  //
+
   @override
   void initState() {          // Init
     super.initState(); 
@@ -28,17 +36,32 @@ class _RootPageState extends State<RootPage> with WidgetsBindingObserver {
     WidgetsBinding.instance.addPostFrameCallback((_){ 
       provider.updateData01(AppConfig.shared.appName, AppConfig.shared.appDesc);  // Provider update
     }); 
+
   }
+
+
   @override
   void didChangeAppLifecycleState(AppLifecycleState state) { // Lifecycle
     super.didChangeAppLifecycleState(state);
     if (AppConfig.shared.log>=3) logger.e("LifeCycle State: $state");
-    if (state == AppLifecycleState.paused) {logger.e("Background");} 
-    else if (state == AppLifecycleState.resumed) { 
+    if (state == AppLifecycleState.paused) {
+      logger.e("Background");
+      bg();
+    }else if (state == AppLifecycleState.inactive) { bg();
+    }else if (state == AppLifecycleState.resumed) { 
       logger.e("Foreground");
       ApiAuthService.checkRefreshToken();
     }
   }
+
+  Future<void> bg() async {
+    if (GeoData.tripStarted) {
+      await GeoData.location.enableBackgroundMode(enable: true);
+    } else {
+      await GeoData.location.enableBackgroundMode(enable: false);
+    }
+  }
+
   @override
   Widget build(BuildContext context) {  // Widget
     return  Consumer<MyNotifier>(
@@ -54,11 +77,13 @@ class _RootPageState extends State<RootPage> with WidgetsBindingObserver {
                   if (value == 'Item 1') {provider.updateData01('PRF', 'Profile 1');  } // Provider Update
                   else if (value == 'Item 2') {  provider.updateData01('STN', 'Profile 2'); } // Provider Update
                   else if (value =="settings"){  Navigator.restorablePushNamed(context, SettingsView.routeName);   }
+                  else if (value =="map"){  launchUrl(Uri.parse('https://openstreetmap.org'));   }
                 },
                 itemBuilder: (BuildContext context) => <PopupMenuEntry<String>>[
                   const PopupMenuItem<String>( value: 'Item 1',  child: Text('Profile 1'),  ),
                   const PopupMenuItem<String>( value: 'Item 2',  child: Text('Profile 2'), ),
                   const PopupMenuItem<String>( value: 'settings',  child: Text('Settings'), ),
+                  const PopupMenuItem<String>( value: 'map',  child: Text('Open Street Map'), ),
                 ],
               ),
             ],
@@ -68,35 +93,34 @@ class _RootPageState extends State<RootPage> with WidgetsBindingObserver {
               padding: EdgeInsets.zero,
               children: [
                 DrawerHeader(decoration: BoxDecoration(color: AppConfig.shared.primaryColor,),child: const Text('Menu', style: TextStyle(color: Colors.white,fontSize: 24,),),),
-                ListTile( title:  const Text('Home',), onTap: () async {MyHelpers.msg("You are home");},    ),
+                ListTile( title:  const Text('Home',), onTap: () async {
+                  MyHelpers.msg("You are home");
+                  
+                  },
+                ),
                 ListTile( title:  Text('${GlobalAccess.mode=="Guest"?"Sign In":"Sign Out"} ',),  onTap: () async { _gotoSignIn(context); },),
               ],
             ),
           ),
-          body: DefaultTabController(
-            length: 3,
+          body: const DefaultTabController(
+            length: 4,
             child: Column(
               children: [
                 Expanded(
                   child: TabBarView(
                     children: [
-                      // Tab 1 content 
-                      Column( children: [ 
-                        Align(alignment: Alignment.centerRight, child:  Text('${GlobalAccess.userName!=""?"Welcome ${GlobalAccess.userName} (${GlobalAccess.userID})":""} ',
-                          style: const TextStyle(color: Colors.black)),),
-                        SizedBox(height: MediaQuery.of(context).size.height * 0.05,),
-                      ], ),
-                      // Tab 2 content
-                      const ViewBlank(),
-                      // Tab 3 content
-                      const ViewApps(),
+                      MainTab(),
+                      MapView001(),
+                      ViewBlank(),
+                      ViewApps(),
                     ],
                   ),
                 ),
-                const TabBar(
+                TabBar(
                   tabs: [
                     Tab( text: 'Home', icon: Icon(Icons.home), ),
-                    Tab( text: 'Forms', icon: Icon(Icons.ac_unit_outlined),  ),
+                    Tab( text: 'Map', icon: Icon(Icons.map), ),
+                    Tab( text: 'Trips', icon: Icon(Icons.add_location_alt_outlined),  ),
                     Tab( text: 'Apps', icon: Icon(Icons.apps), ),
                   ],
                 ), 

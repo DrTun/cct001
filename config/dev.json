@@ -1,6 +1,7 @@
-{
+  {
     "FLV": "dev",
-    "APP_TITLE":"CCT1 Dev",
+    "APP_NAME":"CCT1 Dev",
+    "APP_DESC":"CCT1 Dev",
 
     "CLIENT_ID":"53bedecefeghijk01",
     "KEY1": "jRxaPLUjcm210BiPDey7kMM7",

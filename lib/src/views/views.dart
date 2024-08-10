@@ -1,5 +1,6 @@
-import '../views/view_data.dart';
-import '../views/view_sample_list.dart';
+import 'viewdata.dart';
+import 'viewsamplelist.dart';
+import '../geolocation/geopara.dart';
 
 import '../shared/appconfig.dart';
 
@@ -32,10 +33,15 @@ class ViewApps extends StatelessWidget {
         const SizedBox(height: 20),
         const Text('Samples Apps', style: TextStyle(fontSize: 20),),
         
+        const SizedBox(height: 20), 
+        TextButton( onPressed: () { Navigator.pushNamed(context,GeoPara.routeName, ); }, child: const Text('Geo Parameters', 
+          style: TextStyle(decoration: TextDecoration.underline)),),
 
         const SizedBox(height: 20), 
         TextButton( onPressed: () => throw Exception(), child: const Text('Crash Test', 
           style: TextStyle(decoration: TextDecoration.underline)),),
+
+
 
         const SizedBox(height: 20), 
         TextButton( onPressed: () { Navigator.pushNamed(context,ViewList.routeName, ); }, child: const Text('Form List', 

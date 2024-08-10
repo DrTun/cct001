@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 enum Flavor { prod, dev, sit, staging }
 
 class AppConfig {
+  String appVersion = "1.0.3";  // Update internal version number, edit here
+  bool skipsignin = true ;      // Skip Signin Page, edit here
   String appName = "";
   String appDesc = "";
   String appID = "";

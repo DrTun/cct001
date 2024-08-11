@@ -24,7 +24,7 @@ class MapView001State extends State<MapView001> {
   //late MapController mapctrl; 
   final  mapctrl = MapController();
   bool refreshing = false; 
-  bool switchon = false;
+  bool switchon = GeoData.tripStarted;
   final ValueNotifier<bool> isStartValue = ValueNotifier<bool>(false);
 
   @override

@@ -5,7 +5,6 @@ import 'package:latlong2/latlong.dart';
 import '../helpers/helpers.dart';
 import 'package:location/location.dart';
 
-import '../shared/appconfig.dart'; 
 //  -------------------------------------    GeoData (Property of Nirvasoft.com)
 class GeoData{
   // GPS Data
@@ -53,7 +52,8 @@ class GeoData{
                 polyline01.points[polyline01.points.length-2].longitude,"meters");
           int time= dtimeList01[dtimeList01.length-1].difference(dtimeList01[dtimeList01.length-2]).inSeconds;
           double speed=dist/time;
-          if (AppConfig.shared.log>=3) logger.i("Speed: $speed  ($dist / $time)");
+          //if (AppConfig.shared.log>=3) 
+          logger.i("Speed: $speed  ($dist / $time)");
 
           polyline01Fixed.points.add(LatLng(lat, lng - 0.000003));
           dtimeList01Fixed.add(dt);
@@ -71,11 +71,13 @@ class GeoData{
                 polyline01Fixed.points[polyline01Fixed.points.length-3].longitude,"meters");
                 
             if ((dist1>minDistance && dist1<maxDistance) || (dist2>minDistance && dist2<maxDistance)){
-              if (AppConfig.shared.log>=3) logger.i("Keep: $dist1 $dist2 ");                                 // Keep point B
+              //if (AppConfig.shared.log>=3) 
+              logger.i("Keep: $dist1 $dist2 ");                                 // Keep point B
             } else {
               polyline01Fixed.points.removeAt(polyline01Fixed.points.length-2); // Remove point B
               dtimeList01Fixed.removeAt(dtimeList01Fixed.length-2);
-              if (AppConfig.shared.log>=3) logger.i("Remove: $dist1 $dist2 ");
+              //if (AppConfig.shared.log>=3) 
+              logger.i("Remove: $dist1 $dist2 ");
             }
           }
         }

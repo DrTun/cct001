@@ -38,7 +38,7 @@ class MainTabState extends State<MainTab> {
                                 child: Column(
                                   children: [
                                     Image.asset('assets/images/map.png', width: 100,height: 100,),
-                                    const Text('Map View\nPlan your Route',textAlign: TextAlign.center,),
+                                    const Text('Route Management',textAlign: TextAlign.center,),
                                   ],
                                 ),
                               )

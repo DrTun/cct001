@@ -62,10 +62,10 @@ flutter:
 
 
 
-
+#dart pub run flutter_native_splash:create
 flutter_native_splash:
   color: "#ffffff"
-  image: assets/images/loading/loading.png
+  image: assets/images/loading/wait01.png
   android_12:
-    image: assets/images/loading/loading.png
+    image: assets/images/loading/wait01.png
     icon_background_color: "#ffffff"

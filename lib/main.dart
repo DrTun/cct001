@@ -68,7 +68,6 @@ void main() async {
     FirebaseMessaging.instance.getToken().then((value) =>   showToken(value));
   }  
   // (E) Remove Splash Screen
-
     //FlutterNativeSplash.remove();
 } 
 

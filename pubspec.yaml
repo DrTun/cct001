@@ -40,7 +40,6 @@ dependencies:
   flutter_map: ^7.0.2
   location: ^7.0.0
   flutter_map_cancellable_tile_provider: ^3.0.0
-  flutter_native_splash: ^2.4.1
 
 
 dev_dependencies:
@@ -62,10 +61,3 @@ flutter:
 
 
 
-#dart pub run flutter_native_splash:create
-flutter_native_splash:
-  color: "#ffffff"
-  image: assets/images/loading/wait01.png
-  android_12:
-    image: assets/images/loading/wait01.png
-    icon_background_color: "#ffffff"

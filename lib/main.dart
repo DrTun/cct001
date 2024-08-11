@@ -15,13 +15,14 @@ import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_native_splash/flutter_native_splash.dart';
+//import 'package:flutter_native_splash/flutter_native_splash.dart';
 //  Version 1.0.2
 //  -------------------------------------    Main (Property of Nirvasoft.com) 
 void main() async {   
   // (A) Native Splash Screen if needed
-  WidgetsBinding widgetsBinding = WidgetsFlutterBinding.ensureInitialized();
-  FlutterNativeSplash.preserve(widgetsBinding: widgetsBinding);
+  //WidgetsBinding widgetsBinding = 
+  WidgetsFlutterBinding.ensureInitialized();
+  //FlutterNativeSplash.preserve(widgetsBinding: widgetsBinding);
   //​ (B) Preloading  
   // 1) Settings  
   final settingsController = SettingsController(SettingsService()); 
@@ -68,7 +69,7 @@ void main() async {
   }  
   // (E) Remove Splash Screen
 
-    FlutterNativeSplash.remove();
+    //FlutterNativeSplash.remove();
 } 
 
 // --------------------------------------------------- END of main() ------------------

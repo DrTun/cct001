@@ -65,13 +65,12 @@ class SecureStorage {
     String value = await storage.read(key: key) ?? 'No data found!'; 
     return value;
   }
-
   deleteSecureData(String key) async {
     await storage.delete(key: key);
   }
 }
 
-class Shared {
+class MyStore {
   static dynamic prefs;
   static Future<void> init() async {
     prefs = await SharedPreferences.getInstance();

@@ -1,4 +1,4 @@
-import '/src/helpers/env.dart';
+
 import 'package:flutter/material.dart';
 import 'package:sqflite/sqflite.dart';
 import 'viewdatalist.dart';
@@ -42,8 +42,7 @@ class _ViewDataState extends State<ViewData> {
             onPressed: () async {
               var db = await openDatabase('my_db.db');
               var data = await db.query('my_table');
-              await db.close();
-              logger.i(data);
+              await db.close(); 
             },
             child: const Text('Read Test'),
           ),
@@ -51,8 +50,7 @@ class _ViewDataState extends State<ViewData> {
             onPressed: () async {
               var db = await openDatabase('my_db.db');
               var data = await db.query('my_table');
-              await db.close();
-              logger.i(data);
+              await db.close(); 
             },
             child: const Text('Create Table'),
           ),

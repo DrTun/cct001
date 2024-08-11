@@ -2,6 +2,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:flutter_map_cancellable_tile_provider/flutter_map_cancellable_tile_provider.dart';
+import '../helpers/helpers.dart';
 import '/src/shared/appconfig.dart';
 import 'package:keep_screen_on/keep_screen_on.dart';
 import 'package:latlong2/latlong.dart';
@@ -164,6 +165,7 @@ Widget build(BuildContext context) {
             onClick: () async {
               setState(() {switchon = false;  });
               GeoData.endTrip();
+              MyStore.prefs.setBool("tripStarted", false);
               KeepScreenOn.turnOff();
             },
           )
@@ -173,6 +175,7 @@ Widget build(BuildContext context) {
               GeoData.polyline01.points.clear();
               GeoData.polyline01Fixed.points.clear();
               GeoData.startTrip();
+              MyStore.prefs.setBool("tripStarted", true);
               KeepScreenOn.turnOn();
             },
           );

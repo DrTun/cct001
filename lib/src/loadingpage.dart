@@ -76,6 +76,11 @@ class _LoadingState extends State<LoadingPage> {
     }
   }
   Future loading(BuildContext context) async { 
+    // Shared Preferences
+    await MyStore.init();
+    //if (MyStore.prefs.containsKey('tripStarted')){
+      GeoData.tripStarted = MyStore.prefs.getBool('tripStarted') ?? false;
+    //}
     // Read Global Data from Secure Storage
     await GlobalAccess.readSecToken();
     if (GlobalAccess.accessToken.isNotEmpty){  // should not refresh if guest coming back. let sign in again

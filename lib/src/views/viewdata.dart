@@ -41,7 +41,7 @@ class _ViewDataState extends State<ViewData> {
           ElevatedButton(
             onPressed: () async {
               var db = await openDatabase('my_db.db');
-              var data = await db.query('my_table');
+              //var data = await db.query('my_table');
               await db.close(); 
             },
             child: const Text('Read Test'),
@@ -49,7 +49,7 @@ class _ViewDataState extends State<ViewData> {
           ElevatedButton(
             onPressed: () async {
               var db = await openDatabase('my_db.db');
-              var data = await db.query('my_table');
+              //var data = await db.query('my_table');
               await db.close(); 
             },
             child: const Text('Create Table'),

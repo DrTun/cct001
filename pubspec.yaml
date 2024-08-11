@@ -65,8 +65,8 @@ flutter:
 flutter_native_splash:
   color: "#ffffff"
   image: assets/images/loading/wait01.png
+  android: false
+  ios: false
   android_12:
     image: assets/images/loading/wait01.png
     icon_background_color: "#ffffff"
-  ndroid: false
-  ios: false

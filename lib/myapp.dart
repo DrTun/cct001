@@ -1,13 +1,8 @@
-
-import '/src/geolocation/geopara.dart'; 
-
+import 'src/geolocation/geopara.dart'; 
 import 'src/geolocation/mapview.dart';
 import 'src/shared/appconfig.dart';
 import 'src/views/viewdatadetails.dart';
 import 'src/views/viewdatalist.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-import 'package:flutter_localizations/flutter_localizations.dart';
 import 'src/views/viewsampledetails.dart';
 import 'src/views/viewsamplelist.dart';
 import 'src/settings/settings_controller.dart';
@@ -17,6 +12,10 @@ import 'src/signin/signinpage.dart';
 import 'src/rootpage.dart'; 
 import 'src/views/viewdata.dart';
 import 'src/views/views.dart'; 
+
+import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
 //  -------------------------------------    My App (Property of Nirvasoft.com)
 class MyApp extends StatelessWidget {
   const MyApp({  super.key,  required this.settingsController,});
@@ -65,17 +64,11 @@ class MyApp extends StatelessWidget {
                   case GeoPara.routeName:  return  const GeoPara();
                   default:  return const LoadingPage();
                 }
-                
               },
-              
             );
-            
           },
-          
         );
-        
       },
-      
     );
   }
 }

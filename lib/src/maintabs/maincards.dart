@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart';
 import '../geolocation/mapview.dart';
-
 class MainCards extends StatefulWidget {
   const MainCards({super.key});
-
   @override
   MainCardsState createState() => MainCardsState();
 }

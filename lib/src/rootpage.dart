@@ -1,15 +1,15 @@
 
 import 'dart:async'; 
-import 'maintabs/tabmain.dart';
 import 'package:url_launcher/url_launcher.dart';
-
-import 'geolocation/mapview001.dart';
-import 'geolocation/geodata.dart';
-import 'shared/appconfig.dart';
 import 'package:flutter/material.dart';  
 import 'package:confirm_dialog/confirm_dialog.dart';
 import 'package:provider/provider.dart';  
+
+import 'geolocation/geodata.dart';
 import 'providers/mynotifier.dart';
+import 'shared/appconfig.dart';
+import 'maintabs/maincards.dart';
+import 'geolocation/mapview001.dart';
 import 'shared/globaldata.dart'; 
 import 'helpers/helpers.dart';
 import 'signin/signinpage.dart'; 
@@ -25,8 +25,6 @@ class RootPage extends StatefulWidget {
 }
 class _RootPageState extends State<RootPage> with WidgetsBindingObserver {
   late MyNotifier provider ;  // Provider Declaration and init
-  //
-
   @override
   void initState() {          // Init
     super.initState(); 
@@ -36,9 +34,7 @@ class _RootPageState extends State<RootPage> with WidgetsBindingObserver {
     WidgetsBinding.instance.addPostFrameCallback((_){ 
       provider.updateData01(AppConfig.shared.appName, AppConfig.shared.appDesc);  // Provider update
     }); 
-
   }
-
 
   @override
   void didChangeAppLifecycleState(AppLifecycleState state) { // Lifecycle

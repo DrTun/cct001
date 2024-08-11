@@ -1,19 +1,21 @@
+
+import 'myapp.dart';
+import 'firebase_options.dart';
+import 'src/geolocation/geodata.dart'; 
+import 'src/shared/appconfig.dart';
+import 'src/providers/mynotifier.dart'; 
+import 'src/helpers/helpers.dart';
+import 'src/settings/settings_controller.dart';
+import 'src/settings/settings_service.dart';
+
+import 'dart:ui';
+import 'package:provider/provider.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_native_splash/flutter_native_splash.dart';
-import '/src/geolocation/geodata.dart'; 
-import 'package:provider/provider.dart';
-import 'dart:ui';
-import 'firebase_options.dart';
-import 'src/shared/appconfig.dart';
-import 'myapp.dart';
-import 'src/providers/mynotifier.dart'; 
-import 'src/helpers/helpers.dart';
-import 'src/settings/settings_controller.dart';
-import 'src/settings/settings_service.dart';
 //  Version 1.0.2
 //  -------------------------------------    Main (Property of Nirvasoft.com) 
 void main() async {   

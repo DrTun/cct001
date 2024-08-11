@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 import '../geolocation/mapview.dart';
 
-class MainTab extends StatefulWidget {
-  const MainTab({super.key});
+class MainCards extends StatefulWidget {
+  const MainCards({super.key});
 
   @override
-  MainTabState createState() => MainTabState();
+  MainCardsState createState() => MainCardsState();
 }
-class MainTabState extends State<MainTab> {
+class MainCardsState extends State<MainCards> {
   @override
   void initState() {
     super.initState();

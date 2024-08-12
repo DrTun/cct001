@@ -2,6 +2,7 @@
 import 'myapp.dart';
 import 'firebase_options.dart';
 import 'src/geolocation/geodata.dart'; 
+import 'src/geolocation/locationnotifier.dart';
 import 'src/shared/appconfig.dart';
 import 'src/providers/mynotifier.dart'; 
 import 'src/helpers/helpers.dart';
@@ -20,7 +21,7 @@ import 'package:flutter_native_splash/flutter_native_splash.dart';
 //  -------------------------------------    Main (Property of Nirvasoft.com) 
 void main() async {   
   // (A) Native Splash Screen if needed
-  WidgetsBinding widgetsBinding = WidgetsFlutterBinding.ensureInitialized();
+  WidgetsBinding widgetsBinding =  WidgetsFlutterBinding.ensureInitialized();
   FlutterNativeSplash.preserve(widgetsBinding: widgetsBinding);
   //​ (B) Preloading  
   // 1) Settings  

@@ -63,6 +63,7 @@ flutter:
 
 
 #dart pub run flutter_native_splash:create
+#dart pub run flutter_native_splash:remove
 flutter_native_splash:
   color: "#ffffff"
   image: assets/images/loading/wait01.png

@@ -32,7 +32,8 @@ class _RootPageState extends State<RootPage> with WidgetsBindingObserver {
     provider = Provider.of<MyNotifier>(context,listen: false);
     WidgetsBinding.instance.addObserver(this);
     WidgetsBinding.instance.addPostFrameCallback((_){ 
-      provider.updateData01(AppConfig.shared.appName, AppConfig.shared.appDesc);  // Provider update
+      provider.updateData01(AppConfig.shared.appName, AppConfig.shared.appDesc, false); 
+      provider.updateTripData("","", GeoData.tripStarted, 0, 0); // Provider update
     }); 
   }
 
@@ -70,8 +71,8 @@ class _RootPageState extends State<RootPage> with WidgetsBindingObserver {
               PopupMenuButton<String>(          
                 icon: const Icon(Icons.more_vert),
                 onSelected: (value) { 
-                  if (value == 'Item 1') {provider.updateData01('PRF', 'Profile 1');  } // Provider Update
-                  else if (value == 'Item 2') {  provider.updateData01('STN', 'Profile 2'); } // Provider Update
+                  if (value == 'Item 1') {provider.updateData01('PRF', 'Profile 1',true);  } // Provider Update
+                  else if (value == 'Item 2') {  provider.updateData01('STN', 'Profile 2',true); } // Provider Update
                   else if (value =="settings"){  Navigator.restorablePushNamed(context, SettingsView.routeName);   }
                   else if (value =="map"){  launchUrl(Uri.parse('https://openstreetmap.org'));   }
                 },
@@ -133,13 +134,13 @@ class _RootPageState extends State<RootPage> with WidgetsBindingObserver {
         textOK: const Text('Yes'),textCancel: const Text('No'),)) {
         GlobalAccess.reset();               // reset global data
         await GlobalAccess.resetSecToken(); // reset secure storage with global data
-        provider.updateData01("", "");    // clear provider on screen
+        provider.updateData01("", "",false);    // clear provider on screen
         setState(() {  Navigator.pushNamed(context,SigninPage.routeName, );});
       }
     } else { // if guest, quickly go to sigin in
         GlobalAccess.reset();               // reset global data
         await GlobalAccess.resetSecToken(); // reset secure storage with global data
-        provider.updateData01("", "");    // clear provider on screen
+        provider.updateData01("", "",false);    // clear provider on screen
         setState(() {  Navigator.pushNamed(context,SigninPage.routeName, );});
     }
   }

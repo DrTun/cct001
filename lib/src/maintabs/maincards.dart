@@ -1,5 +1,9 @@
 import 'package:flutter/material.dart';
+import '/src/geolocation/locationnotifier.dart';
+import 'package:provider/provider.dart';
 import '../geolocation/mapview.dart';
+import 'cards/blankcard.dart';
+import 'cards/mapcard.dart';
 class MainCards extends StatefulWidget {
   const MainCards({super.key});
   @override
@@ -9,11 +13,21 @@ class MainCardsState extends State<MainCards> {
   @override
   void initState() {
     super.initState();
+    
     setState(() { 
     });
   }
   @override
   Widget build(BuildContext context) { 
+
+
+
+    return Consumer<LocationNotifier>(
+      builder: (context, provider , child) {
+
+
+
+
         return   Scaffold(
           body: 
           Padding(
@@ -28,35 +42,35 @@ class MainCardsState extends State<MainCards> {
                         onTap: () {
                           Navigator.pushNamed(context, MapView.routeName);
                         },
-                        child:
-                            Card(elevation: 3,shadowColor: Colors.grey,
-                              child: 
-                              Padding(
-                                padding: const EdgeInsets.all(7.0),
-                                child: Column(
-                                  children: [
-                                    Image.asset('assets/images/map.png', width: 100,height: 100,),
-                                    const Text('Route Management',textAlign: TextAlign.center,),
-                                  ],
-                                ),
-                              )
-                            ),
-                        ),
-                          const Card(elevation: 3,shadowColor: Colors.grey,
-                            child: Text(''),
-                          ),
-                          const Card(elevation: 3,shadowColor: Colors.grey,
-                            child: Text(''),
-                          ),
-                          const Card(elevation: 3,shadowColor: Colors.grey,
-                            child: Text(''),
-                          ),
+                        child:mapcard(provider.tripdata)),        
+
+                        GestureDetector(
+                        onTap: () {
+                          Navigator.pushNamed(context, MapView.routeName);
+                        },
+                        child: blankcard(""))
+                        ,
+
+                        GestureDetector(
+                        onTap: () {
+                          Navigator.pushNamed(context, MapView.routeName);
+                        },
+                        child: blankcard(""))
+                        ,
                     ],
               ),
 
           )
-
-
         );
+
+
+
+
+      });
+
+
+
+
   } 
 }
+

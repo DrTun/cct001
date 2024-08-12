@@ -1,5 +1,6 @@
 //  -------------------------------------    Loading 
 import 'dart:async';
+import 'package:flutter_map/flutter_map.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:location/location.dart';
 import '/src/helpers/helpers.dart';
@@ -7,6 +8,7 @@ import '/src/geolocation/geodata.dart';
 import 'package:latlong2/latlong.dart';
 import 'package:provider/provider.dart';
 import 'api/api_auth.dart';
+import 'geolocation/locationnotifier.dart';
 import 'shared/appconfig.dart';
 import 'shared/globaldata.dart';
 import 'rootpage.dart'; 
@@ -53,8 +55,8 @@ class _LoadingState extends State<LoadingPage> {
   void changeLocations(LocationData currentLocation){ //listen to location changes
     try {
         DateTime dt = DateTime.now();
-        GeoData.updateLocation(currentLocation.latitude!, currentLocation.longitude!, dt);  
-          locationNotifierProvider.updateLoc1(currentLocation.latitude!,  currentLocation.longitude!, dt);  
+        GeoData.updateLocation(currentLocation.latitude!, currentLocation.longitude!, dt,locProvider: locationNotifierProvider);  
+        locationNotifierProvider.updateLoc1(currentLocation.latitude!,  currentLocation.longitude!, dt);  
         if (GeoData.centerMap && GeoData.mapready) {locationNotifierProvider.mapController.move(LatLng(locationNotifierProvider.loc01.lat, locationNotifierProvider.loc01.lng),GeoData.zoom);}
         if (AppConfig.shared.log==3){logger.i("(${GeoData.counter}) ${currentLocation.latitude} x ${currentLocation.longitude}");}
 
@@ -65,7 +67,7 @@ class _LoadingState extends State<LoadingPage> {
   // (5 of 6) Current Location Method
   void moveHere() async { // butten event
     try {
-      var locationData = await GeoData.getCurrentLocation(GeoData.location); 
+      var locationData = await GeoData.getCurrentLocation(GeoData.location,locProvider: locationNotifierProvider); 
       if (locationData != null) {
         locationNotifierProvider.updateLoc1(GeoData.currentLat, GeoData.currentLng, GeoData.currentDtime); 
         if (GeoData.mapready) locationNotifierProvider.mapController.move(LatLng(locationNotifierProvider.loc01.lat, locationNotifierProvider.loc01.lng),GeoData.zoom); 
@@ -78,9 +80,28 @@ class _LoadingState extends State<LoadingPage> {
   Future loading(BuildContext context) async { 
     // Shared Preferences
     await MyStore.init();
-    //if (MyStore.prefs.containsKey('tripStarted')){
-      GeoData.tripStarted = MyStore.prefs.getBool('tripStarted') ?? false;
-    //}
+    GeoData.tripStarted = MyStore.prefs.getBool('tripStarted') ?? false;
+
+      Polyline? pline;
+      List<DateTime> dtlist=[];
+      pline = (await MyStore.retrievePolyline("polyline01"));
+      if (pline != null) { 
+        GeoData.polyline01 = pline; 
+        pline = (await MyStore.retrievePolyline("polyline01Fixed"));
+        if (pline != null) { 
+          GeoData.polyline01Fixed = pline; 
+          dtlist = (await MyStore.retrieveDateTimeList("dtimeList01"));
+          if (dtlist.isNotEmpty) { 
+            GeoData.dtimeList01 = dtlist; 
+            dtlist = (await MyStore.retrieveDateTimeList("dtimeList01Fixed"));
+            if (dtlist.isNotEmpty) { 
+              GeoData.dtimeList01Fixed = dtlist; 
+            }  else { GeoData.endTrip();}
+          }   else { GeoData.endTrip();}
+        } else { GeoData.endTrip();}
+      } else { GeoData.endTrip();}
+      
+
     // Read Global Data from Secure Storage
     await GlobalAccess.readSecToken();
     if (GlobalAccess.accessToken.isNotEmpty){  // should not refresh if guest coming back. let sign in again

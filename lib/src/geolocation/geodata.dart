@@ -1,6 +1,9 @@
+
+
 import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:flutter_map_math/flutter_geo_math.dart';
+import '/src/geolocation/locationnotifier.dart';
 import 'package:latlong2/latlong.dart';
 import '../helpers/helpers.dart';
 import 'package:location/location.dart';
@@ -34,7 +37,47 @@ class GeoData{
   static const double defaultLat=1.2926;
   static const double defaultLng=103.8448;
 
-  static void updateLocation(double lat, double lng, DateTime dt){
+  static double currentSpeed(Polyline polyline, List<DateTime> dt, int range){
+    double speed=0;
+    int range =10;
+    double dist=0;
+    int time= 0;
+    FlutterMapMath fmm = FlutterMapMath();
+    if (polyline.points.length>range && dt.length>range){
+      time= dt[dt.length-1].difference(dt[dt.length-range]).inSeconds;
+      for (int i=polyline.points.length-range; i<polyline.points.length-1; i++){
+        dist+=fmm.distanceBetween(
+              polyline.points[i].latitude,            //latest points
+              polyline.points[i].longitude,
+              polyline.points[i-1].latitude, 
+              polyline.points[i-1].longitude,"meters").round();
+      }
+      speed=dist/time*60*60/1000;
+    }
+    return speed;
+  }
+  static int totalTime(List<DateTime> dt){
+    DateTime now = DateTime.now();
+    if (dt.isEmpty) return 0;
+    Duration difference = now.difference(dt[0]);
+    return (difference.inSeconds).round();
+  } 
+ 
+  
+  static double totalDistance(Polyline polyline){
+    double dist=0;
+    FlutterMapMath fmm = FlutterMapMath();
+    for (int i=1; i<polyline.points.length-1; i++){
+      dist+=fmm.distanceBetween(
+            polyline.points[i].latitude,            //latest points
+            polyline.points[i].longitude,
+            polyline.points[i-1].latitude, 
+            polyline.points[i-1].longitude,"meters").round();
+    }
+    return (dist/1000);
+  }
+
+  static void updateLocation(double lat, double lng, DateTime dt,{LocationNotifier? locProvider}){
     if (lat!=0 && lng!=0){
         GeoData.counter++;
         GeoData.currentLat=lat;
@@ -81,9 +124,24 @@ class GeoData{
             }
           }
         }
+      MyStore.storePolyline(polyline01,"polyline01");
+      MyStore.storeDateTimeList(dtimeList01, "dtimeList01");
+      MyStore.storePolyline(polyline01Fixed,"polyline01Fixed");
+      MyStore.storeDateTimeList(dtimeList01Fixed, "dtimeList01Fixed");
+
+      double dist=totalDistance(polyline01Fixed);
+      int time=totalTime(dtimeList01Fixed);
+      double speed = currentSpeed(polyline01Fixed, dtimeList01Fixed, 5);
+      double amount = calculateAmount(dist, time);
+      locProvider?.updateTripData(GeoData.tripStarted, dist, time,  speed,amount);
     }
   }
 
+  static double calculateAmount(double distance, int time){  // replace it with real calculation
+    double ret=0;
+    ret = 2500+(distance * 2500);
+    return ret;  
+  }
 
   static void startTrip(){
     polyline01.points.clear();
@@ -122,39 +180,20 @@ class GeoData{
     }
     return true;
   } 
-  static Future<LocationData?> getCurrentLocation(Location location) async { 
+  static Future<LocationData?> getCurrentLocation(Location location, {LocationNotifier? locProvider}) async { 
       LocationData locationData;
       bool serviceEnabled=await chkPermissions(location);
       if (serviceEnabled) {
         locationData = await location.getLocation();
+        if (locProvider==null){
         GeoData.updateLocation(locationData.latitude!, locationData.longitude!, DateTime.now());
+         } else {
+        GeoData.updateLocation(locationData.latitude!, locationData.longitude!, DateTime.now(),locProvider: locProvider);
+      }
         return locationData;
       } else {
         return null;
       } 
   }
 }
-
-//  -------------------------------------    Location Notifier (Property of Nirvasoft.com)
-class LocationNotifier extends ChangeNotifier {
-  LocationNotifier() { 
-    _loc01 = Loc01(0, 0,  DateTime(2000));
-  }
-  late Loc01 _loc01;
-  Loc01 get loc01 => _loc01;
-  final MapController _mapController = MapController();
-  MapController get mapController => _mapController;
-  
-  void updateLoc1(double lat, double lng, DateTime dt){
-    _loc01 = Loc01(lat, lng, dt);
-    notifyListeners();
-  }
-}
-class Loc01 { 
-  final double  lat;
-  final double lng; 
-  final DateTime dt;
-  Loc01(this.lat, this.lng, this.dt);
-} 
-//  -------------------------------------    Location Notifier (Property of Nirvasoft.com)
 

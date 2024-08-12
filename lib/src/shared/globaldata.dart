@@ -38,7 +38,7 @@ class GlobalAccess {
     _accesstoken=guesttoken; 
   }
   static readSecToken() async {
-   SecureStorage store = SecureStorage();
+   MySecure store = MySecure();
    String userid,username,accesstoken,refreshtoken;
     userid = await store.readSecureData("userid");
     if (AppConfig.shared.log>=3) logger.i('From Secure Data Read: $userid');
@@ -50,14 +50,14 @@ class GlobalAccess {
     } 
   }
   static updateSecToken() async {
-    SecureStorage store = SecureStorage();
+    MySecure store = MySecure();
     store.writeSecureData("userid", _userid);
     store.writeSecureData("username", _username);
     store.writeSecureData("accesstoken", _accesstoken);
     store.writeSecureData("refreshtoken", _refreshtoken);
   }
   static resetSecToken() async {
-    SecureStorage store = SecureStorage();
+    MySecure store = MySecure();
     store.deleteSecureData("userid");
     store.deleteSecureData("username");
     store.deleteSecureData("accesstoken");

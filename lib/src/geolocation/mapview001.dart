@@ -85,15 +85,15 @@ Widget build(BuildContext context) {
             Positioned( 
                   left: 10,
                   top: 30,
-                  child: Text("${MyHelpers.formatTime(provider.tripdata.time)} ", style: const TextStyle(fontSize: 12,color: Colors.red))), 
+                  child: Text("${MyHelpers.formatTime(provider.tripdata.time)} Time ", style: const TextStyle(fontSize: 12,color: Colors.red))), 
             Positioned( // refresh button
                   left: 10,
                   top: 50,
-                  child: Text("${provider.tripdata.amount.toStringAsFixed(2)} MMK", style: const TextStyle(fontSize: 12,color: Colors.red))), 
+                  child: Text("${MyHelpers.formatDouble(provider.tripdata.amount)} MMK", style: const TextStyle(fontSize: 12,color: Colors.red))), 
             Positioned( // refresh button
                   left: 10,
                   top: 70,
-                  child: Text("${provider.tripdata.speed.toStringAsFixed(0)} km/h", style: const TextStyle(fontSize: 12,color: Colors.red))), 
+                  child: provider.tripdata.speed>=1?Text("${provider.tripdata.speed.toStringAsFixed(0)} km/h", style: const TextStyle(fontSize: 12,color: Colors.red)):const SizedBox()), 
             Positioned( // refresh button
                   right: 10,
                   bottom: 50,

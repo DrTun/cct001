@@ -37,6 +37,17 @@ class GeoData{
   static const double defaultLat=1.2926;
   static const double defaultLng=103.8448;
 
+  static void resetData(){
+    counter=0;
+    currentLat=0;
+    currentLng=0;
+    currentDtime= DateTime.now();
+    tripStarted=false;
+    polyline01.points.clear();
+    dtimeList01.clear();
+    polyline01Fixed.points.clear();
+    dtimeList01Fixed.clear(); 
+  }
   static double currentSpeed(Polyline polyline, List<DateTime> dt, int range){
     double speed=0;
     int range =10;
@@ -139,7 +150,8 @@ class GeoData{
 
   static double calculateAmount(double distance, int time){  // replace it with real calculation
     double ret=0;
-    ret = 2500+(distance * 2500);
+    if (distance>0){ ret = 2500+(distance * 2500);
+    } else { ret = 0; }
     return ret;  
   }
 

@@ -7,8 +7,13 @@ Widget blankcard(String title) {
         Padding(
           padding: const EdgeInsets.all(7.0),
           child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
             children: [
-               Text(title,textAlign: TextAlign.center,),
+               Text(
+               title,
+               textAlign: TextAlign.center,
+               style: const TextStyle(fontSize: 15),
+               ),
             ],
           ),
         )

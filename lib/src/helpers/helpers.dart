@@ -1,6 +1,7 @@
 
 import 'dart:convert';
 
+import 'package:confirm_dialog/confirm_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -57,7 +58,21 @@ class MyHelpers{
     return ret;
   }
 
-   static String formatTime(int seconds) {
+
+  static Future<bool?> getBool(BuildContext context,String label,{String? title}) async {
+    bool ret;
+    title ??= "Confirmation";
+    ret =await confirm(context,title:  Text(title),content: Text(label),
+        textOK: const Text('OK'),textCancel: const Text('Cancel'),);
+    return ret;
+  }
+  
+
+
+
+
+
+  static String formatTime(int seconds) {
     int hours = seconds ~/ 3600;
     int minutes = (seconds % 3600) ~/ 60;
     int remainingSeconds = seconds % 60;

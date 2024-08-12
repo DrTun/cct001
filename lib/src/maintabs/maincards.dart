@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import '../geolocation/geodata.dart';
+import '../helpers/helpers.dart';
 import '/src/geolocation/locationnotifier.dart';
 import 'package:provider/provider.dart';
 import '../geolocation/mapview.dart';
@@ -46,14 +48,16 @@ class MainCardsState extends State<MainCards> {
 
                         GestureDetector(
                         onTap: () {
-                          Navigator.pushNamed(context, MapView.routeName);
+                          MyHelpers.getBool(context, "Are you sure to clear trips?").then ((value) => {
+                            if (value!=null && value ) GeoData.resetData()
+                          });
                         },
-                        child: blankcard(""))
+                        child: blankcard("Clear Trip Data"))
                         ,
 
                         GestureDetector(
                         onTap: () {
-                          Navigator.pushNamed(context, MapView.routeName);
+                          
                         },
                         child: blankcard(""))
                         ,

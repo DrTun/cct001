@@ -1,7 +1,6 @@
 
 import 'myapp.dart';
-import 'firebase_options.dart';
-import 'src/geolocation/geodata.dart'; 
+import 'firebase_options.dart'; 
 import 'src/geolocation/locationnotifier.dart';
 import 'src/shared/appconfig.dart';
 import 'src/providers/mynotifier.dart'; 

@@ -193,7 +193,6 @@ Widget build(BuildContext context) {
             onClick: () async {
               setState(() {switchon = false;  
               GeoData.endTrip();
-              locationNotifierProvider.updateTripData(false,0,0,0,0);
               MyStore.prefs.setBool("tripStarted", false);
               KeepScreenOn.turnOff();
               });
@@ -208,7 +207,6 @@ Widget build(BuildContext context) {
               GeoData.dtimeList01Fixed.clear();
               GeoData.startTrip();
               MyStore.prefs.setBool("tripStarted", true);
-              locationNotifierProvider.updateTripData(true,0,0,0,0);
               KeepScreenOn.turnOn();
               });
             },

@@ -57,9 +57,8 @@ class GeoData{
     return speed;
   }
   static int totalTime(List<DateTime> dt){
-    DateTime now = DateTime.now();
     if (dt.isEmpty) return 0;
-    Duration difference = now.difference(dt[0]);
+    Duration difference = dt[dt.length-1].difference(dt[0]);
     return (difference.inSeconds).round();
   } 
  
@@ -123,17 +122,18 @@ class GeoData{
               logger.i("Remove: $dist1 $dist2 ");
             }
           }
+          
         }
-      MyStore.storePolyline(polyline01,"polyline01");
-      MyStore.storeDateTimeList(dtimeList01, "dtimeList01");
-      MyStore.storePolyline(polyline01Fixed,"polyline01Fixed");
-      MyStore.storeDateTimeList(dtimeList01Fixed, "dtimeList01Fixed");
+          MyStore.storePolyline(polyline01,"polyline01");
+          MyStore.storeDateTimeList(dtimeList01, "dtimeList01");
+          MyStore.storePolyline(polyline01Fixed,"polyline01Fixed");
+          MyStore.storeDateTimeList(dtimeList01Fixed, "dtimeList01Fixed");
 
-      double dist=totalDistance(polyline01Fixed);
-      int time=totalTime(dtimeList01Fixed);
-      double speed = currentSpeed(polyline01Fixed, dtimeList01Fixed, 5);
-      double amount = calculateAmount(dist, time);
-      locProvider?.updateTripData(GeoData.tripStarted, dist, time,  speed,amount);
+          double tDist=totalDistance(polyline01Fixed);
+          int tTime=totalTime(dtimeList01Fixed);
+          double tSpeed = currentSpeed(polyline01Fixed, dtimeList01Fixed, 5);
+          double tAmount = calculateAmount(tDist, tTime);
+          locProvider?.updateTripData(GeoData.tripStarted, tDist, tTime,  tSpeed,tAmount);
     }
   }
 

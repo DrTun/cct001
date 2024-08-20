@@ -23,20 +23,17 @@ class LoadingPage extends StatefulWidget {
 }
 class _LoadingState extends State<LoadingPage> {
 
-  // (1 of 6) Geo Declaration >>>>
-  //final Location location = Location();
-  late StreamSubscription<LocationData> locationSubscription;
+  // 1) Geo Declaration >>>>
   late LocationNotifier locationNotifierProvider ;  // Provider Declaration and init
   
+  // 2) Init State
   @override
   void initState() {
     super.initState(); 
-    // (2 of 6) Geo Init
-    //Shared.prefs.init();
-    initGeoData();
-    loading(context);
+    initGeoData();    // 2.1) Geo Init Function
+    loading(context); // 2.2) Loading Function
   }
-  // (3 of 6) Geo Init Function
+  // 2.1) Geo Init Function
   Future<void> initGeoData() async {
     GeoData.currentLat = GeoData.defaultLat;
     GeoData.currentLng = GeoData.defaultLng;
@@ -44,14 +41,14 @@ class _LoadingState extends State<LoadingPage> {
       locationNotifierProvider = Provider.of<LocationNotifier>(context,listen: false);
       if (await GeoData.chkPermissions(GeoData.location)){
         await GeoData.location.changeSettings(accuracy: LocationAccuracy.high, interval: GeoData.interval, distanceFilter: GeoData.distance);
-        locationSubscription = GeoData.location.onLocationChanged.listen((LocationData currentLocation) {changeLocations(currentLocation);});
-        if (GeoData.listenChanges==false) locationSubscription.pause();
+        GeoData.locationSubscription = GeoData.location.onLocationChanged.listen((LocationData currentLocation) {changeLocations(currentLocation);});
+        if (GeoData.listenChanges==false) GeoData.locationSubscription.pause();
       } else {   logger.i("Permission Denied");} 
     } catch (e) {
       logger.i("Exception (initGeoData): $e");
     }
   }
-  // (4 of 6) GPS Listener Method
+  // 2.1.1) GPS Listener Method
   void changeLocations(LocationData currentLocation){ //listen to location changes
     try {
         DateTime dt = DateTime.now();
@@ -64,7 +61,7 @@ class _LoadingState extends State<LoadingPage> {
       logger.i("Exception (changeLocations): $e");
     }
   }
-  // (5 of 6) Current Location Method
+  // 2.1.2) Current Location Method
   void moveHere() async { // butten event
     try {
       var locationData = await GeoData.getCurrentLocation(GeoData.location,locProvider: locationNotifierProvider); 
@@ -77,11 +74,11 @@ class _LoadingState extends State<LoadingPage> {
       logger.i("Exception (moveHere): $e");
     }
   }
+  // 2.2) Loading Function
   Future loading(BuildContext context) async { 
-    // Shared Preferences
+    // 2.2.1) Shared Preferences
     await MyStore.init();
     GeoData.tripStarted = MyStore.prefs.getBool('tripStarted') ?? false;
-
       Polyline? pline;
       List<DateTime> dtlist=[];
       pline = (await MyStore.retrievePolyline("polyline01"));
@@ -102,12 +99,12 @@ class _LoadingState extends State<LoadingPage> {
       } else { GeoData.endTrip();}
       
 
-    // Read Global Data from Secure Storage
+    // 2.2.2) Read Global Data from Secure Storage
     await GlobalAccess.readSecToken();
     if (GlobalAccess.accessToken.isNotEmpty){  // should not refresh if guest coming back. let sign in again
       await ApiAuthService.checkRefreshToken(); 
     }
-    // Decide where to go based on Global Data read from secure storage.
+    // 2.2.3 Decide where to go based on Global Data read from secure storage.
     Timer(const Duration(seconds: 2), () {
     setState(() {
         if (AppConfig.shared.skipsignin) { 
@@ -120,6 +117,7 @@ class _LoadingState extends State<LoadingPage> {
     }); 
     });
   } 
+
 
   @override
   Widget build(BuildContext context) {

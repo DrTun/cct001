@@ -1,5 +1,7 @@
 
 
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:flutter_map_math/flutter_geo_math.dart';
@@ -22,6 +24,7 @@ class GeoData{
   static List<DateTime> dtimeList01Fixed=[];
   static bool mapready=false;
   static Location location =Location();
+  static late StreamSubscription<LocationData> locationSubscription;
 
   // App Parameters 
   static bool showLatLng=false;

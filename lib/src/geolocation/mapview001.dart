@@ -122,14 +122,14 @@ Widget build(BuildContext context) {
       if (GeoData.polyline01Fixed.points.isNotEmpty){
         markers.add(Marker(
           point: LatLng(GeoData.polyline01Fixed.points[0].latitude, GeoData.polyline01Fixed.points[0].longitude), 
-          width: 30,height: 30,alignment: Alignment.center,
+          width: 15,height: 15,alignment: Alignment.center,
           child: Image.asset('assets/images/geo/bluedot.png',scale: 1.0,),
           ));
          if (!GeoData.tripStarted) {
            markers.add(Marker(
            point: LatLng(GeoData.polyline01Fixed.points[GeoData.polyline01Fixed.points.length-1].latitude, 
               GeoData.polyline01Fixed.points[GeoData.polyline01Fixed.points.length-1].longitude), 
-           width: 30,height: 100,alignment: Alignment.center,
+           width: 15,height: 15,alignment: Alignment.center,
            child: Image.asset('assets/images/geo/reddot.png',scale: 1.0,),
            ));
          }

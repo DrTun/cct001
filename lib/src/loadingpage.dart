@@ -2,6 +2,7 @@
 import 'dart:async';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart' as gmap;
 import 'package:location/location.dart';
 import '/src/helpers/helpers.dart';
 import '/src/geolocation/geodata.dart';
@@ -54,9 +55,15 @@ class _LoadingState extends State<LoadingPage> {
         DateTime dt = DateTime.now();
         GeoData.updateLocation(currentLocation.latitude!, currentLocation.longitude!, dt,locProvider: locationNotifierProvider);  
         locationNotifierProvider.updateLoc1(currentLocation.latitude!,  currentLocation.longitude!, dt);  
-        if (GeoData.centerMap && GeoData.mapready) {locationNotifierProvider.mapController.move(LatLng(locationNotifierProvider.loc01.lat, locationNotifierProvider.loc01.lng),GeoData.zoom);}
+        if (GeoData.defaultMap==0 && GeoData.centerMap && GeoData.mapReady) {
+          locationNotifierProvider.mapController.move(LatLng(GeoData.currentLat, GeoData.currentLng),GeoData.zoom);
+        } else if (GeoData.defaultMap==1 && GeoData.centerGMap && GeoData.gmapReady ) {
+          locationNotifierProvider.gmapController.future.then((controller) {
+            controller.moveCamera(gmap.CameraUpdate.newCameraPosition(gmap.CameraPosition(
+            target: gmap.LatLng(GeoData.currentLat, GeoData.currentLng), zoom: GeoData.zoom,
+          )));});
+        }
         if (AppConfig.shared.log==3){logger.i("(${GeoData.counter}) ${currentLocation.latitude} x ${currentLocation.longitude}");}
-
     } catch (e) {
       logger.i("Exception (changeLocations): $e");
     }
@@ -67,7 +74,7 @@ class _LoadingState extends State<LoadingPage> {
       var locationData = await GeoData.getCurrentLocation(GeoData.location,locProvider: locationNotifierProvider); 
       if (locationData != null) {
         locationNotifierProvider.updateLoc1(GeoData.currentLat, GeoData.currentLng, GeoData.currentDtime); 
-        if (GeoData.mapready) locationNotifierProvider.mapController.move(LatLng(locationNotifierProvider.loc01.lat, locationNotifierProvider.loc01.lng),GeoData.zoom); 
+        if (GeoData.mapReady) locationNotifierProvider.mapController.move(LatLng(locationNotifierProvider.loc01.lat, locationNotifierProvider.loc01.lng),GeoData.zoom); 
         MyHelpers.showIt("\n${locationNotifierProvider.loc01.lat}\n${locationNotifierProvider.loc01.lng}",label: "You are here",);
       } else { logger.i("Invalid Location!"); }    
     } catch (e) {
@@ -89,6 +96,7 @@ class _LoadingState extends State<LoadingPage> {
           GeoData.polyline01Fixed = pline; 
           dtlist = (await MyStore.retrieveDateTimeList("dtimeList01"));
           if (dtlist.isNotEmpty) { 
+            GeoData.tripStartDtime =dtlist[0];
             GeoData.dtimeList01 = dtlist; 
             dtlist = (await MyStore.retrieveDateTimeList("dtimeList01Fixed"));
             if (dtlist.isNotEmpty) { 

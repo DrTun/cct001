@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import '../geolocation/geodata.dart';
-import '../helpers/helpers.dart';
 import '/src/geolocation/locationnotifier.dart';
 import 'package:provider/provider.dart';
 import '../geolocation/mapview.dart';
@@ -22,11 +21,12 @@ class MainCardsState extends State<MainCards> {
   }
   @override
   Widget build(BuildContext context) { 
-
-
-
     return Consumer<LocationNotifier>(
       builder: (context, provider , child) {
+        if (GeoData.tripStarted) {
+          GeoData.startTimer(provider);
+        }  
+
         return   Scaffold(
           body: 
           Padding(
@@ -39,57 +39,41 @@ class MainCardsState extends State<MainCards> {
               crossAxisSpacing: 2,
                     children:  [ 
                         StaggeredGridTile.count(
-                        crossAxisCellCount: 4,  
-                        mainAxisCellCount: 3,   
+                        crossAxisCellCount: 8,  
+                        mainAxisCellCount: 4,   
                         child: 
                         GestureDetector(
                         onTap: () {
                           Navigator.pushNamed(context, MapView.routeName);
                         },
-                        child:mapcard(provider.tripdata)),        
+                        child:mapcard(provider.tripdata, fsize: 42)),        
                         ),
                        StaggeredGridTile.count(
-                        crossAxisCellCount: 4,
-                        mainAxisCellCount:2,
-                        child: 
-                        GestureDetector(
-                        onTap: () {
-                          MyHelpers.getBool(context, "Are you sure to clear trips?").then ((value) => {
-                            if (value!=null && value ) GeoData.resetData()
-                          });
-                        },
-                        child: blankcard("Clear Trip Data"))
-                       ),
-
-                       StaggeredGridTile.count(
-                        crossAxisCellCount: 4,
-                        mainAxisCellCount: 2,
-                        child: 
-                        GestureDetector(
-                        onTap: () {
-                        },
+                        crossAxisCellCount: 4,mainAxisCellCount:2,
+                        child: GestureDetector(
+                        onTap: () {},
                         child: blankcard("1"))
                        ),
-
                        StaggeredGridTile.count(
-                        crossAxisCellCount: 4,
-                        mainAxisCellCount: 4,
-                        child: 
-                        GestureDetector(
+                        crossAxisCellCount: 4,mainAxisCellCount: 2,
+                        child: GestureDetector(
                         onTap: () {
+                          //Navigator.pushNamed(context, MapViewGoogle.routeName);
                         },
                         child: blankcard("2"))
+                       ),
+
+                       StaggeredGridTile.count( crossAxisCellCount: 4, mainAxisCellCount: 4,
+                        child: GestureDetector(onTap: () {}, child: blankcard("3"))
                        ),  
 
-                       StaggeredGridTile.count(
-                        crossAxisCellCount: 4,
-                        mainAxisCellCount: 3,
-                        child: 
-                        GestureDetector(
-                        onTap: () {
-                        },
-                        child: blankcard("3"))
+                       StaggeredGridTile.count( crossAxisCellCount: 4, mainAxisCellCount: 2,
+                        child:  GestureDetector( onTap: () {  },  child: blankcard("4"))
                        ),  
+                       StaggeredGridTile.count( crossAxisCellCount: 4, mainAxisCellCount: 2,
+                        child:  GestureDetector( onTap: () {  },  child: blankcard("5"))
+                       ),  
+
                     ],
               ),
           )

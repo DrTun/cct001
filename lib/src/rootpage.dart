@@ -1,15 +1,15 @@
 
-import 'dart:async'; 
+import 'dart:async';  
+import '/src/geolocation/mapview002google.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:flutter/material.dart';  
 import 'package:confirm_dialog/confirm_dialog.dart';
 import 'package:provider/provider.dart';  
-
-import 'geolocation/geodata.dart';
+import 'geolocation/geodata.dart';   
+import 'geolocation/mapview001.dart';
 import 'providers/mynotifier.dart';
 import 'shared/appconfig.dart';
-import 'maintabs/maincards.dart';
-import 'geolocation/mapview001.dart';
+import 'maintabs/maincards.dart'; 
 import 'shared/globaldata.dart'; 
 import 'helpers/helpers.dart';
 import 'signin/signinpage.dart'; 
@@ -33,7 +33,7 @@ class _RootPageState extends State<RootPage> with WidgetsBindingObserver {
     WidgetsBinding.instance.addObserver(this);
     WidgetsBinding.instance.addPostFrameCallback((_){ 
       provider.updateData01(AppConfig.shared.appName, AppConfig.shared.appDesc, false); 
-      provider.updateTripData("","", GeoData.tripStarted, 0, 0); // Provider update
+      // provider.updateTripData("","", GeoData.tripStarted, 0, 0); // Provider update
     }); 
   }
 
@@ -99,28 +99,29 @@ class _RootPageState extends State<RootPage> with WidgetsBindingObserver {
               ],
             ),
           ),
-          body: const DefaultTabController(
-            length: 4,
+          body:  const DefaultTabController(
+            length: 3,
             child: Column(
               children: [
                 Expanded(
                   child: TabBarView(
+                    // disable swipe so that the map can be scrolled
+                    physics: NeverScrollableScrollPhysics(),
                     children: [
-                      MainCards(),
                       MapView001(),
                       ViewBlank(),
-                      ViewApps(),
+                      MainCards(),
                     ],
                   ),
                 ),
                 TabBar(
                   tabs: [
                     Tab( text: 'Home', icon: Icon(Icons.home), ),
-                    Tab( text: 'Map', icon: Icon(Icons.map), ),
                     Tab( text: 'Trips', icon: Icon(Icons.add_location_alt_outlined),  ),
                     Tab( text: 'Apps', icon: Icon(Icons.apps), ),
                   ],
-                ), 
+                  labelStyle: TextStyle(fontSize: 12), // Modify the font size here
+                ),
               ],
             ),
           ),

@@ -1,5 +1,6 @@
 import 'src/geolocation/geopara.dart'; 
 import 'src/geolocation/mapview.dart';
+import 'src/geolocation/mapviewgoogle.dart';
 import 'src/shared/appconfig.dart';
 import 'src/views/viewdatadetails.dart';
 import 'src/views/viewdatalist.dart';
@@ -61,6 +62,7 @@ class MyApp extends StatelessWidget {
                   case ViewDataDetails.routeName: return const ViewDataDetails();
                   case SigninPage.routeName:  return const SigninPage();
                   case MapView.routeName:  return  const MapView();
+                  case MapViewGoogle.routeName:  return  const MapViewGoogle();
                   case GeoPara.routeName:  return  const GeoPara();
                   default:  return const LoadingPage();
                 }

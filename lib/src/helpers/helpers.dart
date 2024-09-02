@@ -72,7 +72,8 @@ class MyHelpers{
 
 
 
-  static String formatTime(int seconds) {
+  static String formatTime(int seconds,{bool? sec}) {
+    sec ??= false;
     int hours = seconds ~/ 3600;
     int minutes = (seconds % 3600) ~/ 60;
     int remainingSeconds = seconds % 60;
@@ -81,7 +82,11 @@ class MyHelpers{
     String minutesString = minutes.toString().padLeft(2, '0');
     String secondsString = remainingSeconds.toString().padLeft(2, '0');
     
-    return '$hoursString:$minutesString:$secondsString';
+    if (sec) {
+      return '$hoursString:$minutesString:$secondsString';
+    } else {
+      return '$hoursString:$minutesString';
+    }
   }
 
   static String formatDouble(double number){

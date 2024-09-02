@@ -15,25 +15,17 @@ class SwitchOn extends StatelessWidget {
     return 
     GestureDetector( onTap: onClick,
     child: value?
-    Container(
-      decoration: const BoxDecoration(shape: BoxShape.rectangle),
-          child: Padding(
-            padding: const EdgeInsets.only(top: 10.0),
-            child: DecoratedBox(
-              decoration: BoxDecoration(
-                  color: const Color.fromARGB(128, 163, 163, 163),
-                  borderRadius: BorderRadius.circular(6)),
-              child: Column(
+          Column(
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: [
                   Padding(
                     padding: const EdgeInsets.fromLTRB(6, 6, 6, 4),
-                    child: Text(label, style: const TextStyle(color: Colors.black,fontSize: 12, fontWeight: FontWeight.bold,),),
+                    child: label.isNotEmpty? Text(label, style: const TextStyle(color: Colors.black,fontSize: 12, fontWeight: FontWeight.bold,),):const SizedBox(),
                   ),
                   Padding(
                     padding: const EdgeInsets.only(left: 8, right: 8, bottom: 10),
                     child: Container(
-                      width: 80,height: 40,decoration: BoxDecoration(
+                      width: 60,height: 32,decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(30),
                           color: value? Colors.green: Colors.grey
                       ),
@@ -41,7 +33,7 @@ class SwitchOn extends StatelessWidget {
                         children: [
                           const Align(alignment: Alignment.centerLeft,
                               child: Padding( 
-                                padding: EdgeInsets.only(left: 16.0),
+                                padding: EdgeInsets.only(left: 12.0),
                                 child: Text('ON',style: TextStyle(color: Colors.white,fontWeight: FontWeight.bold,fontSize: 11.0, ),
                                 ),
                               ),
@@ -49,8 +41,8 @@ class SwitchOn extends StatelessWidget {
                           Align(
                             alignment: Alignment.centerRight,
                             child: Padding(
-                              padding:const EdgeInsets.only(left: 10, right: 10),
-                              child: Container(width: 25.0,height: 25.0,decoration: const BoxDecoration(shape: BoxShape.circle,color: Colors.white,),),
+                              padding:const EdgeInsets.only(left: 5, right: 5),
+                              child: Container(width: 21.0,height: 21.0,decoration: const BoxDecoration(shape: BoxShape.circle,color: Colors.white,),),
                             ),
                           ),
                         ],
@@ -58,33 +50,18 @@ class SwitchOn extends StatelessWidget {
                     ),
                   ),
                 ],
-              ),
-            ),
-          ),
-
-
-
-    )
-    :Container(
-      decoration: const BoxDecoration(shape: BoxShape.rectangle),
-
-          child: Padding(
-            padding: const EdgeInsets.only(top: 10.0),
-            child: DecoratedBox(
-              decoration: BoxDecoration(
-                  color: const Color.fromARGB(128, 163, 163, 163),
-                  borderRadius: BorderRadius.circular(6)),
-              child: Column(
+              )
+    :Column(
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: [
                    Padding(
                     padding: const EdgeInsets.fromLTRB(6, 6, 6, 4),
-                    child: Text(label,style: const TextStyle(color: Colors.black,fontSize: 12, fontWeight: FontWeight.bold,),),
+                    child: label.isNotEmpty? Text(label, style: const TextStyle(color: Colors.black,fontSize: 12, fontWeight: FontWeight.bold,),):const SizedBox(),
                   ),
                   Padding(
                     padding: const EdgeInsets.only(left: 8, right: 8, bottom: 10),
                     child: Container(
-                      width: 80,height: 40,decoration: BoxDecoration(
+                      width: 60,height: 32,decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(30),
                           color: value? Colors.green: Colors.grey
                       ),
@@ -92,7 +69,7 @@ class SwitchOn extends StatelessWidget {
                         children: [
                           const Align(alignment: Alignment.centerRight,
                               child: Padding( 
-                                padding: EdgeInsets.only(right: 14.0),
+                                padding: EdgeInsets.only(right: 9.0),
                                 child: Text('OFF',style: TextStyle(color: Colors.white,fontWeight: FontWeight.bold,fontSize: 11.0, ),),
                               ),
                             ),
@@ -100,8 +77,8 @@ class SwitchOn extends StatelessWidget {
                           Align(
                             alignment: Alignment.centerLeft,
                             child: Padding(
-                              padding:const EdgeInsets.only(left: 10, right: 10),
-                              child: Container(width: 25.0,height: 25.0,decoration: const BoxDecoration(shape: BoxShape.circle,color: Colors.white,),),
+                              padding:const EdgeInsets.only(left: 5, right: 5),
+                              child: Container(width: 21.0,height: 21.0,decoration: const BoxDecoration(shape: BoxShape.circle,color: Colors.white,),),
                             ),
                           ),
                         ],
@@ -109,10 +86,8 @@ class SwitchOn extends StatelessWidget {
                     ),
                   ),
                 ],
-              ),
-            ),
-          ),
-    )
+              )
+
     );
   }
 }

@@ -1,10 +1,8 @@
 import 'package:flutter/material.dart';
-import '/src/geolocation/mapview001.dart';
-import 'geodata.dart';
 import 'mapview002google.dart'; 
-class MapView extends StatelessWidget {
-  static const routeName = '/mapview';
-  const MapView({super.key});
+class MapViewGoogle extends StatelessWidget {
+  static const routeName = '/mapviewgoogle';
+  const MapViewGoogle({super.key});
   @override
   Widget build(BuildContext context) {
       return  Scaffold(
@@ -17,7 +15,7 @@ class MapView extends StatelessWidget {
           ),
         ],
       ),
-        body: GeoData.defaultMap==0? const MapView001(): const MapView002Google(),
+        body: const MapView002Google(),
       );
    }
 }

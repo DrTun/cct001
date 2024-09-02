@@ -2,13 +2,12 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:flutter_map_cancellable_tile_provider/flutter_map_cancellable_tile_provider.dart';
-import '../helpers/helpers.dart'; 
+import '../maintabs/cards/mapcard.dart';
 import '/src/shared/appconfig.dart';
 import 'package:keep_screen_on/keep_screen_on.dart';
 import 'package:latlong2/latlong.dart';
 import '../widgets/debugcircle.dart';
-import '../widgets/recenter.dart'; 
-import '../widgets/switchon.dart';
+import '../widgets/recenter.dart';  
 import 'package:provider/provider.dart';
 import 'geodata.dart';
 import 'locationnotifier.dart';
@@ -21,7 +20,7 @@ class MapView001 extends StatefulWidget {
 }
 class MapView001State extends State<MapView001> {
   //late MyNotifier provider ; 
-  late LocationNotifier locationNotifierProvider ;
+  late LocationNotifier locationNotifier ;
   final List<Marker> markers = [];
   final List<Polyline> polylines = [];
   //late MapController mapctrl; 
@@ -35,7 +34,7 @@ class MapView001State extends State<MapView001> {
     super.initState();
     setState(() {
     //provider = Provider.of<MyNotifier>(context,listen: false);
-    locationNotifierProvider = Provider.of<LocationNotifier>(context,listen: false);
+    locationNotifier = Provider.of<LocationNotifier>(context,listen: false);
     });
     if (GeoData.tripStarted){
               KeepScreenOn.turnOn();
@@ -62,7 +61,7 @@ Widget build(BuildContext context) {
                   }
                 },
                 onMapReady: () {
-                  GeoData.mapready=true;
+                  GeoData.mapReady=true;
                 },
               ),
               children: [
@@ -70,34 +69,44 @@ Widget build(BuildContext context) {
                   urlTemplate:"https://tile.openstreetmap.org/{z}/{x}/{y}.png",
                   tileProvider: CancellableNetworkTileProvider(),
                 ),
-                PolylineLayer(polylines: addPolylines(provider)),   // add markers
-                MarkerLayer(rotate: true, markers: addMarkers(provider)), 
+                PolylineLayer(polylines: addPolylines()),   // add markers
+                MarkerLayer(rotate: true, markers: addMarkers()), 
               ],
             ),
-
-            Positioned( 
-                  left: 10,
-                  top: 10,
-                  child: 
-                      Container(
-                        width: MediaQuery.of(context).size.width * 0.40,
-                      color: Colors.black.withOpacity(0.8), // Adjust opacity
-                      child: Column(
-                      children: [
-                        const SizedBox(height: 5,),
-                        Text("${provider.tripdata.distance.toStringAsFixed(2)} km", style: const TextStyle(fontFamily: "Digital",fontSize: 30,height: 1.2,color: Colors.green)), 
-                        Text("${MyHelpers.formatTime(provider.tripdata.time)} ", style: const TextStyle(fontFamily: "Digital",fontSize: 30,height: 1.2,color: Colors.green)),
-                        Text("${MyHelpers.formatDouble(provider.tripdata.amount)} ", style: const TextStyle(fontFamily: "Digital",fontSize: 30,height: 1.2,color: Colors.green)),
-                        provider.tripdata.speed>=1?Text("${provider.tripdata.speed.toStringAsFixed(0)} km/h", style: const TextStyle(fontSize: 12,height: 1.2,color: Colors.green)):const SizedBox(), 
-                        const SizedBox(height: 5,),
-                      ],  
-                      ),
-                  ),
-            ),
-            Positioned( 
-                  right: 10,
-                  top: 0,
-                  child: switchOn()),
+      Positioned( 
+            right: 10,
+            top: 10,
+            child: SizedBox(
+                  //width: MediaQuery.of(context).size.width -20,
+                  width:220,
+                  height: 150,
+            child: mapcard(locationNotifier.tripdata,transparent: true, fcolor: Colors.orange, fsize: 32),
+            )
+      ),
+            // Positioned( 
+            //       left: 10,
+            //       top: 10,
+            //       child: 
+            //           Container(
+            //             width: MediaQuery.of(context).size.width * 0.40,
+            //           color: Colors.black.withOpacity(0.8), // Adjust opacity
+            //           child: Column(
+            //           children: [
+            //             const SizedBox(height: 5,),
+            //             Text("${provider.tripdata.distance.toStringAsFixed(2)} km", style: const TextStyle(fontFamily: "Digital",fontSize: 30,height: 1.2,color: Colors.green)), 
+            //             Text("${MyHelpers.formatTime(GeoData.tripDuration())} ", style: const TextStyle(fontFamily: "Digital",fontSize: 30,height: 1.2,color: Colors.green)),
+            //             Text("${MyHelpers.formatDouble(provider.tripdata.amount)} ", style: const TextStyle(fontFamily: "Digital",fontSize: 30,height: 1.2,color: Colors.green)),
+            //             provider.tripdata.speed>=1?Text("${provider.tripdata.speed.toStringAsFixed(0)} km/h", style: const TextStyle(fontSize: 12,height: 1.2,color: Colors.green)):const SizedBox(), 
+            //             const SizedBox(height: 5,),
+            //           ],  
+            //           ),
+            //       ),
+            // ),
+            // Positioned( 
+            //       right: 10,
+            //       top: 0,
+            //       child:  GestureDetector(onTap: () {}, child: const SwitchonTrip(label: 'Trip',))
+            //       ),
             Positioned( 
                   right: 10,
                   bottom: 50,
@@ -109,15 +118,14 @@ Widget build(BuildContext context) {
             Positioned( 
                   left: 10,
                   bottom: 10,
-                  child: Text("${GeoData.showLatLng?'(${GeoData.counter})':''} ${GeoData.showLatLng?locationNotifierProvider.loc01.lat:''} ${GeoData.showLatLng?locationNotifierProvider.loc01.lng:''} v${AppConfig.shared.appVersion} ", style: const TextStyle(fontSize: 12,color: Colors.red))
-                   
+                  child: Text("${GeoData.showLatLng?'(${GeoData.counter})':''} ${GeoData.showLatLng?locationNotifier.loc01.lat:''} ${GeoData.showLatLng?locationNotifier.loc01.lng:''} v${AppConfig.shared.appVersion} ", style: const TextStyle(fontSize: 12,color: Colors.red))
                   ),
             ],
           ),
         );
   });
 }
-  List<Marker> addMarkers(LocationNotifier model) { 
+  List<Marker> addMarkers() { 
       markers.clear();
       if (GeoData.polyline01Fixed.points.isNotEmpty){
         markers.add(Marker(
@@ -136,19 +144,19 @@ Widget build(BuildContext context) {
       }
       if (GeoData.tripStarted) {
         markers.add(Marker(
-          point: LatLng(model.loc01.lat, model.loc01.lng), width: 100,height: 100,alignment: Alignment.center,
+          point: LatLng(GeoData.currentLat, GeoData.currentLng), width: 100,height: 100,alignment: Alignment.center,
           child:  Image.asset('assets/images/geo/move-car.png',scale: 0.1,),
         ));
       } else{
         markers.add(Marker(
-          point: LatLng(model.loc01.lat, model.loc01.lng), width: 100,height: 100,alignment: Alignment.center,
+          point: LatLng(GeoData.currentLat, GeoData.currentLng), width: 100,height: 100,alignment: Alignment.center,
           child: Image.asset('assets/images/geo/here-red.png',scale: 1.0,),
         ));
         
       }
     return markers;
   }  
-  List<Polyline> addPolylines(LocationNotifier model) { 
+  List<Polyline> addPolylines() { 
     polylines.clear();
     if (GeoData.showLatLng) {
       polylines.add(GeoData.polyline01Fixed);
@@ -162,8 +170,6 @@ Widget build(BuildContext context) {
     return 
     Text("${GeoData.currentSpeed(GeoData.polyline01,GeoData.dtimeList01,5).toStringAsFixed(0)} km/h", style: const TextStyle(fontSize: 12,color: Colors.red));
   }
-
-
   Widget reCenter() {
     return 
       ReCenter(
@@ -172,7 +178,7 @@ Widget build(BuildContext context) {
             setState(() {
                 GeoData.centerMap=true;
             });
-            locationNotifierProvider.mapController.move(LatLng(GeoData.currentLat, GeoData.currentLng),GeoData.zoom); 
+            locationNotifier.mapController.move(LatLng(GeoData.currentLat, GeoData.currentLng),GeoData.zoom); 
           },
       );
   }
@@ -189,32 +195,6 @@ Widget build(BuildContext context) {
                   setState(() {});
                 }
               );
-            },
-          );
-  }
-  Widget switchOn() {
-    return switchon // cheeck if on or off
-        ? SwitchOn(value: true, label: "Trip",
-            onClick: () async {
-              setState(() {switchon = false;  
-              GeoData.endTrip();
-              MyStore.prefs.setBool("tripStarted", false);
-              KeepScreenOn.turnOff();
-              });
-            },
-          )
-        : SwitchOn(value: false, label: "Trip",
-            onClick: () async {
-              setState(() {switchon = true;
-              GeoData.polyline01.points.clear();
-              GeoData.polyline01Fixed.points.clear();
-              GeoData.dtimeList01.clear();
-              GeoData.dtimeList01Fixed.clear();
-              locationNotifierProvider.updateTripData(true, 0, 0, 0, 0);
-              GeoData.startTrip();
-              MyStore.prefs.setBool("tripStarted", true);
-              KeepScreenOn.turnOn();
-              });
             },
           );
   }

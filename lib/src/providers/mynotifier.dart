@@ -8,6 +8,7 @@ class MyNotifier extends ChangeNotifier {
 
   late Data01 _data01;
   Data01 get data01 => _data01;
+  
   void updateData01(String id, String name,bool online) {
     _data01 = Data01(id, name,online);
     notifyListeners(); // Notify listeners that the data has changed
@@ -16,11 +17,16 @@ class MyNotifier extends ChangeNotifier {
 
   late Data02 _data02;
   Data02 get data2 => _data02;
-  void updateTripData(String s1, String s2,bool started,double lat,double lng) {
-    _data02 = Data02(s1,s1,started,lat,lng);
-    notifyListeners(); // Notify listeners that the data has changed
-  } 
 
+  // void updateTripData(String s1, String s2,bool started,double lat,double lng) {
+  //   _data02 = Data02(s1,s1,started,lat,lng);
+  //   notifyListeners(); // Notify listeners that the data has changed
+  // } 
+
+
+  // void notify() {
+  //   notifyListeners(); // Notify listeners that the data has changed
+  // } 
 }
 
 

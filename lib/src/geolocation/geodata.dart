@@ -1,7 +1,5 @@
 
-
 import 'dart:async';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:flutter_map_math/flutter_geo_math.dart';
@@ -18,27 +16,34 @@ class GeoData{
   static double currentLng=0; 
   static DateTime currentDtime= DateTime.now();
   static bool tripStarted=false;
-  static Polyline polyline01 = Polyline(points: [], color: Colors.red,strokeWidth: origThickenss,);
+  static DateTime tripStartDtime= DateTime.now();
+  static Polyline polyline01 = Polyline(points: [], color: Colors.red,strokeWidth: oriThickness,);
   static List<DateTime> dtimeList01=[];
-  static Polyline polyline01Fixed = Polyline(points: [], color: Colors.blue,strokeWidth: optiThickenss,);
+  static Polyline polyline01Fixed = Polyline(points: [], color: Colors.blue,strokeWidth: fixedThickness,);
   static List<DateTime> dtimeList01Fixed=[];
-  static bool mapready=false;
+  static bool mapReady=false;
+  static bool gmapReady=false;
   static Location location =Location();
   static late StreamSubscription<LocationData> locationSubscription;
+  static Timer? timer;
+  static bool useTimer=false;
 
   // App Parameters 
   static bool showLatLng=false;
   static bool centerMap=true;
+  static bool centerGMap=true;
   static bool listenChanges=true;
   static double zoom=16;
   static int interval=1000;
   static double distance=0;
   static double minDistance=10;
   static double maxDistance=30;
-  static double origThickenss=3;
-  static double optiThickenss=6;
+  static double oriThickness=3;
+  static double fixedThickness=6;
   static const double defaultLat=1.2926;
   static const double defaultLng=103.8448;
+  static const int timerInterval=1000;
+  static int defaultMap=0;  //0 open street, 1 google map
 
   static void resetData(){
     counter=0;
@@ -75,8 +80,7 @@ class GeoData{
     Duration difference = dt[dt.length-1].difference(dt[0]);
     return (difference.inSeconds).round();
   } 
- 
-  
+
   static double totalDistance(Polyline polyline){
     double dist=0;
     FlutterMapMath fmm = FlutterMapMath();
@@ -126,17 +130,18 @@ class GeoData{
                 polyline01Fixed.points[polyline01Fixed.points.length-3].latitude,
                 polyline01Fixed.points[polyline01Fixed.points.length-3].longitude,"meters");
                 
-            if ((dist1>minDistance && dist1<maxDistance) || (dist2>minDistance && dist2<maxDistance)){
-              //if (AppConfig.shared.log>=3) 
-              logger.i("Keep: $dist1 $dist2 ");                                 // Keep point B
-            } else {
+            if ((dist1<minDistance && dist2<minDistance) || 
+                (dist1>maxDistance && dist2>maxDistance) ){
               polyline01Fixed.points.removeAt(polyline01Fixed.points.length-2); // Remove point B
               dtimeList01Fixed.removeAt(dtimeList01Fixed.length-2);
               //if (AppConfig.shared.log>=3) 
               logger.i("Remove: $dist1 $dist2 ");
+                          
+            } else {
+              //if (AppConfig.shared.log>=3) 
+              logger.i("Keep: $dist1 $dist2 ");       
             }
           }
-          
         }
           MyStore.storePolyline(polyline01,"polyline01");
           MyStore.storeDateTimeList(dtimeList01, "dtimeList01");
@@ -150,7 +155,6 @@ class GeoData{
           locProvider?.updateTripData(GeoData.tripStarted, tDist, tTime,  tSpeed,tAmount);
     }
   }
-
   static double calculateAmount(double distance, int time){  // replace it with real calculation
     double ret=0;
     if (distance>0){ ret = 2500+(distance * 2500);
@@ -158,12 +162,29 @@ class GeoData{
     return ret;  
   }
 
-  static void startTrip(){
+  static void startTrip(LocationNotifier locationNotifier){
+    tripStartDtime= DateTime.now();
+    if (!useTimer) startTimer(locationNotifier);
     polyline01.points.clear();
     tripStarted=true;
   }
+  static void startTimer(LocationNotifier locationNotifier){
+    timer = Timer.periodic(const Duration(milliseconds: GeoData.timerInterval), (timer) {
+      locationNotifier.notify();
+    });
+  }
+  static int tripDuration(){
+    int tm =0;
+    if (GeoData.tripStarted){
+      tm = DateTime.now().difference(tripStartDtime).inSeconds;
+    } else {
+      tm =totalTime(dtimeList01Fixed);
+    }
+    return tm;
+  }
   static void endTrip(){
     tripStarted=false;
+    if (!useTimer) timer?.cancel();
   }
   static Future<bool> chkPermissions(Location location) async{
     bool serviceEnabled;

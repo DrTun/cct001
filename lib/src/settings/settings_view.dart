@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '/src/geolocation/geodata.dart';
 
 import 'settings_controller.dart';
 
@@ -22,7 +23,12 @@ class SettingsView extends StatelessWidget {
         //
         // When a user selects a theme from the dropdown list, the
         // SettingsController is updated, which rebuilds the MaterialApp.
-        child: DropdownButton<ThemeMode>(
+        
+
+
+        child: Column (children: [
+        
+        DropdownButton<ThemeMode>(
           // Read the selected themeMode from the controller
           value: controller.themeMode,
           // Call the updateThemeMode method any time the user selects a theme.
@@ -42,6 +48,30 @@ class SettingsView extends StatelessWidget {
             )
           ],
         ),
+        const SizedBox(height: 20),
+        
+        DropdownButton<int>(
+          // Read the selected themeMode from the controller
+          value: GeoData.defaultMap,
+          // Call the updateThemeMode method any time the user selects a theme.
+          items: const [
+            DropdownMenuItem(
+              value: 0,
+              child: Text('Open Street Map'),
+            ),
+            DropdownMenuItem(
+              value: 1,
+              child: Text('Google Map'),
+            ),
+          ], onChanged: (Object? value) { GeoData.defaultMap = value as int; },
+        ),
+
+
+
+
+        
+      ],)
+
       ),
     );
   }

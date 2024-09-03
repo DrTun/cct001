@@ -32,6 +32,8 @@ class MapView001State extends State<MapView001> {
   @override
   void initState() {
     super.initState();
+    GeoData.defaultMap=0;
+    GeoData.centerMap=true;
     setState(() {
     //provider = Provider.of<MyNotifier>(context,listen: false);
     locationNotifier = Provider.of<LocationNotifier>(context,listen: false);

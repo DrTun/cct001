@@ -31,6 +31,8 @@ class MapSampleState extends State<MapView002Google> {
   @override
   void initState() {
     super.initState();
+    GeoData.defaultMap=1;
+    GeoData.centerMap=true;
     setState(() {
     //provider = Provider.of<MyNotifier>(context,listen: false);
     locationNotifier = Provider.of<LocationNotifier>(context,listen: false);
@@ -87,8 +89,9 @@ class MapSampleState extends State<MapView002Google> {
         onTap: (LatLng latLng) { 
         },
         onCameraMoveStarted: () {
-          GeoData.centerGMap = false;
+          GeoData.centerMap = false;
         },
+        
         onCameraMove: (CameraPosition position) {
           GeoData.zoom = position.zoom;
         },
@@ -125,10 +128,10 @@ class MapSampleState extends State<MapView002Google> {
   Widget reCenter() {
     return 
       ReCenter(
-          value: GeoData.centerGMap,  
+          value: GeoData.centerMap,  
           onClick: ()  {
             setState(() {
-                GeoData.centerGMap=true;
+                GeoData.centerMap=true;
             });
           },
       );

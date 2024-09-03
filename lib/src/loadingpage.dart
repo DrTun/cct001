@@ -57,7 +57,7 @@ class _LoadingState extends State<LoadingPage> {
         locationNotifierProvider.updateLoc1(currentLocation.latitude!,  currentLocation.longitude!, dt);  
         if (GeoData.defaultMap==0 && GeoData.centerMap && GeoData.mapReady) {
           locationNotifierProvider.mapController.move(LatLng(GeoData.currentLat, GeoData.currentLng),GeoData.zoom);
-        } else if (GeoData.defaultMap==1 && GeoData.centerGMap && GeoData.gmapReady ) {
+        } else if (GeoData.defaultMap==1 && GeoData.centerMap && GeoData.gmapReady ) {
           locationNotifierProvider.gmapController.future.then((controller) {
             controller.moveCamera(gmap.CameraUpdate.newCameraPosition(gmap.CameraPosition(
             target: gmap.LatLng(GeoData.currentLat, GeoData.currentLng), zoom: GeoData.zoom,

@@ -59,6 +59,7 @@ class SwitchonTripState extends State<SwitchonTrip> {
   }
   
   void startIt(LocationNotifier locationNotifier){
+              GeoData.centerMap=true; 
               GeoData.polyline01.points.clear();
               GeoData.polyline01Fixed.points.clear();
               GeoData.dtimeList01.clear();

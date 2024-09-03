@@ -1,11 +1,11 @@
 
 import 'dart:async'; 
-import '/src/geolocation/mapview002google.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:flutter/material.dart';  
 import 'package:confirm_dialog/confirm_dialog.dart';
 import 'package:provider/provider.dart';  
 import 'geolocation/geodata.dart';   
+import 'geolocation/mapview001.dart';
 import 'providers/mynotifier.dart';
 import 'shared/appconfig.dart';
 import 'maintabs/maincards.dart'; 
@@ -107,7 +107,7 @@ class _RootPageState extends State<RootPage> with WidgetsBindingObserver {
                     // disable swipe so that the map can be scrolled
                     physics: NeverScrollableScrollPhysics(),
                     children: [
-                      MapView002Google(),
+                      MapView001(),
                       ViewBlank(),
                       MainCards(),
                     ],

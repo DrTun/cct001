@@ -42,7 +42,7 @@ class GeoData{
   static const double defaultLat=1.2926;
   static const double defaultLng=103.8448;
   static const int timerInterval=1000;
-  static int defaultMap=1;  //0 open street, 1 google map
+  static int defaultMap=0;  //0 open street, 1 google map
 
   static void resetData(){
     counter=0;

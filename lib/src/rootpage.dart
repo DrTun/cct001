@@ -1,11 +1,12 @@
 
 import 'dart:async'; 
+import '/src/geolocation/mapview001.dart';
+import '/src/geolocation/mapview002google.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:flutter/material.dart';  
 import 'package:confirm_dialog/confirm_dialog.dart';
 import 'package:provider/provider.dart';  
 import 'geolocation/geodata.dart';   
-import 'geolocation/mapview001.dart';
 import 'providers/mynotifier.dart';
 import 'shared/appconfig.dart';
 import 'maintabs/maincards.dart'; 
@@ -98,22 +99,22 @@ class _RootPageState extends State<RootPage> with WidgetsBindingObserver {
               ],
             ),
           ),
-          body:  const DefaultTabController(
+          body:   DefaultTabController(
             length: 3,
             child: Column(
               children: [
                 Expanded(
                   child: TabBarView(
                     // disable swipe so that the map can be scrolled
-                    physics: NeverScrollableScrollPhysics(),
+                    physics: const NeverScrollableScrollPhysics(),
                     children: [
-                      MapView001(),
-                      ViewBlank(),
-                      MainCards(),
+                      GeoData.defaultMap==0? const MapView001():const MapView002Google(),
+                      const ViewBlank(),
+                      const MainCards(),
                     ],
                   ),
                 ),
-                TabBar(
+                const TabBar(
                   tabs: [
                     Tab( text: 'Home', icon: Icon(Icons.home), ),
                     Tab( text: 'Trips', icon: Icon(Icons.add_location_alt_outlined),  ),

@@ -21,12 +21,11 @@ class MapView002Google extends StatefulWidget {
 }
 
 class MapSampleState extends State<MapView002Google> {
-  //final Completer<GoogleMapController> _controller = Completer<GoogleMapController>();
   late LocationNotifier locationNotifier ;
   bool refreshing = false; 
-  BitmapDescriptor icStart = BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueGreen);
-  BitmapDescriptor icEnd = BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueRed);
-  BitmapDescriptor icDrive = BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueRed);
+  final Completer<GoogleMapController> _controller =Completer<GoogleMapController>();
+  BitmapDescriptor icStart = BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueBlue);
+    bool _isProgrammaticChange = false;
 
   @override
   void initState() {
@@ -34,13 +33,12 @@ class MapSampleState extends State<MapView002Google> {
     GeoData.defaultMap=1;
     GeoData.centerMap=true;
     setState(() {
-    //provider = Provider.of<MyNotifier>(context,listen: false);
     locationNotifier = Provider.of<LocationNotifier>(context,listen: false);
     });
     if (GeoData.tripStarted){
               KeepScreenOn.turnOn();
     }
-    _setCustomMarker();
+    //_setCustomMarker();
   }
 
   // Load the custom marker image
@@ -49,21 +47,13 @@ class MapSampleState extends State<MapView002Google> {
       const ImageConfiguration(size: Size(3, 3)),
       "assets/images/blue.png",
     );
-    icEnd = await BitmapDescriptor.fromAssetImage(
-      const ImageConfiguration(size: Size(3, 3)),
-      "assets/images/green.png",
-    );
-    icDrive = await BitmapDescriptor.fromAssetImage(
-      const ImageConfiguration(size: Size(3, 3)),
-      "assets/images/geo/drive.png",
-    );
     setState(() {});
   }
 
 
   @override
-  Widget build(BuildContext context) {
-    locationNotifier.gmapController = Completer<GoogleMapController>();    
+  Widget build(BuildContext context) { 
+
     return Consumer<LocationNotifier>(
       builder: (context, provider , child) { 
     return 
@@ -72,7 +62,7 @@ class MapSampleState extends State<MapView002Google> {
             children: [
       GoogleMap(
         mapType: MapType.normal,
-        //myLocationEnabled: true,
+        myLocationEnabled: true,
         initialCameraPosition: CameraPosition(
               target: LatLng(GeoData.currentLat, GeoData.currentLng),
               zoom: GeoData.zoom,
@@ -81,15 +71,20 @@ class MapSampleState extends State<MapView002Google> {
         markers: Set<Marker>.from(addMarkers()),
         polylines: Set<Polyline>.from(addPolylines()),
         onMapCreated: (GoogleMapController controller) { 
-          if (locationNotifier.gmapController.isCompleted == false){
-            locationNotifier.gmapController.complete(controller);
+          if (_controller.isCompleted == false){
+            _controller.complete(controller);
           } 
           GeoData.gmapReady = true;
         },
         onTap: (LatLng latLng) { 
         },
         onCameraMoveStarted: () {
-          GeoData.centerMap = false;
+          if (!_isProgrammaticChange) {
+              GeoData.centerMap = false;
+          }
+        },
+        onCameraIdle: () { 
+          _isProgrammaticChange = false;
         },
         
         onCameraMove: (CameraPosition position) {
@@ -154,9 +149,8 @@ class MapSampleState extends State<MapView002Google> {
   }
 
 
-    List<Marker> addMarkers() { 
+  List<Marker> addMarkers() { 
     List<Marker> markers = [];
-
     if (GeoData.tripStarted){
       if (GeoData.polyline01Fixed.points.isNotEmpty){
         Marker start = Marker(
@@ -165,14 +159,7 @@ class MapSampleState extends State<MapView002Google> {
                   position: LatLng(GeoData.polyline01Fixed.points[0].latitude, GeoData.polyline01Fixed.points[0].longitude),
                   infoWindow: const InfoWindow(title: 'Start', snippet: '5 Star Rating'),
                 );
-        Marker end = Marker(
-                  markerId: const MarkerId('End'),
-                  icon: icDrive,
-                  position: LatLng(GeoData.polyline01Fixed.points[GeoData.polyline01Fixed.points.length-1].latitude, GeoData.polyline01Fixed.points[GeoData.polyline01Fixed.points.length-1].longitude),
-                  infoWindow: const InfoWindow(title: 'End', snippet: '5 Star Rating'),
-                );
         markers.add(start);
-        markers.add(end);
       }
     } else {
       if (GeoData.polyline01Fixed.points.isNotEmpty){
@@ -182,18 +169,22 @@ class MapSampleState extends State<MapView002Google> {
                   position: LatLng(GeoData.polyline01Fixed.points[0].latitude, GeoData.polyline01Fixed.points[0].longitude),
                   infoWindow: const InfoWindow(title: 'Start', snippet: '5 Star Rating'),
                 );
-        Marker end = Marker(
-                  markerId: const MarkerId('End'),
-                  icon: icEnd,
-                  position: LatLng(GeoData.polyline01Fixed.points[GeoData.polyline01Fixed.points.length-1].latitude, GeoData.polyline01Fixed.points[GeoData.polyline01Fixed.points.length-1].longitude),
-                  infoWindow: const InfoWindow(title: 'End', snippet: '5 Star Rating'),
-                );
         markers.add(start);
-        markers.add(end);
       }
     }
-    return markers;
 
+
+      if (GeoData.centerMap){
+        _controller.future.then(
+          (controller) {
+            controller.moveCamera(CameraUpdate.newCameraPosition(
+              CameraPosition(target: LatLng(GeoData.currentLat, GeoData.currentLng), zoom: GeoData.zoom,)
+            ));
+            _isProgrammaticChange = true;
+          }
+        );
+      }
+    return markers;
     
     }
   

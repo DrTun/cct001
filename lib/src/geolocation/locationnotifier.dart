@@ -1,9 +1,5 @@
 //  -------------------------------------    Location Notifier (Property of Nirvasoft.com)
-import 'dart:async';
-
 import 'package:flutter/material.dart';
-import 'package:flutter_map/flutter_map.dart';
-import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 class LocationNotifier extends ChangeNotifier {
   LocationNotifier() { 
@@ -16,11 +12,9 @@ class LocationNotifier extends ChangeNotifier {
   TripData get tripdata => _tripdata;
 
   // Open Street Map
-  final MapController _mapController = MapController();
-  MapController get mapController => _mapController;
-  // Google Map
-  //final Completer<GoogleMapController> gmapController = Completer<GoogleMapController>();
-  late Completer<GoogleMapController> gmapController ;
+  //final MapController _mapController = MapController();
+  //MapController get mapController => _mapController;
+  
 
   void updateLoc1(double lat, double lng, DateTime dt){
     _loc01 = Loc01(lat, lng, dt);

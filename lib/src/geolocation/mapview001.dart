@@ -52,7 +52,7 @@ Widget build(BuildContext context) {
           body: Stack(
             children: [ 
             FlutterMap(
-              mapController: provider.mapController,
+              mapController: mapctrl,
               options:   MapOptions(
                 initialCenter: LatLng(lat, lng), 
                 initialZoom: GeoData.zoom,
@@ -154,7 +154,9 @@ Widget build(BuildContext context) {
           point: LatLng(GeoData.currentLat, GeoData.currentLng), width: 100,height: 100,alignment: Alignment.center,
           child: Image.asset('assets/images/geo/here-red.png',scale: 1.0,),
         ));
-        
+      }
+      if (GeoData.mapReady && GeoData.centerMap){
+        mapctrl.move(LatLng(GeoData.currentLat, GeoData.currentLng),GeoData.zoom);
       }
     return markers;
   }  
@@ -180,7 +182,7 @@ Widget build(BuildContext context) {
             setState(() {
                 GeoData.centerMap=true;
             });
-            locationNotifier.mapController.move(LatLng(GeoData.currentLat, GeoData.currentLng),GeoData.zoom); 
+            mapctrl.move(LatLng(GeoData.currentLat, GeoData.currentLng),GeoData.zoom); 
           },
       );
   }

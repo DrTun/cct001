@@ -23,7 +23,7 @@ class LoadingPage extends StatefulWidget {
 class _LoadingState extends State<LoadingPage> {
 
   // 1) Geo Declaration >>>>
-  late LocationNotifier locationNotifierProvider ;  // Provider Declaration and init
+  late LocationNotifier providerLocNoti ;  // Provider Declaration and init
   
   // 2) Init State
   @override
@@ -37,7 +37,7 @@ class _LoadingState extends State<LoadingPage> {
     GeoData.currentLat = GeoData.defaultLat;
     GeoData.currentLng = GeoData.defaultLng;
     try {
-      locationNotifierProvider = Provider.of<LocationNotifier>(context,listen: false);
+      providerLocNoti = Provider.of<LocationNotifier>(context,listen: false);
       if (await GeoData.chkPermissions(GeoData.location)){
         await GeoData.location.changeSettings(accuracy: LocationAccuracy.high, interval: GeoData.interval, distanceFilter: GeoData.distance);
         GeoData.locationSubscription = GeoData.location.onLocationChanged.listen((LocationData currentLocation) {changeLocations(currentLocation);});
@@ -51,8 +51,8 @@ class _LoadingState extends State<LoadingPage> {
   void changeLocations(LocationData currentLocation){ //listen to location changes
     try {
         DateTime dt = DateTime.now();
-        GeoData.updateLocation(currentLocation.latitude!, currentLocation.longitude!, dt,locProvider: locationNotifierProvider);  
-        locationNotifierProvider.updateLoc1(currentLocation.latitude!,  currentLocation.longitude!, dt);  
+        GeoData.updateLocation(currentLocation.latitude!, currentLocation.longitude!, dt,locProvider: providerLocNoti);  
+        // No need. above method will notify the provider
         if (AppConfig.shared.log==3){logger.i("(${GeoData.counter}) ${currentLocation.latitude} x ${currentLocation.longitude}");}
     } catch (e) {
       logger.i("Exception (changeLocations): $e");

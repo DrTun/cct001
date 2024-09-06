@@ -3,30 +3,13 @@ import 'package:flutter/material.dart';
 
 class LocationNotifier extends ChangeNotifier {
   LocationNotifier() { 
-    _loc01 = Loc01(0, 0,  DateTime(2000));
     _tripdata = TripData(false,0,0,0,0);
   }
-  late Loc01 _loc01;
-  Loc01 get loc01 => _loc01;
   late TripData _tripdata;
   TripData get tripdata => _tripdata;
 
-  // Open Street Map
-  //final MapController _mapController = MapController();
-  //MapController get mapController => _mapController;
-  
-
-  void updateLoc1(double lat, double lng, DateTime dt){
-    _loc01 = Loc01(lat, lng, dt);
-    notifyListeners();
-  }
-
   void updateTripData(bool started,double dis, int tme, double spd, double amt){
     _tripdata = TripData(started,dis,tme,spd,amt);
-    notifyListeners();
-  }
-  void updateTripStatus(bool started){
-    _tripdata = TripData(started,_tripdata.distance,_tripdata.time,_tripdata.speed,_tripdata.amount);
     notifyListeners();
   }
   void notify() {

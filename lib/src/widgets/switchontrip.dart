@@ -53,7 +53,7 @@ class SwitchonTripState extends State<SwitchonTrip> {
   }
   void endIt(LocationNotifier locationNotifier){
               GeoData.endTrip();
-              locationNotifier.updateTripStatus(false);
+              locationNotifier.notify();
               MyStore.prefs.setBool("tripStarted", false);
               KeepScreenOn.turnOff();
   }

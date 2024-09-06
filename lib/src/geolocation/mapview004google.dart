@@ -7,17 +7,20 @@ import '../maintabs/cards/mapcard.dart';
 import '../shared/appconfig.dart'; 
 import '../widgets/toggleicon.dart';
 import 'locationnotifier.dart';
-class MapView002Google extends StatefulWidget {
-  const MapView002Google({super.key});
+
+class MapView004Google extends StatefulWidget {
+  const MapView004Google({super.key});
+
   @override
-  State<MapView002Google> createState() => MapView002GoogleState();
+  State<MapView004Google> createState() => MapView004GoogleState();
 }
-class MapView002GoogleState extends State<MapView002Google> {  
+class MapView004GoogleState extends State<MapView004Google> {
+  // this will hold each polyline coordinate as Lat and Lng pairs
+  bool refreshing = false;
   int movingCount =0;
   bool moving=false;
-  final Completer<GoogleMapController> completer =Completer<GoogleMapController>();
   late LocationNotifier providerLocNoti ;
-  BitmapDescriptor icStart = BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueCyan);
+  BitmapDescriptor icStart = BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueBlue);
 
   @override
   void initState() {
@@ -27,81 +30,98 @@ class MapView002GoogleState extends State<MapView002Google> {
     providerLocNoti = Provider.of<LocationNotifier>(context,listen: false);
     });
   }
-  void _moveCamera(){
+
+  GoogleMapController? _mapController;
+
+  Future<void> _moveCameraToKeepLocationInView(
+    GoogleMapController controller,
+    LatLng location,
+  ) async {
+    //  controller.animateCamera(CameraUpdate.newLatLng(location));
+    //final visibleRegion = await controller.getVisibleRegion();
+    //if (!visibleRegion.contains(location)) {
       if (GeoData.centerMap){
-        completer.future.then(
-          (controller) {
-            if (movingCount>5){
-                moving=true;
-                controller.moveCamera(CameraUpdate.newCameraPosition(
-                        CameraPosition(target: LatLng(GeoData.currentLat, GeoData.currentLng), zoom: GeoData.zoom,)
-                ));
-            movingCount=0;
-            Timer(const Duration(seconds: 1), () {moving = false;});
-            } else {
-                movingCount++;
-            } 
-          }
-        );
-      }
+        if (movingCount>5){
+          moving=true;
+          controller.moveCamera(CameraUpdate.newLatLng(location));
+          movingCount=0;
+          Timer(const Duration(seconds: 1), () {moving = false;});
+        } else {
+          movingCount++;
+        }
+    }
   }
 
   @override
   Widget build(BuildContext context) {
     return Consumer<LocationNotifier>(
       builder: (consumeContext, model, child) {
-        _moveCamera();
+        final mapController = _mapController;
+        final locationPosition =  LatLng(GeoData.currentLat, GeoData.currentLng);
+        if (mapController != null ) {
+          _moveCameraToKeepLocationInView(mapController, locationPosition);
+        }
+        // If we have user's location, then display the google map
         if (GeoData.currentLat!=0 && GeoData.currentLng!=0) { 
+
           return Scaffold(
             body: Stack(
               children: [
               GoogleMap(
-                myLocationEnabled: true,
-                myLocationButtonEnabled: false,
                 markers: Set<Marker>.from(addMarkers()),
                 polylines: Set<Polyline>.from(addPolylines()),
                 mapType: MapType.normal,
-                minMaxZoomPreference: const MinMaxZoomPreference(10, 17.5),
                 initialCameraPosition: CameraPosition(
-                  target: LatLng(GeoData.currentLat, GeoData.currentLng),
-                  zoom: 16,
+                  target: locationPosition,
+                  zoom: 18,
                 ),
-                onMapCreated: (GoogleMapController controller) { 
-                  if (completer.isCompleted == false){ completer.complete(controller); } 
+                myLocationEnabled: true,
+                myLocationButtonEnabled: true,
+                onMapCreated: (GoogleMapController controller) {
+                  _mapController = controller;
                 },
+                onTap: (LatLng latLng) { 
+                  //if (!GeoData.centerMap) {GeoData.centerMap=true;} else {GeoData.centerMap=false;}
+                  //  setState(() {});
+                },
+                onLongPress: (LatLng latLng) { 
+                }, 
                 onCameraMove: (CameraPosition position) {
-                  if (!moving) { GeoData.centerMap = false; }
+                  if (!moving) {
+                    GeoData.centerMap = false;
+                  }
                 },
-                onTap: (LatLng latLng) {   },
-                onLongPress: (LatLng latLng) {  }, 
-                onCameraMoveStarted: () { }, 
-                onCameraIdle: () {  },
+                onCameraMoveStarted: () { 
+                },
+                //
+                onCameraIdle: () {  
+                  //if (!moving){GeoData.centerMap=false;}
+                },
+                
               ),
               Positioned( 
                     right: 10,
                     top: 10,
-                    child: SizedBox( 
+                    child: SizedBox(
+                          //width: MediaQuery.of(context).size.width -20,
                           width:220,
                           height: 150,
                     child: mapcard(providerLocNoti.tripdata,transparent: true, fcolor: Colors.orange, fsize: 32),
                     )
               ),
               Positioned( 
-                          left: 15,
+                          left: 10,
                           bottom: 25,
                           child: reCenter()),
               Positioned( 
                           right: 15,
-                          bottom: 25,
+                          bottom: 100,
                           child: debugGeoData()),
               Positioned( 
                           left: 10,
-                          bottom: 0,
-                          child: GeoData.showLatLng? Text("${GeoData.counter} ${GeoData.currentLat} ${GeoData.currentLng} v${AppConfig.shared.appVersion} ", 
-                          style: const TextStyle(fontSize: 12,color: Colors.red, backgroundColor: Colors.white), )
-                          : const SizedBox(width: 0, height: 0,)
+                          bottom: 10,
+                          child: Text("${GeoData.showLatLng?'(${GeoData.counter})':''} ${GeoData.showLatLng?GeoData.currentLat:''} ${GeoData.showLatLng?GeoData.currentLng:''} v${AppConfig.shared.appVersion} ", style: const TextStyle(fontSize: 12,color: Colors.red))
               ),
-
 
               ]
             )
@@ -124,9 +144,7 @@ class MapView002GoogleState extends State<MapView002Google> {
   Widget reCenter() {
     return  
       ToggleIcon(
-          value: GeoData.centerMap, 
-          iconOn: const Icon(Icons.control_camera , color: Colors.white,), 
-          iconOff: const Icon(Icons.control_camera_sharp , color: Colors.white,),
+          value: GeoData.centerMap,  
           onClick: ()  {
             setState(() {
                 if (!GeoData.centerMap) {GeoData.centerMap=true;} else {GeoData.centerMap=false;}
@@ -147,6 +165,8 @@ class MapView002GoogleState extends State<MapView002Google> {
           },
       );
   }
+
+
   List<Marker> addMarkers() { 
     List<Marker> markers = [];
     if (GeoData.tripStarted){
@@ -170,8 +190,9 @@ class MapView002GoogleState extends State<MapView002Google> {
         markers.add(start);
       }
     }
-    return markers;  
-  }
+    return markers;
+    
+    }
   
   List<Polyline> addPolylines() { 
     List<Polyline> polylines = [];

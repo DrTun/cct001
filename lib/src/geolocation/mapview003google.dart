@@ -7,9 +7,8 @@ import 'package:google_maps_flutter/google_maps_flutter.dart' ;
 import 'package:keep_screen_on/keep_screen_on.dart';
 import 'package:provider/provider.dart';
 import '../maintabs/cards/mapcard.dart';
-import '../shared/appconfig.dart';
-import '../widgets/debugcircle.dart';
-import '../widgets/recenteron.dart';
+import '../shared/appconfig.dart'; 
+import '../widgets/toggleicon.dart';
 import 'geodata.dart';
 import 'locationnotifier.dart';
 
@@ -21,7 +20,7 @@ class MapView003 extends StatefulWidget {
 }
 
 class MapSampleState extends State<MapView003> {
-  late LocationNotifier locationNotifier ;
+  late LocationNotifier providerLocNoti ;
   bool refreshing = false; 
   final Completer<GoogleMapController> _controller =Completer<GoogleMapController>();
   BitmapDescriptor icStart = BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueBlue);
@@ -32,7 +31,7 @@ class MapSampleState extends State<MapView003> {
     GeoData.defaultMap=1;
     GeoData.centerMap=true;
     setState(() {
-    locationNotifier = Provider.of<LocationNotifier>(context,listen: false);
+    providerLocNoti = Provider.of<LocationNotifier>(context,listen: false);
     });
     if (GeoData.tripStarted){
               KeepScreenOn.turnOn();
@@ -98,7 +97,7 @@ class MapSampleState extends State<MapView003> {
                   //width: MediaQuery.of(context).size.width -20,
                   width:220,
                   height: 150,
-            child: mapcard(locationNotifier.tripdata,transparent: true, fcolor: Colors.orange, fsize: 32),
+            child: mapcard(providerLocNoti.tripdata,transparent: true, fcolor: Colors.orange, fsize: 32),
             )
       ),
       Positioned( 
@@ -112,7 +111,7 @@ class MapSampleState extends State<MapView003> {
       Positioned( 
                   left: 10,
                   bottom: 10,
-                  child: Text("${GeoData.showLatLng?'(${GeoData.counter})':''} ${GeoData.showLatLng?locationNotifier.loc01.lat:''} ${GeoData.showLatLng?locationNotifier.loc01.lng:''} v${AppConfig.shared.appVersion} ", style: const TextStyle(fontSize: 12,color: Colors.red))
+                  child: Text("${GeoData.showLatLng?'(${GeoData.counter})':''} ${GeoData.showLatLng?GeoData.currentLat:''} ${GeoData.showLatLng?GeoData.currentLng:''} v${AppConfig.shared.appVersion} ", style: const TextStyle(fontSize: 12,color: Colors.red))
       ),
       ],), 
       // ),
@@ -122,7 +121,7 @@ class MapSampleState extends State<MapView003> {
 
   Widget reCenter() {
     return  
-      ReCenterOn(
+      ToggleIcon(
           value: GeoData.centerMap,  
           onClick: ()  {
             setState(() {
@@ -132,20 +131,17 @@ class MapSampleState extends State<MapView003> {
       );
   }
   Widget debugCircle() {
-    return refreshing // cheeck if on or off
-        ? DebugCircle(value: true, onClick: () async {},)
-        : DebugCircle(value: false,
-            onClick: () async {
-              setState(() {});
-              setState(() { refreshing = true;}); // start refreshing
-              Timer(const Duration(seconds: 1), () {
-                  setState(() { refreshing = false;}); // done refreshing
-                  if (GeoData.showLatLng) {GeoData.showLatLng=false; } else {GeoData.showLatLng=true;}
-                  setState(() {});
-                }
-              );
-            },
-          );
+    return  
+      ToggleIcon(
+          value: GeoData.showLatLng, 
+          iconOn: const Icon(Icons.closed_caption_off_outlined , color: Colors.white,), 
+          iconOff: const Icon(Icons.closed_caption_disabled_outlined, color: Colors.white,),
+          onClick: ()  {
+            setState(() {
+                if (!GeoData.showLatLng) {GeoData.showLatLng=true;} else {GeoData.showLatLng=false;}
+            });
+          },
+      );
   }
 
 

@@ -2,35 +2,42 @@ import 'package:flutter/material.dart';
 import '/src/widgets/circularbutton.dart';
 
 // ignore: must_be_immutable
-class ReCenterOn extends StatelessWidget {
+class ToggleIcon extends StatelessWidget {
   final bool value;
+  Icon? iconOn;
+  String? labelOn = "";
+  Icon? iconOff;
+  String? labelOff = "";
   final VoidCallback? onClick;
 
-  final icon1 = const Icon( Icons.center_focus_weak_rounded, color: Colors.white,);
-  const ReCenterOn(
+  //final icon1 = const Icon( Icons.auto_mode, color: Colors.white,);
+  ToggleIcon(
       {super.key,
       required this.value,   
-      required this.onClick}
+      this.iconOn, this.labelOn, this.iconOff, this.labelOff, required this.onClick}
   );
   @override
   Widget build(BuildContext context) {
+    Icon iconOn = this.iconOn!=null? this.iconOn!: const Icon( Icons.beenhere , color: Colors.white,);
+    Icon iconOff = this.iconOff!=null? this.iconOff!: const Icon( Icons.beenhere, color: Colors.white,);
+    String labelOn = this.labelOn!=null? this.labelOn!: "";
+    String labelOff = this.labelOff!=null? this.labelOff!: "";
     return value
     ? 
-    
     Center(
           child: Row(
             mainAxisAlignment: MainAxisAlignment.center, // Centers the text horizontally
             children: [
     CircularButton( // show refresh icon onclick go refreshing (rotate)
-            color: Colors.grey,
+            color: Colors.blue,
             width: 40, height: 40,
-            icon: icon1,
+            icon: iconOn,
             onClick: () async { 
                 onClick!(); 
             },
     ),
 
-    const Text(" Center Map", style: TextStyle(color: Colors.black, fontSize: 10)),
+    Text(" $labelOn", style: const TextStyle(color: Colors.black, fontSize: 10)),
     ]))
 
 
@@ -41,15 +48,15 @@ class ReCenterOn extends StatelessWidget {
             children: [
     
     CircularButton( // show refresh icon onclick go refreshing (rotate)
-            color: Colors.lightBlue,
+            color: Colors.grey,
             width: 40, height: 40,
-            icon: icon1,
+            icon: iconOff,
             onClick: () async { 
                 onClick!(); 
             },
     ),
 
-    const Text(" Center Map", style: TextStyle(color: Colors.red, fontSize: 10)),
+    Text(" $labelOff", style: const TextStyle(color: Colors.black, fontSize: 10)),
     ]));
   }
 }

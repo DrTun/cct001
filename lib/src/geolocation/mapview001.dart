@@ -1,13 +1,12 @@
-import 'dart:async'; 
+ 
 import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:flutter_map_cancellable_tile_provider/flutter_map_cancellable_tile_provider.dart';
 import '../maintabs/cards/mapcard.dart';
+import '../widgets/toggleicon.dart';
 import '/src/shared/appconfig.dart';
 import 'package:keep_screen_on/keep_screen_on.dart';
-import 'package:latlong2/latlong.dart';
-import '../widgets/debugcircle.dart';
-import '../widgets/recenter.dart';  
+import 'package:latlong2/latlong.dart'; 
 import 'package:provider/provider.dart';
 import 'geodata.dart';
 import 'locationnotifier.dart';
@@ -20,12 +19,11 @@ class MapView001 extends StatefulWidget {
 }
 class MapView001State extends State<MapView001> {
   //late MyNotifier provider ; 
-  late LocationNotifier locationNotifier ;
+  late LocationNotifier providerLocNoti ;
   final List<Marker> markers = [];
   final List<Polyline> polylines = [];
   //late MapController mapctrl; 
-  final  mapctrl = MapController();
-  bool refreshing = false; 
+  final  mapctrl = MapController(); 
   bool switchon = GeoData.tripStarted;
   final ValueNotifier<bool> isStartValue = ValueNotifier<bool>(false);
 
@@ -36,7 +34,7 @@ class MapView001State extends State<MapView001> {
     GeoData.centerMap=true;
     setState(() {
     //provider = Provider.of<MyNotifier>(context,listen: false);
-    locationNotifier = Provider.of<LocationNotifier>(context,listen: false);
+    providerLocNoti = Provider.of<LocationNotifier>(context,listen: false);
     });
     if (GeoData.tripStarted){
               KeepScreenOn.turnOn();
@@ -82,45 +80,24 @@ Widget build(BuildContext context) {
                   //width: MediaQuery.of(context).size.width -20,
                   width:220,
                   height: 150,
-            child: mapcard(locationNotifier.tripdata,transparent: true, fcolor: Colors.orange, fsize: 32),
+            child: mapcard(providerLocNoti.tripdata,transparent: true, fcolor: Colors.orange, fsize: 32),
             )
       ),
-            // Positioned( 
-            //       left: 10,
-            //       top: 10,
-            //       child: 
-            //           Container(
-            //             width: MediaQuery.of(context).size.width * 0.40,
-            //           color: Colors.black.withOpacity(0.8), // Adjust opacity
-            //           child: Column(
-            //           children: [
-            //             const SizedBox(height: 5,),
-            //             Text("${provider.tripdata.distance.toStringAsFixed(2)} km", style: const TextStyle(fontFamily: "Digital",fontSize: 30,height: 1.2,color: Colors.green)), 
-            //             Text("${MyHelpers.formatTime(GeoData.tripDuration())} ", style: const TextStyle(fontFamily: "Digital",fontSize: 30,height: 1.2,color: Colors.green)),
-            //             Text("${MyHelpers.formatDouble(provider.tripdata.amount)} ", style: const TextStyle(fontFamily: "Digital",fontSize: 30,height: 1.2,color: Colors.green)),
-            //             provider.tripdata.speed>=1?Text("${provider.tripdata.speed.toStringAsFixed(0)} km/h", style: const TextStyle(fontSize: 12,height: 1.2,color: Colors.green)):const SizedBox(), 
-            //             const SizedBox(height: 5,),
-            //           ],  
-            //           ),
-            //       ),
-            // ),
-            // Positioned( 
-            //       right: 10,
-            //       top: 0,
-            //       child:  GestureDetector(onTap: () {}, child: const SwitchonTrip(label: 'Trip',))
-            //       ),
             Positioned( 
                   right: 10,
-                  bottom: 50,
-                  child: debugCircle()),
+                  bottom: 20,
+                  child: debugGeoData()),
             Positioned( 
                   left: 10,
-                  bottom: 50,
+                  bottom: 20,
                   child: reCenter()),
             Positioned( 
                   left: 10,
-                  bottom: 10,
-                  child: Text("${GeoData.showLatLng?'(${GeoData.counter})':''} ${GeoData.showLatLng?locationNotifier.loc01.lat:''} ${GeoData.showLatLng?locationNotifier.loc01.lng:''} v${AppConfig.shared.appVersion} ", style: const TextStyle(fontSize: 12,color: Colors.red))
+                  bottom: 0,
+
+                          child: GeoData.showLatLng? Text("${GeoData.counter} ${GeoData.currentLat} ${GeoData.currentLng} v${AppConfig.shared.appVersion} ", 
+                          style: const TextStyle(fontSize: 12,color: Colors.red, backgroundColor: Colors.white), )
+                          : const SizedBox(width: 0, height: 0,)
                   ),
             ],
           ),
@@ -175,31 +152,29 @@ Widget build(BuildContext context) {
     Text("${GeoData.currentSpeed(GeoData.polyline01,GeoData.dtimeList01,5).toStringAsFixed(0)} km/h", style: const TextStyle(fontSize: 12,color: Colors.red));
   }
   Widget reCenter() {
-    return 
-      ReCenter(
-          value: GeoData.centerMap,  
+    return  
+      ToggleIcon(
+          value: GeoData.centerMap, 
+          iconOn: const Icon(Icons.control_camera , color: Colors.white,), 
+          iconOff: const Icon(Icons.control_camera_sharp , color: Colors.white,),
           onClick: ()  {
             setState(() {
                 if (!GeoData.centerMap) {GeoData.centerMap=true;} else {GeoData.centerMap=false;}
             });
-            mapctrl.move(LatLng(GeoData.currentLat, GeoData.currentLng),GeoData.zoom); 
           },
       );
   }
-  Widget debugCircle() {
-    return refreshing // cheeck if on or off
-        ? DebugCircle(value: true, onClick: () async {},)
-        : DebugCircle(value: false,
-            onClick: () async {
-              setState(() {});
-              setState(() { refreshing = true;}); // start refreshing
-              Timer(const Duration(seconds: 1), () {
-                  setState(() { refreshing = false;}); // done refreshing
-                  if (GeoData.showLatLng) {GeoData.showLatLng=false; } else {GeoData.showLatLng=true;}
-                  setState(() {});
-                }
-              );
-            },
-          );
+  Widget debugGeoData() {
+    return  
+      ToggleIcon(
+          value: GeoData.showLatLng, 
+          iconOn: const Icon(Icons.closed_caption_off_outlined , color: Colors.white,), 
+          iconOff: const Icon(Icons.closed_caption_disabled_outlined, color: Colors.white,),
+          onClick: ()  {
+            setState(() {
+                if (!GeoData.showLatLng) {GeoData.showLatLng=true;} else {GeoData.showLatLng=false;}
+            });
+          },
+      );
   }
 }

@@ -44,6 +44,7 @@ class GeoData{
   static const int timerInterval=1000;
   static int defaultMap=0;  //0 open street, 1 google map
 
+
   static void resetData(){
     counter=0;
     currentLat=0;

@@ -2,6 +2,8 @@
 import 'dart:async';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
+import '/src/rootpage.dart';
+import '/src/signin/sign_in.dart';
 import 'package:location/location.dart';
 import '/src/helpers/helpers.dart';
 import '/src/geolocation/geodata.dart';
@@ -10,9 +12,7 @@ import 'api/api_auth.dart';
 import 'geolocation/locationnotifier.dart';
 import 'shared/appconfig.dart';
 import 'shared/globaldata.dart';
-import 'rootpage.dart'; 
 import 'package:flutter/material.dart';
-import 'signin/signinpage.dart'; 
 //  -------------------------------------    Loading (Property of Nirvasoft.com)
 class LoadingPage extends StatefulWidget {
   static const routeName = '/loading';
@@ -97,9 +97,11 @@ class _LoadingState extends State<LoadingPage> {
         if (AppConfig.shared.skipsignin) { 
           Navigator.pushReplacementNamed(context,RootPage.routeName, ); 
         } else if( GlobalAccess.userID.isNotEmpty || GlobalAccess.accessToken.isNotEmpty){ 
+          
           Navigator.pushReplacementNamed(context,RootPage.routeName, ); 
         } else { 
-          Navigator.pushReplacementNamed(context,SigninPage.routeName, );  
+          Navigator.pushReplacementNamed(context, SignIn.routeName);
+        //  Navigator.pushReplacementNamed(context,SigninPage.routeName, );  
         }
     }); 
     });

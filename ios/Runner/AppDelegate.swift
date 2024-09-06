@@ -1,6 +1,6 @@
 import Flutter
 import UIKit
-import GoogleMap
+import GoogleMaps
 
 @UIApplicationMain
 @objc class AppDelegate: FlutterAppDelegate {
@@ -13,3 +13,4 @@ import GoogleMap
     return super.application(application, didFinishLaunchingWithOptions: launchOptions)
   }
 }
+ 

@@ -1,137 +1,159 @@
-//https://medium.com/@samra.sajjad0001/a-comprehensive-guide-to-using-google-maps-in-flutter-3fbc0f7d469e
-//https://pub.dev/packages/google_maps_flutter
-
 import 'dart:async'; 
 import 'package:flutter/material.dart'; 
-import 'package:google_maps_flutter/google_maps_flutter.dart' ; 
-import 'package:keep_screen_on/keep_screen_on.dart';
-import 'package:provider/provider.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart' ;
+import '/src/geolocation/geodata.dart';  
+import 'package:provider/provider.dart';   
 import '../maintabs/cards/mapcard.dart';
 import '../shared/appconfig.dart';
-import '../widgets/debugcircle.dart';
-import '../widgets/recenter.dart';
-import 'geodata.dart';
+import '../widgets/debugcircle.dart'; 
+import '../widgets/recenteron.dart';
 import 'locationnotifier.dart';
 
 class MapView002Google extends StatefulWidget {
   const MapView002Google({super.key});
 
   @override
-  State<MapView002Google> createState() => MapSampleState();
+  State<MapView002Google> createState() => MapView002GoogleState();
 }
-
-class MapSampleState extends State<MapView002Google> {
+class MapView002GoogleState extends State<MapView002Google> {
+  // this will hold each polyline coordinate as Lat and Lng pairs
+  bool refreshing = false;
+  int movingCount =0;
+  bool moving=false;
   late LocationNotifier locationNotifier ;
-  bool refreshing = false; 
-  final Completer<GoogleMapController> _controller =Completer<GoogleMapController>();
   BitmapDescriptor icStart = BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueBlue);
-    bool _isProgrammaticChange = false;
 
   @override
   void initState() {
     super.initState();
-    GeoData.defaultMap=1;
-    GeoData.centerMap=true;
+    // Add polyline
     setState(() {
     locationNotifier = Provider.of<LocationNotifier>(context,listen: false);
     });
-    if (GeoData.tripStarted){
-              KeepScreenOn.turnOn();
+  }
+
+  GoogleMapController? _mapController;
+
+  Future<void> _moveCameraToKeepLocationInView(
+    GoogleMapController controller,
+    LatLng location,
+  ) async {
+    //  controller.animateCamera(CameraUpdate.newLatLng(location));
+    //final visibleRegion = await controller.getVisibleRegion();
+    //if (!visibleRegion.contains(location)) {
+      if (GeoData.centerMap){
+        if (movingCount>5){
+          moving=true;
+          controller.moveCamera(CameraUpdate.newLatLng(location));
+          movingCount=0;
+          Timer(const Duration(seconds: 1), () {moving = false;});
+        } else {
+          movingCount++;
+        }
     }
-    //_setCustomMarker();
   }
-
-  // Load the custom marker image
-  Future<void> _setCustomMarker() async {
-    icStart = await BitmapDescriptor.fromAssetImage(
-      const ImageConfiguration(size: Size(3, 3)),
-      "assets/images/blue.png",
-    );
-    setState(() {});
-  }
-
 
   @override
-  Widget build(BuildContext context) { 
-
+  Widget build(BuildContext context) {
     return Consumer<LocationNotifier>(
-      builder: (context, provider , child) { 
-    return 
-    Scaffold(
-      body: Stack(
-            children: [
-      GoogleMap(
-        mapType: MapType.normal,
-        myLocationEnabled: true,
-        initialCameraPosition: CameraPosition(
-              target: LatLng(GeoData.currentLat, GeoData.currentLng),
-              zoom: GeoData.zoom,
+      builder: (consumeContext, model, child) {
+        final mapController = _mapController;
+        final locationPosition =  LatLng(GeoData.currentLat, GeoData.currentLng);
+        if (mapController != null ) {
+          _moveCameraToKeepLocationInView(mapController, locationPosition);
+        }
+        // If we have user's location, then display the google map
+        if (GeoData.currentLat!=0 && GeoData.currentLng!=0) { 
 
-        ),
-        markers: Set<Marker>.from(addMarkers()),
-        polylines: Set<Polyline>.from(addPolylines()),
-        onMapCreated: (GoogleMapController controller) { 
-          if (_controller.isCompleted == false){
-            _controller.complete(controller);
-          } 
-          GeoData.gmapReady = true;
-        },
-        onTap: (LatLng latLng) { 
-        },
-        onCameraMoveStarted: () {
-          if (!_isProgrammaticChange) {
-              GeoData.centerMap = false;
-          }
-        },
-        onCameraIdle: () { 
-          _isProgrammaticChange = false;
-        },
-        
-        onCameraMove: (CameraPosition position) {
-          GeoData.zoom = position.zoom;
-        },
-      ),
-      Positioned( 
-            right: 10,
-            top: 10,
-            child: SizedBox(
-                  //width: MediaQuery.of(context).size.width -20,
-                  width:220,
-                  height: 150,
-            child: mapcard(locationNotifier.tripdata,transparent: true, fcolor: Colors.orange, fsize: 32),
+          return Scaffold(
+            body: Stack(
+              children: [
+              GoogleMap(
+                markers: Set<Marker>.from(addMarkers()),
+                polylines: Set<Polyline>.from(addPolylines()),
+                mapType: MapType.normal,
+                initialCameraPosition: CameraPosition(
+                  target: locationPosition,
+                  zoom: 18,
+                ),
+                myLocationEnabled: true,
+                myLocationButtonEnabled: true,
+                onMapCreated: (GoogleMapController controller) {
+                  _mapController = controller;
+                },
+                onTap: (LatLng latLng) { 
+                  //if (!GeoData.centerMap) {GeoData.centerMap=true;} else {GeoData.centerMap=false;}
+                  //  setState(() {});
+                },
+                onLongPress: (LatLng latLng) { 
+                }, 
+                onCameraMove: (CameraPosition position) {
+                  if (!moving) {
+                    GeoData.centerMap = false;
+                  }
+                },
+                onCameraMoveStarted: () { 
+                },
+                //
+                onCameraIdle: () {  
+                  //if (!moving){GeoData.centerMap=false;}
+                },
+                
+              ),
+              Positioned( 
+                    right: 10,
+                    top: 10,
+                    child: SizedBox(
+                          //width: MediaQuery.of(context).size.width -20,
+                          width:220,
+                          height: 150,
+                    child: mapcard(locationNotifier.tripdata,transparent: true, fcolor: Colors.orange, fsize: 32),
+                    )
+              ),
+              Positioned( 
+                          left: 10,
+                          bottom: 25,
+                          child: reCenter()),
+              Positioned( 
+                          right: 15,
+                          bottom: 100,
+                          child: debugGeoData()),
+              Positioned( 
+                          left: 10,
+                          bottom: 10,
+                          child: Text("${GeoData.showLatLng?'(${GeoData.counter})':''} ${GeoData.showLatLng?locationNotifier.loc01.lat:''} ${GeoData.showLatLng?locationNotifier.loc01.lng:''} v${AppConfig.shared.appVersion} ", style: const TextStyle(fontSize: 12,color: Colors.red))
+              ),
+
+              ]
             )
-      ),
-      Positioned( 
-                  left: 10,
-                  bottom: 50,
-                  child: reCenter()),
-      Positioned( 
-                  right: 25,
-                  bottom: 100,
-                  child: debugCircle()),
-      Positioned( 
-                  left: 10,
-                  bottom: 10,
-                  child: Text("${GeoData.showLatLng?'(${GeoData.counter})':''} ${GeoData.showLatLng?locationNotifier.loc01.lat:''} ${GeoData.showLatLng?locationNotifier.loc01.lng:''} v${AppConfig.shared.appVersion} ", style: const TextStyle(fontSize: 12,color: Colors.red))
-      ),
-      ],), 
-      // ),
+          );
+
+        }
+        // Else, display container with loading animation
+        return const SizedBox(
+          width: 400,
+          height: 415,
+          child: Center(
+            child: CircularProgressIndicator(),
+          ),
+        );
+      },
     );
-    });
   }
 
+
   Widget reCenter() {
-    return 
-      ReCenter(
+    return  
+      ReCenterOn(
           value: GeoData.centerMap,  
           onClick: ()  {
             setState(() {
-                GeoData.centerMap=true;
+                if (!GeoData.centerMap) {GeoData.centerMap=true;} else {GeoData.centerMap=false;}
             });
           },
       );
   }
-  Widget debugCircle() {
+  Widget debugGeoData() {
     return refreshing // cheeck if on or off
         ? DebugCircle(value: true, onClick: () async {},)
         : DebugCircle(value: false,
@@ -172,18 +194,6 @@ class MapSampleState extends State<MapView002Google> {
         markers.add(start);
       }
     }
-
-
-      if (GeoData.centerMap){
-        _controller.future.then(
-          (controller) {
-            controller.moveCamera(CameraUpdate.newCameraPosition(
-              CameraPosition(target: LatLng(GeoData.currentLat, GeoData.currentLng), zoom: GeoData.zoom,)
-            ));
-            _isProgrammaticChange = true;
-          }
-        );
-      }
     return markers;
     
     }

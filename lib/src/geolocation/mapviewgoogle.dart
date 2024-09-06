@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'mapview002google.dart'; 
+import 'mapview003google.dart'; 
 class MapViewGoogle extends StatelessWidget {
   static const routeName = '/mapviewgoogle';
   const MapViewGoogle({super.key});
@@ -15,7 +15,7 @@ class MapViewGoogle extends StatelessWidget {
           ),
         ],
       ),
-        body: const MapView002Google(),
+        body: const MapView003(),
       );
    }
 }

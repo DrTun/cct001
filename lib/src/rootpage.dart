@@ -1,12 +1,13 @@
 
 import 'dart:async'; 
 import '/src/geolocation/mapview001.dart';
-import '/src/geolocation/mapview002google.dart';
+ 
 import 'package:url_launcher/url_launcher.dart';
 import 'package:flutter/material.dart';  
 import 'package:confirm_dialog/confirm_dialog.dart';
 import 'package:provider/provider.dart';  
 import 'geolocation/geodata.dart';   
+import 'geolocation/mapview002google.dart';
 import 'providers/mynotifier.dart';
 import 'shared/appconfig.dart';
 import 'maintabs/maincards.dart'; 

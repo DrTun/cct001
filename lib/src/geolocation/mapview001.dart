@@ -180,7 +180,7 @@ Widget build(BuildContext context) {
           value: GeoData.centerMap,  
           onClick: ()  {
             setState(() {
-                GeoData.centerMap=true;
+                if (!GeoData.centerMap) {GeoData.centerMap=true;} else {GeoData.centerMap=false;}
             });
             mapctrl.move(LatLng(GeoData.currentLat, GeoData.currentLng),GeoData.zoom); 
           },

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import '/src/geolocation/mapview001.dart';
 import 'geodata.dart';
-import 'mapview002google.dart'; 
+import 'mapview003google.dart'; 
 class MapView extends StatelessWidget {
   static const routeName = '/mapview';
   const MapView({super.key});
@@ -17,7 +17,7 @@ class MapView extends StatelessWidget {
           ),
         ],
       ),
-        body: GeoData.defaultMap==0? const MapView001(): const MapView002Google(),
+        body: GeoData.defaultMap==0? const MapView001(): const MapView003(),
       );
    }
 }

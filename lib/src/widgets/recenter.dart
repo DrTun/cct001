@@ -6,7 +6,7 @@ class ReCenter extends StatelessWidget {
   final bool value;
   final VoidCallback? onClick;
 
-  final icon1 = const Icon( Icons.center_focus_weak_rounded, color: Colors.white,);
+  final icon1 = const Icon( Icons.center_focus_strong_rounded, color: Colors.white,);
   const ReCenter(
       {super.key,
       required this.value,   
@@ -15,7 +15,11 @@ class ReCenter extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return value
-    ? const Text("Centered",style: TextStyle(color: Colors.blueGrey),)
+    ? GestureDetector(
+      child: const Text("Centered",style: TextStyle(color: Colors.blueGrey),),
+      onTap: () async { 
+          onClick!(); 
+      },)
     : CircularButton( // show refresh icon onclick go refreshing (rotate)
             color: Colors.lightBlue,
             width: 40, height: 40,

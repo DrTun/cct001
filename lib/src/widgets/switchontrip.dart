@@ -26,44 +26,34 @@ class SwitchonTripState extends State<SwitchonTrip> {
       return SwitchOn(
         value: locationNotifier.tripdata.started,
         label: widget.label,
-        onClick: () async {
-        //  setState(() {
+        onClick: () async { 
             if (locationNotifier.tripdata.started) {
-              if (GeoData.tripDuration()>(60)){
+              if (GeoData.tripDuration()>(GeoData.mintripDuration)){    // more than 60s
                 MyHelpers.getBool(context, "Are you sure to end trip?").then((value) => {
                       if (value != null && value) {
                           endIt(locationNotifier)
                       }
                 });
               } else {
-                          endIt(locationNotifier); 
+                      endIt(locationNotifier); 
+                      GeoData.clearTrip();      // less than 60s, GeoData.mintripDuration
               }
-            } else {
-              // MyHelpers.getBool(context, "Are you sure to start trip?").then((value) => {
-              //       if (value != null && value) {
-              //           startIt(locationNotifier)
-              //       }
-              // });
+            } else { 
               startIt(locationNotifier);
-            }
-         // });
+            } 
         },
       );
     });
   }
   void endIt(LocationNotifier locationNotifier){
-              GeoData.endTrip();
-              locationNotifier.notify();
-              MyStore.prefs.setBool("tripStarted", false);
-              KeepScreenOn.turnOff();
+      GeoData.endTrip();
+      locationNotifier.notify();
+      MyStore.prefs.setBool("tripStarted", false);
+      KeepScreenOn.turnOff();
   }
-  
   void startIt(LocationNotifier locationNotifier){
               GeoData.centerMap=true; 
-              GeoData.polyline01.points.clear();
-              GeoData.polyline01Fixed.points.clear();
-              GeoData.dtimeList01.clear();
-              GeoData.dtimeList01Fixed.clear();
+              GeoData.clearTrip();
               locationNotifier.updateTripData(true, 0, 0, 0, 0);
               GeoData.startTrip(locationNotifier);
               MyStore.prefs.setBool("tripStarted", true);

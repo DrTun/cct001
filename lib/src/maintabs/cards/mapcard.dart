@@ -19,7 +19,7 @@ Widget mapcard(TripData tripdata, {bool? transparent, Color? fcolor,double? fsiz
                   right: 10,
                   child: 
                   GeoData.polyline01.points.length % 2 == 0
-                  ? Image.asset('assets/images/round-green.png',width:15,height: 15,)
+                  ? Image.asset('assets/images/round-white.png',width:15,height: 15,)
                   : Image.asset('assets/images/round-grey.png',width:15,height: 15,)
           ),
 

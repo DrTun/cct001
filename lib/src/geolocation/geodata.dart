@@ -42,8 +42,8 @@ class GeoData{
   static const double defaultLat=1.2926;
   static const double defaultLng=103.8448;
   static const int timerInterval=1000;
+  static const int mintripDuration=60; // to save the trip or not
   static int defaultMap=0;  //0 open street, 1 google map
-
 
   static void resetData(){
     counter=0;
@@ -51,6 +51,9 @@ class GeoData{
     currentLng=0;
     currentDtime= DateTime.now();
     tripStarted=false;
+    clearTrip();
+  }
+  static void clearTrip(){
     polyline01.points.clear();
     dtimeList01.clear();
     polyline01Fixed.points.clear();

@@ -2,6 +2,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:flutter_map_cancellable_tile_provider/flutter_map_cancellable_tile_provider.dart';
+import 'package:flutter_speed_dial/flutter_speed_dial.dart';
 import '../maintabs/cards/mapcard.dart';
 import '../widgets/toggleicon.dart';
 import '/src/shared/appconfig.dart';
@@ -84,26 +85,70 @@ Widget build(BuildContext context) {
             )
       ),
             Positioned( 
-                  right: 10,
-                  bottom: 20,
-                  child: debugGeoData()),
-            Positioned( 
                   left: 10,
-                  bottom: 20,
+                  bottom: 25,
                   child: reCenter()),
             Positioned( 
                   left: 10,
-                  bottom: 0,
+                  bottom: 100,
+                  child: debugGeoData()),
 
+            Positioned( 
+                  left: 10,
+                  bottom: 0,
                           child: GeoData.showLatLng? Text("${GeoData.counter} ${GeoData.currentLat} ${GeoData.currentLng} v${AppConfig.shared.appVersion} ", 
                           style: const TextStyle(fontSize: 12,color: Colors.red, backgroundColor: Colors.white), )
                           : const SizedBox(width: 0, height: 0,)
-                  ),
+            ),
+              Positioned(
+                          right: 10,
+                          top: 180,
+                          child: SpeedDial(
+                              
+                              icon: Icons.apps,
+                              backgroundColor: const Color.fromARGB(255, 126, 149, 174),
+                              foregroundColor: Colors.white,
+                              direction: SpeedDialDirection.down,
+                              
+                              children: [
+                                SpeedDialChild(
+                                  child: const Icon(Icons.receipt_long_outlined ),
+                                  label: 'Receipt',
+                                  onTap: () => (),
+                                ),SpeedDialChild(
+                                  child: const Icon(Icons.difference_outlined ),
+                                  label: 'Charges and Fees',
+                                  onTap: () => (),
+                                ),
+                                
+                                SpeedDialChild(
+                                  child: const Icon(Icons.control_camera ),
+                                  label: GeoData.centerMap?'Auto center Off':'Auto center On',
+                                  onTap: () => recenter(),
+                                ),
+                                SpeedDialChild(
+                                  visible: !GeoData.tripStarted,
+                                  child: const Icon(Icons.delete_outline),
+                                  label: 'Clear Trip',
+                                  onTap: () => clearTrip(),
+                                ), 
+                                SpeedDialChild(
+                                  child: const Icon(Icons.closed_caption_off ),
+                                  label: GeoData.showLatLng?'Debug on':'Debug off',
+                                  onTap: () => debug(),
+                                ),
+                                ],
+                          ),
+              ),
             ],
           ),
         );
   });
 }
+    void clearTrip () {  
+    GeoData.clearTrip();
+  }
+  
   List<Marker> addMarkers() { 
       markers.clear();
       if (GeoData.polyline01Fixed.points.isNotEmpty){
@@ -157,12 +202,14 @@ Widget build(BuildContext context) {
           value: GeoData.centerMap, 
           iconOn: const Icon(Icons.control_camera , color: Colors.white,), 
           iconOff: const Icon(Icons.control_camera_sharp , color: Colors.white,),
-          onClick: ()  {
-            setState(() {
-                if (!GeoData.centerMap) {GeoData.centerMap=true;} else {GeoData.centerMap=false;}
-            });
+          onClick: ()  {recenter();
           },
       );
+  }
+  void recenter() {
+    setState(() {
+        if (GeoData.centerMap) {GeoData.centerMap=false ;} else { GeoData.centerMap=true;}
+    });
   }
   Widget debugGeoData() {
     return  
@@ -171,10 +218,13 @@ Widget build(BuildContext context) {
           iconOn: const Icon(Icons.closed_caption_off_outlined , color: Colors.white,), 
           iconOff: const Icon(Icons.closed_caption_disabled_outlined, color: Colors.white,),
           onClick: ()  {
-            setState(() {
-                if (!GeoData.showLatLng) {GeoData.showLatLng=true;} else {GeoData.showLatLng=false;}
-            });
+            debug();
           },
       );
+  }
+  void debug(){
+      setState(() {
+          if (!GeoData.showLatLng) {GeoData.showLatLng=true;} else {GeoData.showLatLng=false;}
+      });
   }
 }

@@ -1,6 +1,7 @@
 import 'dart:async'; 
-import 'package:flutter/material.dart'; 
-import 'package:google_maps_flutter/google_maps_flutter.dart' ;
+import 'package:flutter/material.dart';
+import 'package:flutter_speed_dial/flutter_speed_dial.dart'; 
+import 'package:google_maps_flutter/google_maps_flutter.dart' ; 
 import '/src/geolocation/geodata.dart';  
 import 'package:provider/provider.dart';   
 import '../maintabs/cards/mapcard.dart';
@@ -45,7 +46,6 @@ class MapView002GoogleState extends State<MapView002Google> {
         );
       }
   }
-
   @override
   Widget build(BuildContext context) {
     return Consumer<LocationNotifier>(
@@ -91,8 +91,8 @@ class MapView002GoogleState extends State<MapView002Google> {
                           bottom: 25,
                           child: reCenter()),
               Positioned( 
-                          right: 15,
-                          bottom: 25,
+                          left: 15,
+                          bottom: 100,
                           child: debugGeoData()),
               Positioned( 
                           left: 10,
@@ -101,10 +101,50 @@ class MapView002GoogleState extends State<MapView002Google> {
                           style: const TextStyle(fontSize: 12,color: Colors.red, backgroundColor: Colors.white), )
                           : const SizedBox(width: 0, height: 0,)
               ),
-
+             Positioned(
+                          right: 10,
+                          top: 180,
+                          child: SpeedDial(
+                              
+                              icon: Icons.apps,
+                              backgroundColor: const Color.fromARGB(255, 126, 149, 174),
+                              foregroundColor: Colors.white,
+                              direction: SpeedDialDirection.down,
+                              
+                              children: [
+                                SpeedDialChild(
+                                  child: const Icon(Icons.receipt_long_outlined ),
+                                  label: 'Receipt',
+                                  onTap: () => (),
+                                ),SpeedDialChild(
+                                  child: const Icon(Icons.difference_outlined ),
+                                  label: 'Charges and Fees',
+                                  onTap: () => (),
+                                ),
+                                
+                                SpeedDialChild(
+                                  child: const Icon(Icons.control_camera ),
+                                  label: GeoData.centerMap?'Auto center Off':'Auto center On',
+                                  onTap: () => recenter(),
+                                ),
+                                SpeedDialChild(
+                                  visible: !GeoData.tripStarted,
+                                  child: const Icon(Icons.delete_outline),
+                                  label: 'Clear Trip',
+                                  onTap: () => clearTrip(),
+                                ), 
+                                SpeedDialChild(
+                                  child: const Icon(Icons.closed_caption_off ),
+                                  label: GeoData.showLatLng?'Debug on':'Debug off',
+                                  onTap: () => debug(),
+                                ),
+                                ],
+                          ),
+              ),
 
               ]
-            )
+            ),
+
           );
 
         }
@@ -119,20 +159,23 @@ class MapView002GoogleState extends State<MapView002Google> {
       },
     );
   }
-
-
+  void clearTrip () {  
+    GeoData.clearTrip();
+  }
   Widget reCenter() {
     return  
       ToggleIcon(
           value: GeoData.centerMap, 
           iconOn: const Icon(Icons.control_camera , color: Colors.white,), 
           iconOff: const Icon(Icons.control_camera_sharp , color: Colors.white,),
-          onClick: ()  {
-            setState(() {
-                if (!GeoData.centerMap) {GeoData.centerMap=true;} else {GeoData.centerMap=false;}
-            });
+          onClick: ()  {recenter();
           },
       );
+  }
+  void recenter() {
+    setState(() {
+        if (GeoData.centerMap) {GeoData.centerMap=false ;} else { GeoData.centerMap=true;}
+    });
   }
   Widget debugGeoData() {
     return  
@@ -140,12 +183,13 @@ class MapView002GoogleState extends State<MapView002Google> {
           value: GeoData.showLatLng, 
           iconOn: const Icon(Icons.closed_caption_off_outlined , color: Colors.white,), 
           iconOff: const Icon(Icons.closed_caption_disabled_outlined, color: Colors.white,),
-          onClick: ()  {
-            setState(() {
-                if (!GeoData.showLatLng) {GeoData.showLatLng=true;} else {GeoData.showLatLng=false;}
-            });
-          },
+          onClick: ()  { debug();},
       );
+  }
+  void debug(){
+      setState(() {
+          if (!GeoData.showLatLng) {GeoData.showLatLng=true;} else {GeoData.showLatLng=false;}
+      });
   }
   List<Marker> addMarkers() { 
     List<Marker> markers = [];

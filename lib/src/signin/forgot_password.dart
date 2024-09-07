@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import '../api/token.dart';
 import '/src/api/api_service.dart';
 import '/src/models/auth_models.dart';
-import '/src/helpers/token.dart';
 import '/src/shared/appconfig.dart';
 import '/src/signin/sign_in.dart';
 import '/src/widgets/text_form.dart';

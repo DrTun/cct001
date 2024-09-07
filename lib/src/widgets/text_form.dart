@@ -23,53 +23,62 @@ class _MyTextFieldState extends State<MyTextField> {
 
   @override
   Widget build(BuildContext context) {
-    return TextFormField(    
-      autofocus: false,
-      validator: (value) => validateField(value, widget.validateKey),
-      controller: widget.controller,
-      obscureText: widget.obscureText,
-      decoration: InputDecoration(
-        contentPadding: const EdgeInsets.only(
-          left: 10,
-        ),
-        hintText: widget.hintText,
-        hintStyle: TextStyle(
-           color:  Colors.grey.shade400,
-           fontSize: 14
-         ),
-        border: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(6),
-        ),
-        focusedErrorBorder:OutlineInputBorder(
-          borderRadius: BorderRadius.circular(6),
-          borderSide: const BorderSide(
+    return SizedBox(
+      height: 60,
+      child: TextFormField(  
+        autofocus: false,
+        validator: (value) => validateField(value, widget.validateKey),
+        controller: widget.controller,
+        obscureText: widget.obscureText,
+        decoration: InputDecoration(
+          errorMaxLines: 1,
+          errorStyle: const TextStyle(
             color: Colors.red,
-          ), 
-        ),
-        errorBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(6),
-          borderSide: const BorderSide(
-            color: Colors.red,
+            fontSize: 12,
+            height: 0.25, // Adjust the line height for the error text
           ),
-        ),
-        focusedBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(6),
-          borderSide: BorderSide(
-            color: Colors.grey.shade500,
+          contentPadding: const EdgeInsets.only(
+            left: 10,top: 0,bottom: 0
           ),
-        ),
-        disabledBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(6),
-          borderSide: BorderSide(
-            color: Colors.grey.shade500,
+          hintText: widget.hintText,
+          hintStyle: TextStyle(
+             color:  Colors.grey.shade400,
+             fontSize: 14
+           ),
+          border: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(6),
           ),
-        ),
-        enabledBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(6),
-          borderSide: BorderSide(
-            color: Colors.grey.shade500,
+          focusedErrorBorder:OutlineInputBorder(
+            borderRadius: BorderRadius.circular(6),
+            borderSide: const BorderSide(
+              color: Colors.red,
+            ), 
           ),
-        ),   
+          errorBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(6),
+            borderSide: const BorderSide(
+              color: Colors.red,
+            ),
+          ),
+          focusedBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(6),
+            borderSide: BorderSide(
+              color: Colors.grey.shade500,
+            ),
+          ),
+          disabledBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(6),
+            borderSide: BorderSide(
+              color: Colors.grey.shade500,
+            ),
+          ),
+          enabledBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(6),
+            borderSide: BorderSide(
+              color: Colors.grey.shade500,
+            ),
+          ),   
+        ),
       ),
     );
   }

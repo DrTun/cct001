@@ -2,8 +2,7 @@
 import 'dart:convert';
 
 import 'package:confirm_dialog/confirm_dialog.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter_map/flutter_map.dart';
+import 'package:flutter/material.dart'; 
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:intl/intl.dart';
@@ -118,37 +117,31 @@ class MyStore {
   static Future<void> init() async {
     prefs = await SharedPreferences.getInstance();
   }
-  static Future<void> storePolyline(Polyline polyline,String fname) async {
-  // Convert Polyline to a JSON string
-  final Map<String, dynamic> polylineMap = { 
-    'points': polyline.points.map((LatLng point) {
-      return {'latitude': point.latitude, 'longitude': point.longitude};
-    }).toList(),
-    'color': polyline.color.value,
-    'width': polyline.strokeWidth,
-  };
-  final String polylineJson = jsonEncode(polylineMap);
 
-  // Store JSON string in SharedPreferences
-  await MyStore.prefs.setString(fname, polylineJson);
-}
-// Function to retrieve a Polyline object
-static Future<Polyline?> retrievePolyline(String fname) async {  
-  final String? polylineJson = MyStore.prefs.getString(fname);
-  if (polylineJson == null) {
-    return null; // Handle the case where there is no stored polyline
+  static Future<void> storePolyline(List<LatLng>  points,String fname) async {
+      // Convert Polyline to a JSON string
+      final Map<String, dynamic> polylineMap = { 
+        'points': points.map((LatLng point) {
+          return {'latitude': point.latitude, 'longitude': point.longitude};
+        }).toList()
+      };
+      final String polylineJson = jsonEncode(polylineMap);
+      // Store JSON string in SharedPreferences
+      await MyStore.prefs.setString(fname, polylineJson);
   }
-  // Convert JSON string back to Polyline
-  final Map<String, dynamic> polylineMap = jsonDecode(polylineJson);
+  // Function to retrieve a Polyline object
+  static Future<List<LatLng>?> retrievePolyline(String fname) async {  
+    final String? polylineJson = MyStore.prefs.getString(fname);
+    if (polylineJson == null) {
+      return null; // Handle the case where there is no stored polyline
+    }
+    // Convert JSON string back to Polyline
+    final Map<String, dynamic> polylineMap = jsonDecode(polylineJson);
 
-  final List<LatLng> points = (polylineMap['points'] as List).map((point) {
-    return LatLng(point['latitude'], point['longitude']);
-  }).toList();
-  return Polyline( 
-    points: points,
-    color: Color(polylineMap['color']),
-    strokeWidth: polylineMap['width'],
-  );
+    final List<LatLng> points = (polylineMap['points'] as List).map((point) {
+      return LatLng(point['latitude'], point['longitude']);
+    }).toList();
+    return points;
   }
 
   static Future<void> storeDateTimeList(List<DateTime> dateTimeList, String fname) async { 

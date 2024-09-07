@@ -5,7 +5,7 @@ import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import '/src/api/api_service.dart';
 import '/src/models/auth_models.dart';
-import '/src/helpers/token.dart';
+import '/src/api/token.dart';
 import '/src/rootpage.dart';
 import '/src/shared/appconfig.dart';
 import '/src/shared/globaldata.dart';
@@ -31,6 +31,7 @@ class _SignInState extends State<SignIn> {
   @override
   Widget build(BuildContext context) {
     final height = MediaQuery.of(context).size.height;
+    final isKeyboardVisible = MediaQuery.of(context).viewInsets.bottom == 0;
     return SafeArea(
       child: Scaffold(
         body: GestureDetector(
@@ -44,127 +45,124 @@ class _SignInState extends State<SignIn> {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     SizedBox(
-                      height: height * 0.15,
+                      height: height * 0.12,
                     ),
                     Center(
                       child: ClipRRect(
                         borderRadius: BorderRadius.circular(100.0),
                         child: const Image(
                           image: AssetImage("assets/images/logo.png"),
-                          width: 120,
-                          height: 120,
+                          width: 110,
+                          height: 110,
                         ),
-                      ),
-                    ),
-                    const SizedBox(
-                      height: 20,
-                    ),
-                    SizedBox(
-                      height: height * 0.42,
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        children: [
-                          const Row(
-                            mainAxisAlignment: MainAxisAlignment.start,
-                            children: [
-                              Text(
-                                'User ID',
-                              ),
-                            ],
-                          ),
-                          const SizedBox(
-                            height: 5,
-                          ),
-                          MyTextField(
-                            obscureText: false,
-                            controller:  _useridController,
-                            validateKey: 'Userid',
-                            hintText: 'Email',
-                          ),
-                          const SizedBox(
-                            height: 15,
-                          ),
-                          const Row(
-                            mainAxisAlignment: MainAxisAlignment.start,
-                            children: [
-                              Text(
-                                'Password',
-                              ),
-                            ],
-                          ),
-                          const SizedBox(
-                            height: 5,
-                          ),
-                          MyTextField(
-                            obscureText: true,
-                            controller: _passwordController,
-                            validateKey: 'Password',
-                            hintText: 'Password',
-                          ),
-                          const SizedBox(
-                            height: 5,
-                          ),
-                          Align(
-                              alignment: Alignment.centerRight,
-                              child: InkWell(
-                                  onTap: () {
-                                    Navigator.pushReplacementNamed(
-                                        context, ForgotPassword.routeName);
-                                  },
-                                  child: const Text(
-                                    'Forgot Password?',
-                                    style: TextStyle(
-                                        color: Color.fromARGB(255, 0, 106, 193),
-                                        fontWeight: FontWeight.bold),
-                                  ))),
-                        ],
                       ),
                     ),
                     SizedBox(
                       height: height * 0.05,
                     ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
+                    Column(
+                      mainAxisAlignment: MainAxisAlignment.start,
                       children: [
-                        const Text("Don't have an account?  "),
-                        InkWell(
-                            onTap: () {
-                              Navigator.pushReplacementNamed(
-                                  context, SignupPage.routeName);
-                            },
-                            child: const Text(
-                              'Sign Up',
-                              style: TextStyle(
-                                  color: Color.fromARGB(255, 0, 106, 193),
-                                  fontWeight: FontWeight.bold),
-                            ))
+                        const Row(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          children: [
+                            Text(
+                              'User ID',
+                            ),
+                          ],
+                        ),
+                        const SizedBox(
+                          height: 5,
+                        ),
+                        MyTextField(
+                          obscureText: false,
+                          controller: _useridController,
+                          validateKey: 'Userid',
+                          hintText: 'Email',
+                        ),
+                        const SizedBox(
+                          height: 10,
+                        ),
+                        const Row(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          children: [
+                            Text(
+                              'Password',
+                            ),
+                          ],
+                        ),
+                        const SizedBox(
+                          height: 5,
+                        ),
+                        MyTextField(
+                          obscureText: true,
+                          controller: _passwordController,
+                          validateKey: 'Password',
+                          hintText: 'Password',
+                        ),
+                        Align(
+                            alignment: Alignment.centerRight,
+                            child: InkWell(
+                                onTap: () {
+                                  Navigator.pushReplacementNamed(
+                                      context, ForgotPassword.routeName);
+                                },
+                                child: const Text(
+                                  'Forgot Password?',
+                                  style: TextStyle(
+                                      color: Color.fromARGB(255, 0, 106, 193),
+                                      fontWeight: FontWeight.bold),
+                                ))),
                       ],
                     ),
-                    const SizedBox(
-                      height: 20,
-                    ),
-                    Align(
-                        alignment: Alignment.bottomCenter,
-                        child: loadingTime
-                            ? SizedBox(
-                                height: 50,
-                                child: SpinKitCircle(
-                                  duration: const Duration(seconds: 2),
-                                  color: Colors.blue[300],
-                                  size: 40.0,
-                                ))
-                            : MyButton(
-                                text: 'Sign In',
-                                onTap: () {
-                                  _formKey.currentState!.validate()
-                                      ? {
-                                          setState(() {
-                                            loadingTime = true;
-                                          }),
-                                          signIn(),
-                                        }
-                                      : null;
-                                })),
+                    isKeyboardVisible
+                        ? Column(
+                            children: [
+                              SizedBox(
+                                height: height * 0.2,
+                              ),
+                              Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  const Text("Don't have an account?  "),
+                                  InkWell(
+                                      onTap: () {
+                                        Navigator.pushReplacementNamed(
+                                            context, SignupPage.routeName);
+                                      },
+                                      child: const Text(
+                                        'Sign Up',
+                                        style: TextStyle(
+                                            color: Color.fromARGB(
+                                                255, 0, 106, 193),
+                                            fontWeight: FontWeight.bold),
+                                      ))
+                                ],
+                              ),
+                              SizedBox(
+                                height: height * 0.03,
+                              ),
+                              loadingTime
+                                  ? SpinKitCircle(
+                                      duration: const Duration(seconds: 2),
+                                      color: Colors.blue[300],
+                                      size: 40.0,
+                                    )
+                                  : MyButton(
+                                      text: 'Sign In',
+                                      onTap: () {
+                                        setState(() {
+                                          _formKey.currentState!.validate()
+                                              ? {
+                                                  loadingTime = true,
+                                                  signIn(),
+                                                }
+                                              : null;
+                                        });
+                                      }),
+                            ],
+                          )
+                        : const SizedBox()
                   ],
                 ),
               ),
@@ -196,7 +194,8 @@ class _SignInState extends State<SignIn> {
 
     if (response['status'] == 200) {
       Fluttertoast.showToast(msg: response['message']);
-      GlobalAccess.updateUToken(userid,userName,response['data']['access_token'],response['data']['refresh_token']);
+      GlobalAccess.updateUToken(userid, userName,
+          response['data']['access_token'], response['data']['refresh_token']);
       setState(() {
         Navigator.pushReplacementNamed(context, RootPage.routeName);
         _useridController.clear();

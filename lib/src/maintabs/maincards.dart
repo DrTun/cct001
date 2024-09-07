@@ -26,7 +26,6 @@ class MainCardsState extends State<MainCards> {
         if (GeoData.tripStarted) {
           GeoData.startTimer(provider);
         }  
-
         return   Scaffold(
           body: 
           Padding(
@@ -46,7 +45,7 @@ class MainCardsState extends State<MainCards> {
                         onTap: () {
                           Navigator.pushNamed(context, MapView.routeName);
                         },
-                        child:mapcard(provider.tripdata, fsize: 42)),        
+                        child:mapcard( fsize: 42)),        
                         ),
                        StaggeredGridTile.count(
                         crossAxisCellCount: 4,mainAxisCellCount:2,

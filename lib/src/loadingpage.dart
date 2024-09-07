@@ -1,7 +1,7 @@
 //  -------------------------------------    Loading 
-import 'dart:async';
-import 'package:flutter_map/flutter_map.dart';
+import 'dart:async'; 
 import 'package:flutter_spinkit/flutter_spinkit.dart';
+import 'package:latlong2/latlong.dart'; 
 import '/src/rootpage.dart';
 import '/src/signin/sign_in.dart';
 import 'package:location/location.dart';
@@ -51,7 +51,8 @@ class _LoadingState extends State<LoadingPage> {
   void changeLocations(LocationData currentLocation){ //listen to location changes
     try {
         DateTime dt = DateTime.now();
-        GeoData.updateLocation(currentLocation.latitude!, currentLocation.longitude!, dt,locProvider: providerLocNoti);  
+        GeoData.updateLocation(currentLocation.latitude!, currentLocation.longitude!, dt);  
+        providerLocNoti.notify();
         // No need. above method will notify the provider
         if (AppConfig.shared.log==3){logger.i("(${GeoData.counter}) ${currentLocation.latitude} x ${currentLocation.longitude}");}
     } catch (e) {
@@ -65,14 +66,14 @@ class _LoadingState extends State<LoadingPage> {
     // 2.2.1) Shared Preferences
     await MyStore.init();
     GeoData.tripStarted = MyStore.prefs.getBool('tripStarted') ?? false;
-      Polyline? pline;
+      List<LatLng>? pline;
       List<DateTime> dtlist=[];
-      pline = (await MyStore.retrievePolyline("polyline01"));
-      if (pline != null) { 
-        GeoData.polyline01 = pline; 
+      pline = (await MyStore.retrievePolyline("points01"));
+      if (pline != null  ) { 
+        GeoData.points01 = pline; 
         pline = (await MyStore.retrievePolyline("polyline01Fixed"));
         if (pline != null) { 
-          GeoData.polyline01Fixed = pline; 
+          GeoData.points01Fixed = pline; 
           dtlist = (await MyStore.retrieveDateTimeList("dtimeList01"));
           if (dtlist.isNotEmpty) { 
             GeoData.tripStartDtime =dtlist[0];
@@ -80,6 +81,14 @@ class _LoadingState extends State<LoadingPage> {
             dtlist = (await MyStore.retrieveDateTimeList("dtimeList01Fixed"));
             if (dtlist.isNotEmpty) { 
               GeoData.dtimeList01Fixed = dtlist; 
+ 
+              // end the trip if it is more than 3 minute, it will be ended.
+              DateTime currenttime = DateTime.now();
+              if (currenttime.difference(dtlist[dtlist.length-1])>const Duration(minutes: 3)){ 
+                GeoData.endTrip();
+              } 
+              //
+
             }  else { GeoData.endTrip();}
           }   else { GeoData.endTrip();}
         } else { GeoData.endTrip();}
@@ -94,7 +103,7 @@ class _LoadingState extends State<LoadingPage> {
     // 2.2.3 Decide where to go based on Global Data read from secure storage.
     Timer(const Duration(seconds: 2), () {
     setState(() {
-        if (AppConfig.shared.skipsignin) { 
+        if (AppConfig.shared.skipSignin) { 
           Navigator.pushReplacementNamed(context,RootPage.routeName, ); 
         } else if( GlobalAccess.userID.isNotEmpty || GlobalAccess.accessToken.isNotEmpty){ 
           

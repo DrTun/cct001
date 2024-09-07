@@ -1,5 +1,8 @@
 
 import 'dart:async';
+import 'dart:math';
+import 'package:flutter/material.dart';
+import 'package:flutter_map/flutter_map.dart';
 import 'package:flutter_map_math/flutter_geo_math.dart';
 import '/src/geolocation/locationnotifier.dart';
 import 'package:latlong2/latlong.dart';
@@ -14,15 +17,12 @@ class GeoData{
   static DateTime currentDtime= DateTime.now();
   static bool tripStarted=false;
   static DateTime tripStartDtime= DateTime.now();
-
-  //static Polyline polyline01 = Polyline(points: [], color: Colors.red,strokeWidth: oriThickness,);
-  static List<LatLng> points01=[];
-  //static Polyline polyline01Fixed = Polyline(points: [], color: Colors.blue,strokeWidth: fixedThickness,);
-  static List<LatLng> points01Fixed=[];
-
+  static Polyline polyline01 = Polyline(points: [], color: Colors.red,strokeWidth: oriThickness,);
+  static List<Point> points01=[];
   static List<DateTime> dtimeList01=[];
+  static Polyline polyline01Fixed = Polyline(points: [], color: Colors.blue,strokeWidth: fixedThickness,);
+  static List<Point> points01Fixed=[];
   static List<DateTime> dtimeList01Fixed=[];
-
   static double tripDistance=0;
   static int tripTime=0;
   static double tripSpeedNow =0;
@@ -59,25 +59,25 @@ class GeoData{
     clearTrip();
   }
   static void clearTrip(){
-    points01.clear();
+    polyline01.points.clear();
     dtimeList01.clear();
-    points01Fixed.clear();
+    polyline01Fixed.points.clear();
     dtimeList01Fixed.clear(); 
   }
-  static double currentSpeed(List<LatLng> points, List<DateTime> dt, int range){
+  static double currentSpeed(Polyline polyline, List<DateTime> dt, int range){
     double speed=0;
     int range =10;
     double dist=0;
     int time= 0;
     FlutterMapMath fmm = FlutterMapMath();
-    if (points.length>range && dt.length>range){
+    if (polyline.points.length>range && dt.length>range){
       time= dt[dt.length-1].difference(dt[dt.length-range]).inSeconds;
-      for (int i=points.length-range; i<points.length-1; i++){
+      for (int i=polyline.points.length-range; i<polyline.points.length-1; i++){
         dist+=fmm.distanceBetween(
-              points[i].latitude,            //latest points
-              points[i].longitude,
-              points[i-1].latitude, 
-              points[i-1].longitude,"meters").round();
+              polyline.points[i].latitude,            //latest points
+              polyline.points[i].longitude,
+              polyline.points[i-1].latitude, 
+              polyline.points[i-1].longitude,"meters").round();
       }
       speed=dist/time*60*60/1000;
     }
@@ -89,15 +89,15 @@ class GeoData{
     return (difference.inSeconds).round();
   } 
 
-  static double totalDistance(List<LatLng> points){
+  static double totalDistance(Polyline polyline){
     double dist=0;
     FlutterMapMath fmm = FlutterMapMath();
-    for (int i=1; i<points.length-1; i++){
+    for (int i=1; i<polyline.points.length-1; i++){
       dist+=fmm.distanceBetween(
-            points[i].latitude,            //latest points
-            points[i].longitude,
-            points[i-1].latitude, 
-            points[i-1].longitude,"meters").round();
+            polyline.points[i].latitude,            //latest points
+            polyline.points[i].longitude,
+            polyline.points[i-1].latitude, 
+            polyline.points[i-1].longitude,"meters").round();
     }
     return (dist/1000);
   }
@@ -109,38 +109,38 @@ class GeoData{
         GeoData.currentLng=lng;
         GeoData.currentDtime=dt;
         if (tripStarted){
-          points01.add(LatLng(lat, lng));
+          polyline01.points.add(LatLng(lat, lng));
           dtimeList01.add(dt);
           // Geo Data Optimization
           FlutterMapMath fmm = FlutterMapMath();
           double dist=fmm.distanceBetween(
-                points01[points01.length-1].latitude,            //latest points
-                points01[points01.length-1].longitude,
-                points01[points01.length-2].latitude, 
-                points01[points01.length-2].longitude,"meters");
+                polyline01.points[polyline01.points.length-1].latitude,            //latest points
+                polyline01.points[polyline01.points.length-1].longitude,
+                polyline01.points[polyline01.points.length-2].latitude, 
+                polyline01.points[polyline01.points.length-2].longitude,"meters");
           int time= dtimeList01[dtimeList01.length-1].difference(dtimeList01[dtimeList01.length-2]).inSeconds;
           double speed=dist/time;
           //if (AppConfig.shared.log>=3) 
           logger.i("Speed: $speed  ($dist / $time)");
 
-          points01Fixed.add(LatLng(lat, lng - 0.000003));
+          polyline01Fixed.points.add(LatLng(lat, lng - 0.000003));
           dtimeList01Fixed.add(dt);
           // ---------(C or -3)-------(B or -2)--------(A or -1 of original or last point)
-          if (points01Fixed.length>=3){  
+          if (polyline01Fixed.points.length>=3){  
             double dist2=fmm.distanceBetween(
-                points01Fixed[points01Fixed.length-1].latitude,            //latest points
-                points01Fixed[points01Fixed.length-1].longitude,
-                points01Fixed[points01Fixed.length-2].latitude, 
-                points01Fixed[points01Fixed.length-2].longitude,"meters");
+                polyline01Fixed.points[polyline01Fixed.points.length-1].latitude,            //latest points
+                polyline01Fixed.points[polyline01Fixed.points.length-1].longitude,
+                polyline01Fixed.points[polyline01Fixed.points.length-2].latitude, 
+                polyline01Fixed.points[polyline01Fixed.points.length-2].longitude,"meters");
             double dist1=fmm.distanceBetween(
-                points01Fixed[points01Fixed.length-2].latitude, 
-                points01Fixed[points01Fixed.length-2].longitude,
-                points01Fixed[points01Fixed.length-3].latitude,
-                points01Fixed[points01Fixed.length-3].longitude,"meters");
+                polyline01Fixed.points[polyline01Fixed.points.length-2].latitude, 
+                polyline01Fixed.points[polyline01Fixed.points.length-2].longitude,
+                polyline01Fixed.points[polyline01Fixed.points.length-3].latitude,
+                polyline01Fixed.points[polyline01Fixed.points.length-3].longitude,"meters");
                 
             if ((dist1<minDistance && dist2<minDistance) || 
                 (dist1>maxDistance && dist2>maxDistance) ){
-              points01Fixed.removeAt(points01Fixed.length-2); // Remove point B
+              polyline01Fixed.points.removeAt(polyline01Fixed.points.length-2); // Remove point B
               dtimeList01Fixed.removeAt(dtimeList01Fixed.length-2);
               //if (AppConfig.shared.log>=3) 
               logger.i("Remove: $dist1 $dist2 ");
@@ -151,14 +151,14 @@ class GeoData{
             }
           }
         }
-          MyStore.storePolyline(points01,"points01");
+          MyStore.storePolyline(polyline01,"polyline01");
           MyStore.storeDateTimeList(dtimeList01, "dtimeList01");
-          MyStore.storePolyline(points01Fixed,"points01Fixed");
+          MyStore.storePolyline(polyline01Fixed,"polyline01Fixed");
           MyStore.storeDateTimeList(dtimeList01Fixed, "dtimeList01Fixed");
 
-          tripDistance=totalDistance(points01Fixed);
+          tripDistance=totalDistance(polyline01Fixed);
           tripTime=totalTime(dtimeList01Fixed);
-          tripSpeedNow = currentSpeed(points01Fixed, dtimeList01Fixed, 5);
+          tripSpeedNow = currentSpeed(polyline01Fixed, dtimeList01Fixed, 5);
           tripAmount = calculateAmount(tripDistance, tripTime);
 
           providerLocNoti?.notify(); // notify the provider there have been changes
@@ -174,7 +174,7 @@ class GeoData{
   static void startTrip(LocationNotifier locationNotifier){
     tripStartDtime= DateTime.now();
     if (!useTimer) startTimer(locationNotifier);
-    points01.clear();
+    polyline01.points.clear();
     tripStarted=true;
   }
   static void startTimer(LocationNotifier locationNotifier){

@@ -15,15 +15,14 @@ class MapView002Google extends StatefulWidget {
 }
 class MapView002GoogleState extends State<MapView002Google> {  
   int movingCount =0;
-  bool moving=false;
+  bool stillMoving=true;
   final Completer<GoogleMapController> completer =Completer<GoogleMapController>();
   late LocationNotifier providerLocNoti ;
   BitmapDescriptor icStart = BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueCyan);
 
   @override
   void initState() {
-    super.initState();
-    // Add polyline
+    super.initState(); 
     setState(() {
     providerLocNoti = Provider.of<LocationNotifier>(context,listen: false);
     });
@@ -31,14 +30,16 @@ class MapView002GoogleState extends State<MapView002Google> {
   void _moveCamera(){
       if (GeoData.centerMap){
         completer.future.then(
-          (controller) {
+          (controller) async {
             if (movingCount>5){
-                moving=true;
+                stillMoving=true;
+
+                GeoData.zoom = await controller.getZoomLevel();
                 controller.moveCamera(CameraUpdate.newCameraPosition(
                         CameraPosition(target: LatLng(GeoData.currentLat, GeoData.currentLng), zoom: GeoData.zoom,)
                 ));
-            movingCount=0;
-            Timer(const Duration(seconds: 1), () {moving = false;});
+                movingCount=0;
+                Timer(const Duration(seconds: 1), () {stillMoving = false;});
             } else {
                 movingCount++;
             } 
@@ -70,7 +71,7 @@ class MapView002GoogleState extends State<MapView002Google> {
                   if (completer.isCompleted == false){ completer.complete(controller); } 
                 },
                 onCameraMove: (CameraPosition position) {
-                  if (!moving) { GeoData.centerMap = false; }
+                  if (!stillMoving) { GeoData.centerMap = false; }
                 },
                 onTap: (LatLng latLng) {   },
                 onLongPress: (LatLng latLng) {  }, 
@@ -79,11 +80,11 @@ class MapView002GoogleState extends State<MapView002Google> {
               ),
               Positioned( 
                     right: 10,
-                    top: 10,
+                    top: 5,
                     child: SizedBox( 
-                          width:220,
+                  width: MediaQuery.of(context).size.width -15,
                           height: 150,
-                    child: mapcard(providerLocNoti.tripdata,transparent: true, fcolor: Colors.orange, fsize: 32),
+                    child: mapcard(transparent: true, fcolor: Colors.lightGreenAccent, fsize: 32),
                     )
               ),
               Positioned( 
@@ -103,9 +104,8 @@ class MapView002GoogleState extends State<MapView002Google> {
               ),
              Positioned(
                           right: 10,
-                          top: 180,
-                          child: SpeedDial(
-                              
+                          top: 160,
+                          child: SpeedDial( 
                               icon: Icons.apps,
                               backgroundColor: const Color.fromARGB(255, 126, 149, 174),
                               foregroundColor: Colors.white,
@@ -194,21 +194,21 @@ class MapView002GoogleState extends State<MapView002Google> {
   List<Marker> addMarkers() { 
     List<Marker> markers = [];
     if (GeoData.tripStarted){
-      if (GeoData.polyline01Fixed.points.isNotEmpty){
+      if (GeoData.points01Fixed.isNotEmpty){
         Marker start = Marker(
                   markerId: const MarkerId('Start'),
                   icon: icStart,
-                  position: LatLng(GeoData.polyline01Fixed.points[0].latitude, GeoData.polyline01Fixed.points[0].longitude),
+                  position: LatLng(GeoData.points01Fixed[0].latitude, GeoData.points01Fixed[0].longitude),
                   infoWindow: const InfoWindow(title: 'Start', snippet: '5 Star Rating'),
                 );
         markers.add(start);
       }
     } else {
-      if (GeoData.polyline01Fixed.points.isNotEmpty){
+      if (GeoData.points01Fixed.isNotEmpty){
         Marker start = Marker(
                   markerId: const MarkerId('Start'),
                   icon: icStart,
-                  position: LatLng(GeoData.polyline01Fixed.points[0].latitude, GeoData.polyline01Fixed.points[0].longitude),
+                  position: LatLng(GeoData.points01Fixed[0].latitude, GeoData.points01Fixed[0].longitude),
                   infoWindow: const InfoWindow(title: 'Start', snippet: '5 Star Rating'),
                 );
         markers.add(start);
@@ -220,7 +220,7 @@ class MapView002GoogleState extends State<MapView002Google> {
   List<Polyline> addPolylines() { 
     List<Polyline> polylines = [];
     List<LatLng> plistfixed = [];
-    for (var point in GeoData.polyline01Fixed.points) {
+    for (var point in GeoData.points01Fixed) {
       plistfixed.add(LatLng(point.latitude, point.longitude));
     }
     Polyline fixed = Polyline(
@@ -230,7 +230,7 @@ class MapView002GoogleState extends State<MapView002Google> {
       width: GeoData.fixedThickness.toInt(),
     );
      List<LatLng> plist = [];
-    for (var point in GeoData.polyline01.points) {
+    for (var point in GeoData.points01Fixed) {
       plist.add(LatLng(point.latitude, point.longitude));
     }
     Polyline original = Polyline(

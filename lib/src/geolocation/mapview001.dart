@@ -20,6 +20,7 @@ class MapView001 extends StatefulWidget {
 }
 class MapView001State extends State<MapView001> {
   //late MyNotifier provider ; 
+  bool mapReady=false;
   late LocationNotifier providerLocNoti ;
   final List<Marker> markers = [];
   final List<Polyline> polylines = [];
@@ -45,6 +46,7 @@ class MapView001State extends State<MapView001> {
 Widget build(BuildContext context) {
     return Consumer<LocationNotifier>(
       builder: (context, provider , child) {
+      mapReady=false;
       double lat =GeoData.currentLat; 
       double lng =GeoData.currentLng;
       return Scaffold(
@@ -53,8 +55,10 @@ Widget build(BuildContext context) {
             FlutterMap(
               mapController: mapctrl,
               options:   MapOptions(
-                initialCenter: LatLng(lat, lng), 
-                initialZoom: GeoData.zoom,
+                initialCenter: LatLng(lat, lng),                   // Initial zoom level
+                minZoom: 9.0,                 // Minimum zoom level
+                maxZoom: 18.0,  
+                initialZoom: GeoData.zoom,               // Maximum zoom level  
                 onPositionChanged: (position, hasGesture) {
                   GeoData.zoom=position.zoom;
                   if (hasGesture) {
@@ -62,7 +66,7 @@ Widget build(BuildContext context) {
                   }
                 },
                 onMapReady: () {
-                  GeoData.mapReady=true;
+                  mapReady=true;
                 },
               ),
               children: [
@@ -76,12 +80,11 @@ Widget build(BuildContext context) {
             ),
       Positioned( 
             right: 10,
-            top: 10,
+            top: 5,
             child: SizedBox(
-                  //width: MediaQuery.of(context).size.width -20,
-                  width:220,
+                  width: MediaQuery.of(context).size.width -10,
                   height: 150,
-            child: mapcard(providerLocNoti.tripdata,transparent: true, fcolor: Colors.orange, fsize: 32),
+            child: mapcard(transparent: true, fcolor: Colors.lightGreenAccent, fsize: 32),
             )
       ),
             Positioned( 
@@ -102,7 +105,7 @@ Widget build(BuildContext context) {
             ),
               Positioned(
                           right: 10,
-                          top: 180,
+                          top: 160,
                           child: SpeedDial(
                               
                               icon: Icons.apps,
@@ -151,16 +154,16 @@ Widget build(BuildContext context) {
   
   List<Marker> addMarkers() { 
       markers.clear();
-      if (GeoData.polyline01Fixed.points.isNotEmpty){
+      if (GeoData.points01Fixed.isNotEmpty){
         markers.add(Marker(
-          point: LatLng(GeoData.polyline01Fixed.points[0].latitude, GeoData.polyline01Fixed.points[0].longitude), 
+          point: LatLng(GeoData.points01Fixed[0].latitude, GeoData.points01Fixed[0].longitude), 
           width: 15,height: 15,alignment: Alignment.center,
           child: Image.asset('assets/images/geo/bluedot.png',scale: 1.0,),
           ));
          if (!GeoData.tripStarted) {
            markers.add(Marker(
-           point: LatLng(GeoData.polyline01Fixed.points[GeoData.polyline01Fixed.points.length-1].latitude, 
-              GeoData.polyline01Fixed.points[GeoData.polyline01Fixed.points.length-1].longitude), 
+           point: LatLng(GeoData.points01Fixed[GeoData.points01Fixed.length-1].latitude, 
+              GeoData.points01Fixed[GeoData.points01Fixed.length-1].longitude), 
            width: 15,height: 15,alignment: Alignment.center,
            child: Image.asset('assets/images/geo/reddot.png',scale: 1.0,),
            ));
@@ -177,7 +180,7 @@ Widget build(BuildContext context) {
           child: Image.asset('assets/images/geo/here-red.png',scale: 1.0,),
         ));
       }
-      if (GeoData.mapReady && GeoData.centerMap){
+      if (mapReady && GeoData.centerMap){
         mapctrl.move(LatLng(GeoData.currentLat, GeoData.currentLng),GeoData.zoom);
       }
     return markers;
@@ -185,16 +188,25 @@ Widget build(BuildContext context) {
   List<Polyline> addPolylines() { 
     polylines.clear();
     if (GeoData.showLatLng) {
-      polylines.add(GeoData.polyline01Fixed);
-      polylines.add(GeoData.polyline01);
+      polylines.add(
+        
+
+        Polyline(points: GeoData.points01Fixed, color: Colors.blue,strokeWidth: GeoData.fixedThickness,)
+      
+      );
+      polylines.add( 
+        Polyline(points: GeoData.points01, color: Colors.red,strokeWidth: GeoData.oriThickness,)
+      );
     } else {
-      polylines.add(GeoData.polyline01Fixed);
+      polylines.add(
+        Polyline(points: GeoData.points01Fixed, color: Colors.blue,strokeWidth: GeoData.fixedThickness,)
+      );
     }
     return polylines;
   }
   Widget speed() {
     return 
-    Text("${GeoData.currentSpeed(GeoData.polyline01,GeoData.dtimeList01,5).toStringAsFixed(0)} km/h", style: const TextStyle(fontSize: 12,color: Colors.red));
+    Text("${GeoData.currentSpeed(GeoData.points01,GeoData.dtimeList01,5).toStringAsFixed(0)} km/h", style: const TextStyle(fontSize: 12,color: Colors.red));
   }
   Widget reCenter() {
     return  

@@ -1,10 +1,12 @@
-import 'package:flutter/material.dart';
+import 'package:flutter/material.dart'; 
 
 enum Flavor { prod, dev, sit, staging }
 
 class AppConfig {
   String appVersion = "1.0.3";  // Update internal version number, edit here
-  bool skipsignin = true ;      // Skip Signin Page, edit here
+  bool skipSignin = true ;      // Skip Signin Page, edit here
+  int signinType = 0;          // 0= dummy, 1= AIM 2.0, 3=Keycloak
+  
   String appName = "";
   String appDesc = "";
   String appID = "";

@@ -1,6 +1,8 @@
+import '/src/signin/forgot_password.dart';
+import '/src/signin/sign_in.dart';
+import '/src/signin/sign_up.dart';
 import 'src/geolocation/geopara.dart'; 
-import 'src/geolocation/mapview.dart';
-import 'src/geolocation/mapviewgoogle.dart';
+import 'src/geolocation/mapview.dart'; 
 import 'src/shared/appconfig.dart';
 import 'src/views/viewdatadetails.dart';
 import 'src/views/viewdatalist.dart';
@@ -52,6 +54,9 @@ class MyApp extends StatelessWidget {
               settings: routeSettings,            // Route Settings 
               builder: (BuildContext context) {
                 switch (routeSettings.name) {
+                  case SignupPage.routeName: return const SignupPage();
+                  case SignIn.routeName: return const SignIn();
+                  case ForgotPassword.routeName: return const ForgotPassword();
                   case RootPage.routeName: return const RootPage(); 
                   case SettingsView.routeName: return SettingsView(controller: settingsController);
                   case ViewDetails.routeName:return  const ViewDetails();
@@ -61,8 +66,7 @@ class MyApp extends StatelessWidget {
                   case ViewDataList.routeName: return const ViewDataList();
                   case ViewDataDetails.routeName: return const ViewDataDetails();
                   case SigninPage.routeName:  return const SigninPage();
-                  case MapView.routeName:  return  const MapView();
-                  case MapViewGoogle.routeName:  return  const MapViewGoogle();
+                  case MapView.routeName:  return  const MapView(); 
                   case GeoPara.routeName:  return  const GeoPara();
                   default:  return const LoadingPage();
                 }

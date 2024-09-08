@@ -3,42 +3,30 @@ import 'dart:async';
 import 'package:flutter_map_math/flutter_geo_math.dart';
 import '/src/geolocation/locationnotifier.dart';
 import 'package:latlong2/latlong.dart';
-import '../helpers/helpers.dart';
+import '/src/helpers/helpers.dart';
 import 'package:location/location.dart';
-
 import 'tripdata.dart';
 //  -------------------------------------    GeoData (Property of Nirvasoft.com)
 class GeoData{
   // GPS Data
   static int counter=0;
-  static double currentLat=0;
+  static double currentLat=0; 
   static double currentLng=0; 
-  static DateTime currentDtime= DateTime.now();
-  static bool tripStarted=false;
-  static DateTime tripStartDtime= DateTime.now();
+  static DateTime currentDtime= DateTime.now(); // l
 
-  static List<LatLng> points01=[];
-  static List<LatLng> points01Fixed=[];
-
-  static List<DateTime> dtimeList01=[];
-  static List<DateTime> dtimeList01Fixed=[];
-
+  static TripData currentTrip = TripData();
   static TripData previousTrip = TripData();
 
-  static double tripDistance=0;
-  static int tripTime=0;
-  static double tripSpeedNow =0;
-  static double tripAmount = 0;
-
+  // Shared 
   static Location location =Location();
   static late StreamSubscription<LocationData> locationSubscription;
   static Timer? timer;
-  static bool useTimer=false;
 
   // App Parameters 
   static bool showLatLng=false;
   static bool centerMap=true;
   static bool listenChanges=true;
+  static bool useTimer=false;
   static double zoom=16;
   static int interval=1000;
   static double distance=0;
@@ -54,10 +42,10 @@ class GeoData{
 
  
   static void clearTrip(){
-    points01.clear();
-    dtimeList01.clear();
-    points01Fixed.clear();
-    dtimeList01Fixed.clear();
+    currentTrip.points.clear();
+    currentTrip.dtimeList.clear();
+    currentTrip.pointsFixed.clear();
+    currentTrip.dtimeListFixed.clear();
   }
   static void clearTripPrevious(){
     previousTrip.points.clear();
@@ -67,10 +55,10 @@ class GeoData{
     previousTrip.clear();
   }
   static void copyPreviousTrip(){
-    previousTrip.points = List.from(points01);
-    previousTrip.dtimeList = List.from(dtimeList01); 
-    previousTrip.pointsFixed = List.from(points01Fixed);
-    previousTrip.dtimeListFixed = List.from(dtimeList01Fixed); 
+    previousTrip.points = List.from(currentTrip.points);
+    previousTrip.dtimeList = List.from(currentTrip.dtimeList); 
+    previousTrip.pointsFixed = List.from(currentTrip.pointsFixed);
+    previousTrip.dtimeListFixed = List.from(currentTrip.dtimeListFixed); 
   }
   static double currentSpeed(List<LatLng> points, List<DateTime> dt, int range){
     double speed=0;
@@ -116,40 +104,40 @@ class GeoData{
         GeoData.currentLat=lat;
         GeoData.currentLng=lng;
         GeoData.currentDtime=dt;
-        if (tripStarted){
-          points01.add(LatLng(lat, lng));
-          dtimeList01.add(dt);
+        if (currentTrip.started){
+          currentTrip.points.add(LatLng(lat, lng));
+          currentTrip.dtimeList.add(dt);
           // Geo Data Optimization
           FlutterMapMath fmm = FlutterMapMath();
           double dist=fmm.distanceBetween(
-                points01[points01.length-1].latitude,            //latest points
-                points01[points01.length-1].longitude,
-                points01[points01.length-2].latitude, 
-                points01[points01.length-2].longitude,"meters");
-          int time= dtimeList01[dtimeList01.length-1].difference(dtimeList01[dtimeList01.length-2]).inSeconds;
+                currentTrip.points[currentTrip.points.length-1].latitude,            //latest points
+                currentTrip.points[currentTrip.points.length-1].longitude,
+                currentTrip.points[currentTrip.points.length-2].latitude, 
+                currentTrip.points[currentTrip.points.length-2].longitude,"meters");
+          int time= currentTrip.dtimeList[currentTrip.dtimeList.length-1].difference(currentTrip.dtimeList[currentTrip.dtimeList.length-2]).inSeconds;
           double speed=dist/time;
           //if (AppConfig.shared.log>=3) 
           logger.i("Speed: $speed  ($dist / $time)");
 
-          points01Fixed.add(LatLng(lat, lng - 0.000003));
-          dtimeList01Fixed.add(dt);
+          currentTrip.pointsFixed.add(LatLng(lat, lng - 0.000003));
+          currentTrip.dtimeListFixed.add(dt);
           // ---------(C or -3)-------(B or -2)--------(A or -1 of original or last point)
-          if (points01Fixed.length>=3){  
+          if (currentTrip.pointsFixed.length>=3){  
             double dist2=fmm.distanceBetween(
-                points01Fixed[points01Fixed.length-1].latitude,            //latest points
-                points01Fixed[points01Fixed.length-1].longitude,
-                points01Fixed[points01Fixed.length-2].latitude, 
-                points01Fixed[points01Fixed.length-2].longitude,"meters");
+                currentTrip.pointsFixed[currentTrip.pointsFixed.length-1].latitude,            //latest points
+                currentTrip.pointsFixed[currentTrip.pointsFixed.length-1].longitude,
+                currentTrip.pointsFixed[currentTrip.pointsFixed.length-2].latitude, 
+                currentTrip.pointsFixed[currentTrip.pointsFixed.length-2].longitude,"meters");
             double dist1=fmm.distanceBetween(
-                points01Fixed[points01Fixed.length-2].latitude, 
-                points01Fixed[points01Fixed.length-2].longitude,
-                points01Fixed[points01Fixed.length-3].latitude,
-                points01Fixed[points01Fixed.length-3].longitude,"meters");
+                currentTrip.pointsFixed[currentTrip.pointsFixed.length-2].latitude, 
+                currentTrip.pointsFixed[currentTrip.pointsFixed.length-2].longitude,
+                currentTrip.pointsFixed[currentTrip.pointsFixed.length-3].latitude,
+                currentTrip.pointsFixed[currentTrip.pointsFixed.length-3].longitude,"meters");
                 
             if ((dist1<minDistance && dist2<minDistance) || 
                 (dist1>maxDistance && dist2>maxDistance) ){
-              points01Fixed.removeAt(points01Fixed.length-2); // Remove point B
-              dtimeList01Fixed.removeAt(dtimeList01Fixed.length-2);
+              currentTrip.pointsFixed.removeAt(currentTrip.pointsFixed.length-2); // Remove point B
+              currentTrip.dtimeListFixed.removeAt(currentTrip.dtimeListFixed.length-2);
               //if (AppConfig.shared.log>=3) 
               logger.i("Remove: $dist1 $dist2 ");
                           
@@ -159,15 +147,15 @@ class GeoData{
             }
           }
         }
-          MyStore.storePolyline(points01,"points01");
-          MyStore.storeDateTimeList(dtimeList01, "dtimeList01");
-          MyStore.storePolyline(points01Fixed,"points01Fixed");
-          MyStore.storeDateTimeList(dtimeList01Fixed, "dtimeList01Fixed");
+          MyStore.storePolyline(currentTrip.points,"points01");
+          MyStore.storeDateTimeList(currentTrip.dtimeList, "dtimeList01");
+          MyStore.storePolyline(currentTrip.pointsFixed,"points01Fixed");
+          MyStore.storeDateTimeList(currentTrip.dtimeListFixed, "dtimeList01Fixed");
 
-          tripDistance=totalDistance(points01Fixed);
-          tripTime=totalTime(dtimeList01Fixed);
-          tripSpeedNow = currentSpeed(points01Fixed, dtimeList01Fixed, 5);
-          tripAmount = calculateAmount(tripDistance, tripTime);
+          currentTrip.distance=totalDistance(currentTrip.pointsFixed);
+          currentTrip.duration=totalTime(currentTrip.dtimeListFixed);
+          currentTrip.currentSpeed = currentSpeed(currentTrip.pointsFixed, currentTrip.dtimeListFixed, 5);
+          currentTrip.distanceAmount = calculateAmount(currentTrip.distance, currentTrip.duration);
 
           providerLocNoti?.notify(); // notify the provider there have been changes
     }
@@ -180,11 +168,11 @@ class GeoData{
   }
 
   static void startTrip(LocationNotifier locationNotifier){
-    tripStartDtime= DateTime.now();
+    currentTrip.startTime= DateTime.now();
     if (!useTimer) startTimer(locationNotifier);
     clearTrip();
     clearTripPrevious();
-    tripStarted=true;
+    currentTrip.started=true;
   }
   static void startTimer(LocationNotifier locationNotifier){
     timer = Timer.periodic(const Duration(milliseconds: GeoData.timerInterval), (timer) {
@@ -193,15 +181,15 @@ class GeoData{
   }
   static int tripDuration(){
     int tm =0;
-    if (GeoData.tripStarted){
-      tm = DateTime.now().difference(tripStartDtime).inSeconds;
+    if (GeoData.currentTrip.started){
+      tm = DateTime.now().difference(currentTrip.startTime).inSeconds;
     } else {
       tm =totalTime(previousTrip.dtimeListFixed);
     }
     return tm;
   }
   static void endTrip(){
-    tripStarted=false;
+    currentTrip.started=false;
     if (!useTimer) timer?.cancel(); 
     copyPreviousTrip();
     //clearTripPrevious();
@@ -237,20 +225,15 @@ class GeoData{
     }
     return true;
   } 
-  static Future<LocationData?> getCurrentLocation(Location location, {LocationNotifier? locProvider}) async { 
+  static Future<LocationData?> getCurrentLocation(Location location) async { 
       LocationData locationData;
       bool serviceEnabled=await chkPermissions(location);
       if (serviceEnabled) {
-        locationData = await location.getLocation();
-        if (locProvider==null){
-        GeoData.updateLocation(locationData.latitude!, locationData.longitude!, DateTime.now());
-         } else {
-        GeoData.updateLocation(locationData.latitude!, locationData.longitude!, DateTime.now());
-      }
+        locationData = await location.getLocation(); 
+        GeoData.updateLocation(locationData.latitude!, locationData.longitude!, DateTime.now()); 
         return locationData;
       } else {
         return null;
       } 
   }
 }
-

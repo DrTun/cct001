@@ -1,11 +1,14 @@
-import 'package:flutter/material.dart'; 
+import 'package:flutter/material.dart';
+
+import '../signin/signin.dart';
+import '../signin/signinpage.dart'; 
 
 enum Flavor { prod, dev, sit, staging }
 
 class AppConfig {
   String appVersion = "1.0.3";  // Update internal version number, edit here
   bool skipSignin = true ;      // Skip Signin Page, edit here
-  int signinType = 0;          // 0= dummy, 1= AIM 2.0, 3=Keycloak
+  int signinType = 1;          // 0= dummy, 1= AIM 2.0, 3=Keycloak
   
   String appName = "";
   String appDesc = "";
@@ -38,4 +41,14 @@ class AppConfig {
   }
 
   AppConfig(this.appName, this.appDesc, this.appID, this.primaryColor, this.flavor, this.clientID, this.baseURL, this.authURL,this.secretKey, this.log,this.fcm);
+
+  static void signIn(BuildContext context){
+    if (AppConfig.shared.signinType==0) { 
+      Navigator.pushReplacementNamed(context,SigninPage.routeName, );  
+    } else if (AppConfig.shared.signinType==1){
+      Navigator.pushReplacementNamed(context, SignIn.routeName);
+    }
+  }
+
 }
+

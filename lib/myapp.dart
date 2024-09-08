@@ -1,7 +1,6 @@
-import '/src/signin/forgotpassword.dart';
-import '/src/signin/signin.dart';
-import '/src/signin/signup.dart';
-import 'src/geolocation/geopara.dart'; 
+import 'src/signin/forgotpassword.dart';
+import 'src/signin/signin.dart';
+import 'src/signin/signup.dart'; 
 import 'src/geolocation/mapview.dart'; 
 import 'src/shared/appconfig.dart';
 import 'src/views/viewdatadetails.dart';
@@ -67,7 +66,6 @@ class MyApp extends StatelessWidget {
                   case ViewDataDetails.routeName: return const ViewDataDetails();
                   case SigninPage.routeName:  return const SigninPage();
                   case MapView.routeName:  return  const MapView(); 
-                  case GeoPara.routeName:  return  const GeoPara();
                   default:  return const LoadingPage();
                 }
               },

@@ -1,7 +1,6 @@
 
 import 'dart:async'; 
 import '/src/geolocation/mapview001.dart';
- 
 import 'package:url_launcher/url_launcher.dart';
 import 'package:flutter/material.dart';  
 import 'package:confirm_dialog/confirm_dialog.dart';
@@ -12,8 +11,7 @@ import 'providers/mynotifier.dart';
 import 'shared/appconfig.dart';
 import 'maintabs/maincards.dart'; 
 import 'shared/globaldata.dart'; 
-import 'helpers/helpers.dart';
-import 'signin/signinpage.dart'; 
+import 'helpers/helpers.dart';  
 import 'views/views.dart';
 import 'settings/settings_view.dart';
 import 'api/api_auth.dart';
@@ -34,7 +32,7 @@ class _RootPageState extends State<RootPage> with WidgetsBindingObserver {
     WidgetsBinding.instance.addObserver(this);
     WidgetsBinding.instance.addPostFrameCallback((_){ 
       provider.updateData01(AppConfig.shared.appName, AppConfig.shared.appDesc, false); 
-      // provider.updateTripData("","", GeoData.tripStarted, 0, 0); // Provider update
+      // provider.updateTripData("","", GeoData.currentTrip.started, 0, 0); // Provider update
     }); 
   }
 
@@ -53,7 +51,7 @@ class _RootPageState extends State<RootPage> with WidgetsBindingObserver {
   }
 
   Future<void> bg() async {
-    if (GeoData.tripStarted) {
+    if (GeoData.currentTrip.started) {
       await GeoData.location.enableBackgroundMode(enable: true);
     } else {
       await GeoData.location.enableBackgroundMode(enable: false);
@@ -93,7 +91,6 @@ class _RootPageState extends State<RootPage> with WidgetsBindingObserver {
                 DrawerHeader(decoration: BoxDecoration(color: AppConfig.shared.primaryColor,),child: const Text('Menu', style: TextStyle(color: Colors.white,fontSize: 24,),),),
                 ListTile( title:  const Text('Home',), onTap: () async {
                   MyHelpers.msg("You are home");
-                  
                   },
                 ),
                 ListTile( title:  Text('${GlobalAccess.mode=="Guest"?"Sign In":"Sign Out"} ',),  onTap: () async { _gotoSignIn(context); },),
@@ -137,13 +134,17 @@ class _RootPageState extends State<RootPage> with WidgetsBindingObserver {
         GlobalAccess.reset();               // reset global data
         await GlobalAccess.resetSecToken(); // reset secure storage with global data
         provider.updateData01("", "",false);    // clear provider on screen
-        setState(() {  Navigator.pushNamed(context,SigninPage.routeName, );});
+        setState(() {  
+          AppConfig.signIn(context);
+        });
       }
     } else { // if guest, quickly go to sigin in
         GlobalAccess.reset();               // reset global data
         await GlobalAccess.resetSecToken(); // reset secure storage with global data
         provider.updateData01("", "",false);    // clear provider on screen
-        setState(() {  Navigator.pushNamed(context,SigninPage.routeName, );});
+        setState(() {  
+          AppConfig.signIn(context);
+        });
     }
   }
 } 

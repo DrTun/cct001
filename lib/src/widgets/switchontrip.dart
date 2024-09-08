@@ -24,10 +24,10 @@ class SwitchonTripState extends State<SwitchonTrip> {
     return Consumer<LocationNotifier>(
         builder: (context, locationNotifier, child) {
       return SwitchOn(
-        value: GeoData.tripStarted,
+        value: GeoData.currentTrip.started,
         label: widget.label,
         onClick: () async { 
-            if (GeoData.tripStarted) {
+            if (GeoData.currentTrip.started) {
               if (GeoData.tripDuration()>(GeoData.mintripDuration)){    // more than 60s
                 MyHelpers.getBool(context, "Are you sure to end trip?").then((value) => {
                       if (value != null && value) {
@@ -51,7 +51,7 @@ class SwitchonTripState extends State<SwitchonTrip> {
   void endIt(LocationNotifier locationNotifier){
       GeoData.endTrip();
       locationNotifier.notify();
-      MyStore.prefs.setBool("tripStarted", false);
+      MyStore.prefs.setBool("currentTrip.started", false);
       KeepScreenOn.turnOff();
       setState(() {});
   }
@@ -60,7 +60,7 @@ class SwitchonTripState extends State<SwitchonTrip> {
       GeoData.clearTrip();
       locationNotifier.notify();
       GeoData.startTrip(locationNotifier);
-      MyStore.prefs.setBool("tripStarted", true);
+      MyStore.prefs.setBool("currentTrip.started", true);
       KeepScreenOn.turnOn();
       setState(() {});
   }

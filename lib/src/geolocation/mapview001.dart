@@ -24,7 +24,7 @@ class MapView001State extends State<MapView001> {
   final List<Marker> markers = [];
   final List<Polyline> polylines = [];
   final  mapctrl = MapController(); 
-  bool switchon = GeoData.tripStarted;
+  bool switchon = GeoData.currentTrip.started;
   final ValueNotifier<bool> isStartValue = ValueNotifier<bool>(false);
 
   @override
@@ -36,7 +36,7 @@ class MapView001State extends State<MapView001> {
     //provider = Provider.of<MyNotifier>(context,listen: false);
     providerLocNoti = Provider.of<LocationNotifier>(context,listen: false);
     });
-    if (GeoData.tripStarted){
+    if (GeoData.currentTrip.started){
               KeepScreenOn.turnOn();
     }
   }
@@ -128,7 +128,7 @@ Widget build(BuildContext context) {
                                   onTap: () => recenter(),
                                 ),
                                 SpeedDialChild(
-                                  visible: !GeoData.tripStarted,
+                                  visible: !GeoData.currentTrip.started,
                                   child: const Icon(Icons.delete_outline),
                                   label: 'Clear Trip',
                                   onTap: () => clearTrip(),
@@ -152,16 +152,16 @@ Widget build(BuildContext context) {
   
   List<Marker> addMarkers() { 
       markers.clear();
-      if (GeoData.points01Fixed.isNotEmpty){
+      if (GeoData.currentTrip.pointsFixed.isNotEmpty){
         markers.add(Marker(
-          point: LatLng(GeoData.points01Fixed[0].latitude, GeoData.points01Fixed[0].longitude), 
+          point: LatLng(GeoData.currentTrip.pointsFixed[0].latitude, GeoData.currentTrip.pointsFixed[0].longitude), 
           width: 15,height: 15,alignment: Alignment.center,
           child: Image.asset('assets/images/geo/reddot.png',scale: 1.0,),
           ));
            
         markers.add(Marker(
-        point: LatLng(GeoData.points01Fixed[GeoData.points01Fixed.length-1].latitude, 
-          GeoData.points01Fixed[GeoData.points01Fixed.length-1].longitude), 
+        point: LatLng(GeoData.currentTrip.pointsFixed[GeoData.currentTrip.pointsFixed.length-1].latitude, 
+          GeoData.currentTrip.pointsFixed[GeoData.currentTrip.pointsFixed.length-1].longitude), 
         width: 100,height: 100,alignment: Alignment.center,
         child: Image.asset('assets/images/geo/move-car.png',scale: 1.0,),
         )); 
@@ -174,13 +174,13 @@ Widget build(BuildContext context) {
   }  
   List<Polyline> addPolylines() { 
     polylines.clear();
-    if (GeoData.tripStarted){
+    if (GeoData.currentTrip.started){
       polylines.add(
-        Polyline(points: GeoData.points01Fixed, color: Colors.blue,strokeWidth: GeoData.fixedThickness,)
+        Polyline(points: GeoData.currentTrip.pointsFixed, color: Colors.blue,strokeWidth: GeoData.fixedThickness,)
       );
       if (GeoData.showLatLng) {
         polylines.add( 
-          Polyline(points: GeoData.points01, color: Colors.red,strokeWidth: GeoData.oriThickness,)
+          Polyline(points: GeoData.currentTrip.points, color: Colors.red,strokeWidth: GeoData.oriThickness,)
       );
     } 
     } else {
@@ -192,7 +192,7 @@ Widget build(BuildContext context) {
   }
   Widget speed() {
     return 
-    Text("${GeoData.currentSpeed(GeoData.points01,GeoData.dtimeList01,5).toStringAsFixed(0)} km/h", style: const TextStyle(fontSize: 12,color: Colors.red));
+    Text("${GeoData.currentSpeed(GeoData.currentTrip.points,GeoData.currentTrip.dtimeList,5).toStringAsFixed(0)} km/h", style: const TextStyle(fontSize: 12,color: Colors.red));
   }
   Widget reCenter() {
     return  

@@ -129,7 +129,7 @@ class MapView002GoogleState extends State<MapView002Google> {
                                   onTap: () => recenter(),
                                 ),
                                 SpeedDialChild(
-                                  visible: !GeoData.tripStarted,
+                                  visible: !GeoData.currentTrip.started,
                                   child: const Icon(Icons.delete_outline),
                                   label: 'Clear Trip',
                                   onTap: () => clearTrip(),
@@ -194,12 +194,12 @@ class MapView002GoogleState extends State<MapView002Google> {
   }
   List<Marker> addMarkers() { 
     List<Marker> markers = [];
-    if (GeoData.tripStarted){
-      if (GeoData.points01Fixed.isNotEmpty){
+    if (GeoData.currentTrip.started){
+      if (GeoData.currentTrip.pointsFixed.isNotEmpty){
         Marker start = Marker(
                   markerId: const MarkerId('Start'),
                   icon: icGreen,
-                  position: LatLng(GeoData.points01Fixed[0].latitude, GeoData.points01Fixed[0].longitude),
+                  position: LatLng(GeoData.currentTrip.pointsFixed[0].latitude, GeoData.currentTrip.pointsFixed[0].longitude),
                   infoWindow: const InfoWindow(title: 'Start', snippet: 'ongoing trip'),
                 );
         markers.add(start);
@@ -223,7 +223,7 @@ class MapView002GoogleState extends State<MapView002Google> {
 
 
     List<LatLng> plistfixed = [];
-    for (var point in GeoData.points01Fixed) {
+    for (var point in GeoData.currentTrip.pointsFixed) {
       plistfixed.add(LatLng(point.latitude, point.longitude));
     }
     Polyline fixed = Polyline(
@@ -235,7 +235,7 @@ class MapView002GoogleState extends State<MapView002Google> {
 
 
     List<LatLng> plist = [];
-    for (var point in GeoData.points01) {
+    for (var point in GeoData.currentTrip.points) {
       plist.add(LatLng(point.latitude, point.longitude));
     }
     Polyline original = Polyline(
@@ -261,14 +261,14 @@ class MapView002GoogleState extends State<MapView002Google> {
 
     polylines.clear();
     if (GeoData.showLatLng) {
-      if (GeoData.tripStarted){
+      if (GeoData.currentTrip.started){
         polylines.add(fixed);
         polylines.add(original);
       } else {
         polylines.add(previous);
       }
     } else {
-      if (GeoData.tripStarted){
+      if (GeoData.currentTrip.started){
         polylines.add(fixed);
       } else {
         polylines.add(previous);

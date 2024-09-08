@@ -23,7 +23,7 @@ class MainCardsState extends State<MainCards> {
   Widget build(BuildContext context) { 
     return Consumer<LocationNotifier>(
       builder: (context, provider , child) {
-        if (GeoData.tripStarted) {
+        if (GeoData.currentTrip.started) {
           GeoData.startTimer(provider);
         }  
         return   Scaffold(

@@ -3,8 +3,7 @@ import 'dart:async';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:latlong2/latlong.dart'; 
 import '/src/rootpage.dart';
-import 'api/api_auth.dart';
-import 'signin/signin.dart';
+import 'api/api_auth.dart'; 
 import 'package:location/location.dart';
 import '/src/helpers/helpers.dart';
 import '/src/geolocation/geodata.dart';
@@ -12,7 +11,7 @@ import 'package:provider/provider.dart';
 import 'geolocation/locationnotifier.dart';
 import 'shared/appconfig.dart';
 import 'shared/globaldata.dart';
-import 'package:flutter/material.dart';
+import 'package:flutter/material.dart'; 
 //  -------------------------------------    Loading (Property of Nirvasoft.com)
 class LoadingPage extends StatefulWidget {
   static const routeName = '/loading';
@@ -65,22 +64,22 @@ class _LoadingState extends State<LoadingPage> {
   Future loading(BuildContext context) async { 
     // 2.2.1) Shared Preferences
     await MyStore.init();
-    GeoData.tripStarted = MyStore.prefs.getBool('tripStarted') ?? false;
+    GeoData.currentTrip.started = MyStore.prefs.getBool('currentTrip.started') ?? false;
       List<LatLng>? pline;
       List<DateTime> dtlist=[];
       pline = (await MyStore.retrievePolyline("points01"));
       if (pline != null  ) { 
-        GeoData.points01 = pline; 
+        GeoData.currentTrip.points = pline; 
         pline = (await MyStore.retrievePolyline("points01Fixed"));
         if (pline != null) { 
-          GeoData.points01Fixed = pline; 
+          GeoData.currentTrip.pointsFixed = pline; 
           dtlist = (await MyStore.retrieveDateTimeList("dtimeList01"));
           if (dtlist.isNotEmpty) { 
-            GeoData.tripStartDtime =dtlist[0];
-            GeoData.dtimeList01 = dtlist; 
+            GeoData.currentTrip.startTime =dtlist[0];
+            GeoData.currentTrip.dtimeList= dtlist; 
             dtlist = (await MyStore.retrieveDateTimeList("dtimeList01Fixed"));
             if (dtlist.isNotEmpty) { 
-              GeoData.dtimeList01Fixed = dtlist; 
+              GeoData.currentTrip.dtimeListFixed = dtlist; 
  
               // end the trip if it is more than 3 minute, it will be ended.
               DateTime currenttime = DateTime.now();
@@ -106,24 +105,19 @@ class _LoadingState extends State<LoadingPage> {
         if (AppConfig.shared.skipSignin) { 
           Navigator.pushReplacementNamed(context,RootPage.routeName, ); 
         } else if( GlobalAccess.userID.isNotEmpty || GlobalAccess.accessToken.isNotEmpty){ 
-          
           Navigator.pushReplacementNamed(context,RootPage.routeName, ); 
         } else { 
-          Navigator.pushReplacementNamed(context, SignIn.routeName);
-        //  Navigator.pushReplacementNamed(context,SigninPage.routeName, );  
+          AppConfig.signIn(context);
         }
     }); 
     });
   } 
-
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: Column(
         children: [ 
         SizedBox(height: MediaQuery.of(context).size.height * 0.3,), 
-
         ClipRRect(
         borderRadius: BorderRadius.circular(100.0),
           child: const Image(
@@ -132,7 +126,6 @@ class _LoadingState extends State<LoadingPage> {
             height: 150,
           ),
         ),
-
         const SizedBox(height: 50,), 
         Text('Welcome ${AppConfig.shared.appName}', ),
         const SizedBox(height: 50,), 

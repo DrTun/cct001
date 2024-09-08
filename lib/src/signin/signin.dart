@@ -9,10 +9,10 @@ import '/src/api/token.dart';
 import '/src/rootpage.dart';
 import '/src/shared/appconfig.dart';
 import '/src/shared/globaldata.dart';
-import '/src/signin/forgot_password.dart';
-import '/src/signin/sign_up.dart';
-import '/src/widgets/signin_button.dart';
-import '/src/widgets/text_form.dart';
+import '/src/signin/forgotpassword.dart';
+import '/src/signin/signup.dart';
+import '/src/widgets/signinbutton.dart';
+import '/src/widgets/userinputformfield.dart';
 
 class SignIn extends StatefulWidget {
   static const routeName = '/signIn';
@@ -193,7 +193,9 @@ class _SignInState extends State<SignIn> {
     final response = await ApiService().userSignIn(reqIN);
 
     if (response['status'] == 200) {
-      Fluttertoast.showToast(msg: response['message']);
+
+      final String msg = response['message'] ?? 'Signed in successfully';
+      Fluttertoast.showToast(msg: msg);
       GlobalAccess.updateUToken(userid, userName,
           response['data']['access_token'], response['data']['refresh_token']);
       setState(() {
@@ -202,7 +204,7 @@ class _SignInState extends State<SignIn> {
         _passwordController.clear();
       });
     } else {
-      Fluttertoast.showToast(msg: response['message']);
+      Fluttertoast.showToast(msg: response['message']??'Invalid User ID or Password');
     }
     setState(() {
       loadingTime = false;

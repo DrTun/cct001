@@ -15,10 +15,11 @@ class MapView002Google extends StatefulWidget {
 }
 class MapView002GoogleState extends State<MapView002Google> {  
   int movingCount =0;
-  bool stillMoving=true;
+  bool stillMoving= true ;
   final Completer<GoogleMapController> completer =Completer<GoogleMapController>();
   late LocationNotifier providerLocNoti ;
-  BitmapDescriptor icStart = BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueCyan);
+  BitmapDescriptor icRed = BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueRed);
+  BitmapDescriptor icGreen = BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueGreen);
 
   @override
   void initState() {
@@ -62,7 +63,7 @@ class MapView002GoogleState extends State<MapView002Google> {
                 markers: Set<Marker>.from(addMarkers()),
                 polylines: Set<Polyline>.from(addPolylines()),
                 mapType: MapType.normal,
-                minMaxZoomPreference: const MinMaxZoomPreference(10, 17.5),
+                //minMaxZoomPreference: const MinMaxZoomPreference(3.9, 17.5),
                 initialCameraPosition: CameraPosition(
                   target: LatLng(GeoData.currentLat, GeoData.currentLng),
                   zoom: 16,
@@ -197,19 +198,19 @@ class MapView002GoogleState extends State<MapView002Google> {
       if (GeoData.points01Fixed.isNotEmpty){
         Marker start = Marker(
                   markerId: const MarkerId('Start'),
-                  icon: icStart,
+                  icon: icGreen,
                   position: LatLng(GeoData.points01Fixed[0].latitude, GeoData.points01Fixed[0].longitude),
-                  infoWindow: const InfoWindow(title: 'Start', snippet: '5 Star Rating'),
+                  infoWindow: const InfoWindow(title: 'Start', snippet: 'ongoing trip'),
                 );
         markers.add(start);
       }
     } else {
-      if (GeoData.points01Fixed.isNotEmpty){
+      if (GeoData.previousTrip.pointsFixed.isNotEmpty){
         Marker start = Marker(
                   markerId: const MarkerId('Start'),
-                  icon: icStart,
-                  position: LatLng(GeoData.points01Fixed[0].latitude, GeoData.points01Fixed[0].longitude),
-                  infoWindow: const InfoWindow(title: 'Start', snippet: '5 Star Rating'),
+                  icon: icRed,
+                  position: LatLng(GeoData.previousTrip.pointsFixed[0].latitude, GeoData.previousTrip.pointsFixed[0].longitude),
+                  infoWindow: const InfoWindow(title: 'Start', snippet: 'previous trip'),
                 );
         markers.add(start);
       }
@@ -219,6 +220,8 @@ class MapView002GoogleState extends State<MapView002Google> {
   
   List<Polyline> addPolylines() { 
     List<Polyline> polylines = [];
+
+
     List<LatLng> plistfixed = [];
     for (var point in GeoData.points01Fixed) {
       plistfixed.add(LatLng(point.latitude, point.longitude));
@@ -229,8 +232,10 @@ class MapView002GoogleState extends State<MapView002Google> {
       points: plistfixed,
       width: GeoData.fixedThickness.toInt(),
     );
-     List<LatLng> plist = [];
-    for (var point in GeoData.points01Fixed) {
+
+
+    List<LatLng> plist = [];
+    for (var point in GeoData.points01) {
       plist.add(LatLng(point.latitude, point.longitude));
     }
     Polyline original = Polyline(
@@ -239,12 +244,35 @@ class MapView002GoogleState extends State<MapView002Google> {
       points: plist,
       width: GeoData.oriThickness.toInt(),
     );
+
+
+    List<LatLng> plistpre = [];
+    for (var point in GeoData.previousTrip.pointsFixed) {
+      plistpre.add(LatLng(point.latitude, point.longitude));
+    }
+    Polyline previous = Polyline(
+      polylineId: const PolylineId('previous'),
+      color: Colors.purple,
+      points: plistpre,
+      width: GeoData.fixedThickness.toInt(),
+    );
+
+
+
     polylines.clear();
     if (GeoData.showLatLng) {
-      polylines.add(fixed);
-      polylines.add(original);
+      if (GeoData.tripStarted){
+        polylines.add(fixed);
+        polylines.add(original);
+      } else {
+        polylines.add(previous);
+      }
     } else {
-      polylines.add(fixed);
+      if (GeoData.tripStarted){
+        polylines.add(fixed);
+      } else {
+        polylines.add(previous);
+      }
     }
     return polylines;
   }

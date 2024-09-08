@@ -36,8 +36,10 @@ class SwitchonTripState extends State<SwitchonTrip> {
                       }
                 });
               } else {
-                      endIt(locationNotifier); 
-                      GeoData.clearTrip();      // less than 60s, GeoData.mintripDuration
+                      GeoData.clearTripPrevious;
+                      GeoData.clearTrip();  
+                      setState(() { });     // discard the current data 
+                      endIt(locationNotifier);   // less than 60s, GeoData.mintripDuration
               }
             } else { 
               startIt(locationNotifier);
@@ -51,14 +53,16 @@ class SwitchonTripState extends State<SwitchonTrip> {
       locationNotifier.notify();
       MyStore.prefs.setBool("tripStarted", false);
       KeepScreenOn.turnOff();
+      setState(() {});
   }
   void startIt(LocationNotifier locationNotifier){
-              GeoData.centerMap=true; 
-              GeoData.clearTrip();
-              locationNotifier.notify();
-              GeoData.startTrip(locationNotifier);
-              MyStore.prefs.setBool("tripStarted", true);
-              KeepScreenOn.turnOn();
+      GeoData.centerMap=true; 
+      GeoData.clearTrip();
+      locationNotifier.notify();
+      GeoData.startTrip(locationNotifier);
+      MyStore.prefs.setBool("tripStarted", true);
+      KeepScreenOn.turnOn();
+      setState(() {});
   }
 }
 

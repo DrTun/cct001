@@ -1,12 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import '../api/api_service.dart';
 import '../api/token.dart';
-import '/src/api/api_service.dart';
+import '../widgets/signinbutton.dart';
+import '../widgets/userinputformfield.dart';
 import '/src/models/auth_models.dart';
 import '/src/shared/appconfig.dart';
-import '/src/signin/sign_in.dart';
-import '/src/widgets/text_form.dart';
+import 'signin.dart';
 
 class ForgotPassword extends StatefulWidget {
   static const routeName = '/forgotPassword';
@@ -24,6 +25,7 @@ class _ForgotPasswordState extends State<ForgotPassword> {
   @override
   Widget build(BuildContext context) {
     final height = MediaQuery.of(context).size.height;
+    final isKeyboardVisible = MediaQuery.of(context).viewInsets.bottom == 0;
     return SafeArea(
       child: Scaffold(
         appBar: AppBar(
@@ -40,15 +42,15 @@ class _ForgotPasswordState extends State<ForgotPassword> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   SizedBox(
-                    height: height * 0.05,
+                    height: height * 0.1,
                   ),
                   Center(
                     child: ClipRRect(
                       borderRadius: BorderRadius.circular(100.0),
                       child: const Image(
                         image: AssetImage("assets/images/logo.png"),
-                        width: 120,
-                        height: 120,
+                        width: 110,
+                        height: 110,
                       ),
                     ),
                   ),
@@ -56,15 +58,15 @@ class _ForgotPasswordState extends State<ForgotPassword> {
                     height: 40,
                   ),
                   const Text(
-                    'Enter your Email',
+                    'User ID',
                   ),
                   const SizedBox(
-                    height: 22,
+                    height: 5,
                   ),
                   Form(
                     key: _formKey,
                     child: SizedBox(
-                      height: 70,
+                      height: 60,
                       child: MyTextField(
                         obscureText: false,
                         controller: _useridController,
@@ -74,43 +76,33 @@ class _ForgotPasswordState extends State<ForgotPassword> {
                     ),
                   ),
                   const SizedBox(
-                    height: 40,
+                    height: 20,
+
                   ),
-                  Center(
-                      child: loadingtime
-                          ? SizedBox(
-                              height: 50,
-                              child: SpinKitCircle(
-                                color: Colors.blue[300],
-                                size: 40.0,
-                              ))
-                          : TextButton(
-                              onPressed: () {
-                                _formKey.currentState!.validate()
-                                    ? {
-                                        setState(() {
-                                          loadingtime = true;
-                                          resetPassword();
-                                        })
-                                      }
-                                    : null;
-                              },
-                              child: Container(
-                                  height: 40,
-                                  width: 80,
-                                  decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(8),
-                                    color: const Color.fromARGB(255, 0, 106, 193),
-                                  ),
-                                  child: const Center(
-                                      child: Text(
-                                    'Send OTP',
-                                    style: TextStyle(color: Colors.white),
-                                  ))),
-                            )),
-                  SizedBox(
+                  isKeyboardVisible?
+                  Column(
+                    children: [
+                      loadingtime
+                          ? SpinKitCircle(
+                            color: Colors.blue[300],
+                            size: 40.0,
+                          )
+                          : MyButton(text: 'Reset Password', onTap: (){
+                            _formKey.currentState!.validate()
+                                        ? {
+                                            setState(() {
+                                              loadingtime = true;
+                                              resetPassword();
+                                            })
+                                          }
+                                        : null;
+                          }),
+                            SizedBox(
                     height: height * 0.2,
                   ),
+                    ],
+                  ) : const SizedBox()
+                  
                 ],
               ),
             ),
@@ -134,13 +126,14 @@ class _ForgotPasswordState extends State<ForgotPassword> {
         reqType: 3);
     final response = await ApiService().resetPassword(reqReset);
     if (response['status'] == 200) {
-      Fluttertoast.showToast(msg: response['message']);
+      final String msg = response['message'] ?? 'Please check your email';
+      Fluttertoast.showToast(msg: msg);
       setState(() {      
         Navigator.pushReplacementNamed(context, SignIn.routeName);
       });
       
     } else {
-      Fluttertoast.showToast(msg: response['message']);
+      Fluttertoast.showToast(msg: response['message'] ?? 'Processing Failed');
     }
     setState(() {
       loadingtime = false;

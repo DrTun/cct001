@@ -1,11 +1,18 @@
   import 'package:flutter/material.dart'; 
 
-Widget rowDigital(String value, String label, { Color? fcolor,double? fsize,}) {
+Widget rowDigital(String value, String prefix, String postfix, { Color? fcolor,double? fsize,}) {
     fsize ??= 30;
     fcolor ??= Colors.green;
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      children: [
+      children: [ 
+        Expanded(
+          flex: 4,
+          child: Align(
+            alignment: Alignment.centerRight,
+            child: Text(prefix,style:  TextStyle(fontSize: 14,height: 1,color: fcolor), textAlign: TextAlign.left),
+          ),
+        ),
         Expanded(
           flex: 6,
           child: Align(
@@ -17,7 +24,7 @@ Widget rowDigital(String value, String label, { Color? fcolor,double? fsize,}) {
           flex: 4,
           child: Align(
             alignment: Alignment.centerLeft,
-            child: Text(label,style:  TextStyle(fontSize: 20,height: 1,color: fcolor), textAlign: TextAlign.left),
+            child: Text(postfix,style:  TextStyle(fontSize: 14,height: 1,color: fcolor), textAlign: TextAlign.left),
           ),
         ),
       ],

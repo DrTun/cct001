@@ -3,12 +3,12 @@ import 'dart:async';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:latlong2/latlong.dart'; 
 import '/src/rootpage.dart';
-import '/src/signin/sign_in.dart';
+import 'api/api_auth.dart';
+import 'signin/signin.dart';
 import 'package:location/location.dart';
 import '/src/helpers/helpers.dart';
 import '/src/geolocation/geodata.dart';
 import 'package:provider/provider.dart';
-import 'api/api_auth.dart';
 import 'geolocation/locationnotifier.dart';
 import 'shared/appconfig.dart';
 import 'shared/globaldata.dart';
@@ -40,7 +40,7 @@ class _LoadingState extends State<LoadingPage> {
       providerLocNoti = Provider.of<LocationNotifier>(context,listen: false);
       if (await GeoData.chkPermissions(GeoData.location)){
         await GeoData.location.changeSettings(accuracy: LocationAccuracy.high, interval: GeoData.interval, distanceFilter: GeoData.distance);
-        GeoData.locationSubscription = GeoData.location.onLocationChanged.listen((LocationData currentLocation) {changeLocations(currentLocation);});
+        GeoData.locationSubscription = GeoData.location.onLocationChanged.listen((LocationData  currentLocation) {changeLocations(currentLocation);});
         if (GeoData.listenChanges==false) GeoData.locationSubscription.pause();
       } else {   logger.i("Permission Denied");} 
     } catch (e) {
@@ -71,7 +71,7 @@ class _LoadingState extends State<LoadingPage> {
       pline = (await MyStore.retrievePolyline("points01"));
       if (pline != null  ) { 
         GeoData.points01 = pline; 
-        pline = (await MyStore.retrievePolyline("polyline01Fixed"));
+        pline = (await MyStore.retrievePolyline("points01Fixed"));
         if (pline != null) { 
           GeoData.points01Fixed = pline; 
           dtlist = (await MyStore.retrieveDateTimeList("dtimeList01"));

@@ -3,14 +3,14 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-import '/src/api/api_service.dart';
 import '/src/models/auth_models.dart';
 import '/src/api/token.dart';
 import '/src/shared/appconfig.dart';
-import '/src/signin/sign_in.dart';
+import '/src/signin/signin.dart';
 import 'package:logger/logger.dart';
-import '../widgets/signin_button.dart';
-import '../widgets/text_form.dart';
+import '../api/api_service.dart';
+import '../widgets/signinbutton.dart';
+import '../widgets/userinputformfield.dart';
 
 class SignupPage extends StatefulWidget {
   static const routeName = '/signupPage';
@@ -222,7 +222,8 @@ class _SignupPageState extends State<SignupPage> {
     final response = await ApiService().userSignUp(req);
 
     if (response['status'] == 200) {
-      Fluttertoast.showToast(msg: response['message']);
+      final String msg = response['message'] ?? 'Please check your email';
+      Fluttertoast.showToast(msg: msg);
       setState(() {
         _useridController.clear();
         _userNameController.clear();
@@ -230,7 +231,7 @@ class _SignupPageState extends State<SignupPage> {
         Navigator.pushReplacementNamed(context, SignIn.routeName);
       });
     } else {
-      Fluttertoast.showToast(msg: response['message']);
+      Fluttertoast.showToast(msg: response['message']??'Registration Failed');
     }
     setState(() {
       loadingtime = false;

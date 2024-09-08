@@ -19,12 +19,10 @@ class MapView001 extends StatefulWidget {
   MapView001State createState() => MapView001State();
 }
 class MapView001State extends State<MapView001> {
-  //late MyNotifier provider ; 
   bool mapReady=false;
   late LocationNotifier providerLocNoti ;
   final List<Marker> markers = [];
   final List<Polyline> polylines = [];
-  //late MapController mapctrl; 
   final  mapctrl = MapController(); 
   bool switchon = GeoData.tripStarted;
   final ValueNotifier<bool> isStartValue = ValueNotifier<bool>(false);
@@ -56,7 +54,7 @@ Widget build(BuildContext context) {
               mapController: mapctrl,
               options:   MapOptions(
                 initialCenter: LatLng(lat, lng),                   // Initial zoom level
-                minZoom: 9.0,                 // Minimum zoom level
+                minZoom: 5.0,                 // Minimum zoom level
                 maxZoom: 18.0,  
                 initialZoom: GeoData.zoom,               // Maximum zoom level  
                 onPositionChanged: (position, hasGesture) {
@@ -158,28 +156,17 @@ Widget build(BuildContext context) {
         markers.add(Marker(
           point: LatLng(GeoData.points01Fixed[0].latitude, GeoData.points01Fixed[0].longitude), 
           width: 15,height: 15,alignment: Alignment.center,
-          child: Image.asset('assets/images/geo/bluedot.png',scale: 1.0,),
+          child: Image.asset('assets/images/geo/reddot.png',scale: 1.0,),
           ));
-         if (!GeoData.tripStarted) {
-           markers.add(Marker(
-           point: LatLng(GeoData.points01Fixed[GeoData.points01Fixed.length-1].latitude, 
-              GeoData.points01Fixed[GeoData.points01Fixed.length-1].longitude), 
-           width: 15,height: 15,alignment: Alignment.center,
-           child: Image.asset('assets/images/geo/reddot.png',scale: 1.0,),
-           ));
-         }
-      }
-      if (GeoData.tripStarted) {
+           
         markers.add(Marker(
-          point: LatLng(GeoData.currentLat, GeoData.currentLng), width: 100,height: 100,alignment: Alignment.center,
-          child:  Image.asset('assets/images/geo/move-car.png',scale: 0.1,),
-        ));
-      } else{
-        markers.add(Marker(
-          point: LatLng(GeoData.currentLat, GeoData.currentLng), width: 100,height: 100,alignment: Alignment.center,
-          child: Image.asset('assets/images/geo/here-red.png',scale: 1.0,),
-        ));
+        point: LatLng(GeoData.points01Fixed[GeoData.points01Fixed.length-1].latitude, 
+          GeoData.points01Fixed[GeoData.points01Fixed.length-1].longitude), 
+        width: 100,height: 100,alignment: Alignment.center,
+        child: Image.asset('assets/images/geo/move-car.png',scale: 1.0,),
+        )); 
       }
+
       if (mapReady && GeoData.centerMap){
         mapctrl.move(LatLng(GeoData.currentLat, GeoData.currentLng),GeoData.zoom);
       }
@@ -187,19 +174,18 @@ Widget build(BuildContext context) {
   }  
   List<Polyline> addPolylines() { 
     polylines.clear();
-    if (GeoData.showLatLng) {
+    if (GeoData.tripStarted){
       polylines.add(
-        
-
         Polyline(points: GeoData.points01Fixed, color: Colors.blue,strokeWidth: GeoData.fixedThickness,)
-      
       );
-      polylines.add( 
-        Polyline(points: GeoData.points01, color: Colors.red,strokeWidth: GeoData.oriThickness,)
+      if (GeoData.showLatLng) {
+        polylines.add( 
+          Polyline(points: GeoData.points01, color: Colors.red,strokeWidth: GeoData.oriThickness,)
       );
+    } 
     } else {
       polylines.add(
-        Polyline(points: GeoData.points01Fixed, color: Colors.blue,strokeWidth: GeoData.fixedThickness,)
+        Polyline(points: GeoData.previousTrip.pointsFixed, color: Colors.purple,strokeWidth: GeoData.fixedThickness,)
       );
     }
     return polylines;

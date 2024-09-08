@@ -5,6 +5,8 @@ import '/src/geolocation/locationnotifier.dart';
 import 'package:latlong2/latlong.dart';
 import '../helpers/helpers.dart';
 import 'package:location/location.dart';
+
+import 'tripdata.dart';
 //  -------------------------------------    GeoData (Property of Nirvasoft.com)
 class GeoData{
   // GPS Data
@@ -15,13 +17,13 @@ class GeoData{
   static bool tripStarted=false;
   static DateTime tripStartDtime= DateTime.now();
 
-  //static Polyline polyline01 = Polyline(points: [], color: Colors.red,strokeWidth: oriThickness,);
   static List<LatLng> points01=[];
-  //static Polyline polyline01Fixed = Polyline(points: [], color: Colors.blue,strokeWidth: fixedThickness,);
   static List<LatLng> points01Fixed=[];
 
   static List<DateTime> dtimeList01=[];
   static List<DateTime> dtimeList01Fixed=[];
+
+  static TripData previousTrip = TripData();
 
   static double tripDistance=0;
   static int tripTime=0;
@@ -48,21 +50,27 @@ class GeoData{
   static const double defaultLng=103.8448;
   static const int timerInterval=1000;
   static const int mintripDuration=60; // to save the trip or not
-  static int defaultMap=1;  //0 open street, 1 google map
+  static int defaultMap=0;  //0 open street, 1 google map
 
-  static void resetData(){
-    counter=0;
-    currentLat=0;
-    currentLng=0;
-    currentDtime= DateTime.now();
-    tripStarted=false;
-    clearTrip();
-  }
+ 
   static void clearTrip(){
     points01.clear();
     dtimeList01.clear();
     points01Fixed.clear();
-    dtimeList01Fixed.clear(); 
+    dtimeList01Fixed.clear();
+  }
+  static void clearTripPrevious(){
+    previousTrip.points.clear();
+    previousTrip.dtimeList.clear();
+    previousTrip.pointsFixed.clear();
+    previousTrip.dtimeListFixed.clear();
+    previousTrip.clear();
+  }
+  static void copyPreviousTrip(){
+    previousTrip.points = List.from(points01);
+    previousTrip.dtimeList = List.from(dtimeList01); 
+    previousTrip.pointsFixed = List.from(points01Fixed);
+    previousTrip.dtimeListFixed = List.from(dtimeList01Fixed); 
   }
   static double currentSpeed(List<LatLng> points, List<DateTime> dt, int range){
     double speed=0;
@@ -174,7 +182,8 @@ class GeoData{
   static void startTrip(LocationNotifier locationNotifier){
     tripStartDtime= DateTime.now();
     if (!useTimer) startTimer(locationNotifier);
-    points01.clear();
+    clearTrip();
+    clearTripPrevious();
     tripStarted=true;
   }
   static void startTimer(LocationNotifier locationNotifier){
@@ -187,13 +196,16 @@ class GeoData{
     if (GeoData.tripStarted){
       tm = DateTime.now().difference(tripStartDtime).inSeconds;
     } else {
-      tm =totalTime(dtimeList01Fixed);
+      tm =totalTime(previousTrip.dtimeListFixed);
     }
     return tm;
   }
   static void endTrip(){
     tripStarted=false;
-    if (!useTimer) timer?.cancel();
+    if (!useTimer) timer?.cancel(); 
+    copyPreviousTrip();
+    //clearTripPrevious();
+    clearTrip();
   }
   static Future<bool> chkPermissions(Location location) async{
     bool serviceEnabled;

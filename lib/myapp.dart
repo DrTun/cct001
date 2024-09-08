@@ -1,6 +1,6 @@
-import '/src/signin/forgot_password.dart';
-import '/src/signin/sign_in.dart';
-import '/src/signin/sign_up.dart';
+import '/src/signin/forgotpassword.dart';
+import '/src/signin/signin.dart';
+import '/src/signin/signup.dart';
 import 'src/geolocation/geopara.dart'; 
 import 'src/geolocation/mapview.dart'; 
 import 'src/shared/appconfig.dart';

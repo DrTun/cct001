@@ -24,7 +24,7 @@ class _MyTextFieldState extends State<MyTextField> {
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-      height: 60,
+      height: 55,
       child: TextFormField(  
         autofocus: false,
         validator: (value) => validateField(value, widget.validateKey),

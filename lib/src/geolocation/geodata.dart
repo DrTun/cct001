@@ -4,18 +4,40 @@ import 'package:flutter_map_math/flutter_geo_math.dart';
 import '/src/geolocation/locationnotifier.dart';
 import 'package:latlong2/latlong.dart';
 import '/src/helpers/helpers.dart';
-import 'package:location/location.dart';
-import 'tripdata.dart';
+import 'package:location/location.dart'; 
 //  -------------------------------------    GeoData (Property of Nirvasoft.com)
 class GeoData{
+  // Properties
+  String tripId="";
+  String source="";
+  String destination=""; 
+  double distance=0;
+  double currentSpeed=0;
+  int duration=0;
+  double distanceAmount=0; 
+  DateTime startTime=DateTime.now();
+  bool started=false;
+  DateTime endTime=DateTime.now();
+  bool ended=false; 
+  List<LatLng> points=[];  // Previous Trip
+  List<DateTime> dtimeList=[]; 
+  List<LatLng> pointsFixed=[];  // Previous Trip
+  List<DateTime> dtimeListFixed=[];
+  void clear(){
+    points.clear();
+    dtimeList.clear();
+    pointsFixed.clear();
+    dtimeListFixed.clear();
+  }
+
   // GPS Data
   static int counter=0;
   static double currentLat=0; 
   static double currentLng=0; 
   static DateTime currentDtime= DateTime.now(); // l
 
-  static TripData currentTrip = TripData();
-  static TripData previousTrip = TripData();
+  static GeoData currentTrip = GeoData();
+  static GeoData previousTrip = GeoData();
 
   // Shared 
   static Location location =Location();
@@ -29,7 +51,7 @@ class GeoData{
   static bool useTimer=false;
   static double zoom=16;
   static int interval=1000;
-  static double distance=0;
+  static double disFilter=0;
   static double minDistance=10;
   static double maxDistance=30;
   static double oriThickness=3;
@@ -38,7 +60,7 @@ class GeoData{
   static const double defaultLng=103.8448;
   static const int timerInterval=1000;
   static const int mintripDuration=60; // to save the trip or not
-  static int defaultMap=0;  //0 open street, 1 google map
+  static int defaultMap=1;  //0 open street, 1 google map
 
  
   static void clearTrip(){
@@ -60,7 +82,7 @@ class GeoData{
     previousTrip.pointsFixed = List.from(currentTrip.pointsFixed);
     previousTrip.dtimeListFixed = List.from(currentTrip.dtimeListFixed); 
   }
-  static double currentSpeed(List<LatLng> points, List<DateTime> dt, int range){
+  static double estimateSpeed(List<LatLng> points, List<DateTime> dt, int range){
     double speed=0;
     int range =10;
     double dist=0;
@@ -154,7 +176,7 @@ class GeoData{
 
           currentTrip.distance=totalDistance(currentTrip.pointsFixed);
           currentTrip.duration=totalTime(currentTrip.dtimeListFixed);
-          currentTrip.currentSpeed = currentSpeed(currentTrip.pointsFixed, currentTrip.dtimeListFixed, 5);
+          currentTrip.currentSpeed = estimateSpeed(currentTrip.pointsFixed, currentTrip.dtimeListFixed, 5);
           currentTrip.distanceAmount = calculateAmount(currentTrip.distance, currentTrip.duration);
 
           providerLocNoti?.notify(); // notify the provider there have been changes

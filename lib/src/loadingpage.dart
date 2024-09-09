@@ -38,7 +38,7 @@ class _LoadingState extends State<LoadingPage> {
     try {
       providerLocNoti = Provider.of<LocationNotifier>(context,listen: false);
       if (await GeoData.chkPermissions(GeoData.location)){
-        await GeoData.location.changeSettings(accuracy: LocationAccuracy.high, interval: GeoData.interval, distanceFilter: GeoData.distance);
+        await GeoData.location.changeSettings(accuracy: LocationAccuracy.high, interval: GeoData.interval, distanceFilter: GeoData.disFilter);
         GeoData.locationSubscription = GeoData.location.onLocationChanged.listen((LocationData  currentLocation) {changeLocations(currentLocation);});
         if (GeoData.listenChanges==false) GeoData.locationSubscription.pause();
       } else {   logger.i("Permission Denied");} 

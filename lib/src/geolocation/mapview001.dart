@@ -192,7 +192,7 @@ Widget build(BuildContext context) {
   }
   Widget speed() {
     return 
-    Text("${GeoData.currentSpeed(GeoData.currentTrip.points,GeoData.currentTrip.dtimeList,5).toStringAsFixed(0)} km/h", style: const TextStyle(fontSize: 12,color: Colors.red));
+    Text("${GeoData.estimateSpeed(GeoData.currentTrip.points,GeoData.currentTrip.dtimeList,5).toStringAsFixed(0)} km/h", style: const TextStyle(fontSize: 12,color: Colors.red));
   }
   Widget reCenter() {
     return  

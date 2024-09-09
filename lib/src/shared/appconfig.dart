@@ -6,9 +6,10 @@ import '../signin/signinpage.dart';
 enum Flavor { prod, dev, sit, staging }
 
 class AppConfig {
-  String appVersion = "1.0.3";  // Update internal version number, edit here
+  String appVersion = "1.0.3";   // Update internal version number, edit here
+  bool allowGuest = true;       // Allow Guest Access, edit here
   bool skipSignin = true ;      // Skip Signin Page, edit here
-  int signinType = 1;          // 0= dummy, 1= AIM 2.0, 3=Keycloak
+  int signinType = 1;          // 0= dummy, 1= AIM 2.0, 3=Keycloak, edit here
   
   String appName = "";
   String appDesc = "";

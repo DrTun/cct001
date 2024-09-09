@@ -32,10 +32,13 @@ class GeoData{
 
   // GPS Data
   static int counter=0;
+
+  // Send to Server and local location updates
   static double currentLat=0; 
   static double currentLng=0; 
-  static DateTime currentDtime= DateTime.now(); // l
+  static DateTime currentDtime= DateTime.now(); // time of the last update
 
+  // Trip Data
   static GeoData currentTrip = GeoData();
   static GeoData previousTrip = GeoData();
 
@@ -59,7 +62,7 @@ class GeoData{
   static const double defaultLat=1.2926;
   static const double defaultLng=103.8448;
   static const int timerInterval=1000;
-  static const int mintripDuration=60; // to save the trip or not
+  static const int mintripDuration=60;  // to save the trip or not
   static int defaultMap=1;  //0 open street, 1 google map
 
  
@@ -81,6 +84,9 @@ class GeoData{
     previousTrip.dtimeList = List.from(currentTrip.dtimeList); 
     previousTrip.pointsFixed = List.from(currentTrip.pointsFixed);
     previousTrip.dtimeListFixed = List.from(currentTrip.dtimeListFixed); 
+    previousTrip.distance = currentTrip.distance;
+    previousTrip.duration = currentTrip.duration;
+    previousTrip.distanceAmount = currentTrip.distanceAmount;
   }
   static double estimateSpeed(List<LatLng> points, List<DateTime> dt, int range){
     double speed=0;
@@ -214,7 +220,6 @@ class GeoData{
     currentTrip.started=false;
     if (!useTimer) timer?.cancel(); 
     copyPreviousTrip();
-    //clearTripPrevious();
     clearTrip();
   }
   static Future<bool> chkPermissions(Location location) async{

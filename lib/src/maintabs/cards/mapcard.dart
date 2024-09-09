@@ -7,7 +7,14 @@ import '/src/helpers/helpers.dart';
 Widget mapcard({bool? transparent, Color? fcolor,double? fsize,int? width,}) {
   transparent ??= false;
   fcolor ??= Colors.green;
-    fsize ??= 30;
+  fsize ??= 30;
+  final GeoData geoData;
+   if (GeoData.currentTrip.started) {
+      geoData=GeoData.currentTrip;
+    } else {
+      geoData=GeoData.previousTrip;
+   }
+   ;
   return  
       Card(elevation: 3,shadowColor: Colors.grey,color: transparent? Colors.black.withOpacity(0.4):Colors.black,
         child: 
@@ -22,7 +29,7 @@ Widget mapcard({bool? transparent, Color? fcolor,double? fsize,int? width,}) {
                   bottom: 0,
                   right: 0,
                   child: 
-                  GeoData.currentTrip.points.length % 2 == 0  // showing on and off (even and odd)
+                  geoData.points.length % 2 == 0  // showing on and off (even and odd)
                   ? IconButton(  
                           icon:  const Icon( Icons.add_location_alt_outlined, color: Colors.lightBlueAccent,),
                           onPressed: () async { },
@@ -55,11 +62,11 @@ Widget mapcard({bool? transparent, Color? fcolor,double? fsize,int? width,}) {
                 children: [
                   //Image.asset('assets/images/map.png', width: 45,height: 45,),
                   const SizedBox(height: 10),
-                  rowDigital(MyHelpers.formatDouble(GeoData.currentTrip.distance),""," km",fcolor: fcolor,fsize: fsize), 
+                  rowDigital(MyHelpers.formatDouble(geoData.distance),""," km",fcolor: fcolor,fsize: fsize), 
                   rowDigital(MyHelpers.formatTime(GeoData.tripDuration()),""," h:m",fcolor: fcolor,fsize: fsize),
-                  rowDigital(MyHelpers.formatDouble(GeoData.currentTrip.distanceAmount),  "MMK","",fcolor: fcolor,fsize: fsize),
+                  rowDigital(MyHelpers.formatDouble(geoData.distanceAmount),  "MMK","",fcolor: fcolor,fsize: fsize),
                   const SizedBox(height:5,),
-                  GeoData.currentTrip.currentSpeed>=1? Text('${GeoData.currentTrip.currentSpeed.toStringAsFixed(0)} km/h',textAlign: TextAlign.left,  style:  const TextStyle(color: Colors.white)) : const SizedBox(),
+                  geoData.currentSpeed>=1? Text('${geoData.currentSpeed.toStringAsFixed(0)} km/h',textAlign: TextAlign.left,  style:  const TextStyle(color: Colors.white)) : const SizedBox(),
                 ],
               ),
             ),

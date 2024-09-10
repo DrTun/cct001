@@ -32,19 +32,10 @@ class _MyTextFieldState extends State<MyTextField> {
         obscureText: widget.obscureText,
         decoration: InputDecoration(
           errorMaxLines: 1,
-          errorStyle: const TextStyle(
-            color: Colors.red,
-            fontSize: 12,
-            height: 0.25, // Adjust the line height for the error text
-          ),
-          contentPadding: const EdgeInsets.only(
-            left: 10,top: 0,bottom: 0
-          ),
+          errorStyle: const TextStyle( color: Colors.red, fontSize: 12, height: 0.25), 
+          contentPadding: const EdgeInsets.only( left: 10,top: 0,bottom: 0),
           hintText: widget.hintText,
-          hintStyle: TextStyle(
-             color:  Colors.grey.shade400,
-             fontSize: 14
-           ),
+          hintStyle: TextStyle( color:  Colors.grey.shade400, fontSize: 14),
           border: OutlineInputBorder(
             borderRadius: BorderRadius.circular(6),
           ),

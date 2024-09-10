@@ -82,7 +82,7 @@ Widget build(BuildContext context) {
             child: SizedBox(
                   width: MediaQuery.of(context).size.width -10,
                   height: 150,
-            child: mapcard(transparent: true, fcolor: Colors.lightGreenAccent, fsize: 32),
+            child: mapcard(context,transparent: true, fcolor: Colors.lightGreenAccent, fsize: 32),
             )
       ),
             Positioned( 

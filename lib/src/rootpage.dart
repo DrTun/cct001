@@ -7,12 +7,12 @@ import 'package:confirm_dialog/confirm_dialog.dart';
 import 'package:provider/provider.dart';  
 import 'geolocation/geodata.dart';   
 import 'geolocation/mapview002google.dart';
+import 'maintabs/tripstab.dart';
 import 'providers/mynotifier.dart';
 import 'shared/appconfig.dart';
 import 'maintabs/maincards.dart'; 
 import 'shared/globaldata.dart'; 
 import 'helpers/helpers.dart';  
-import 'views/views.dart';
 import 'settings/settings_view.dart';
 import 'api/api_auth.dart';
 //  -------------------------------------    Root Page (Property of Nirvasoft.com)
@@ -88,9 +88,21 @@ class _RootPageState extends State<RootPage> with WidgetsBindingObserver {
             child: ListView(
               padding: EdgeInsets.zero,
               children: [
-                DrawerHeader(decoration: BoxDecoration(color: AppConfig.shared.primaryColor,),child: const Text('Menu', style: TextStyle(color: Colors.white,fontSize: 24,),),),
+                DrawerHeader(decoration: BoxDecoration(color: AppConfig.shared.primaryColor,),child: Column( crossAxisAlignment: CrossAxisAlignment.start, mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    const Text('Menu', style: TextStyle(color: Colors.white,fontSize: 24,),),
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(GlobalAccess.userName,style: const TextStyle(color: Colors.white),),
+                        Text(GlobalAccess.userID,style: const TextStyle(color: Colors.white),)
+                      ],
+                    ),
+                     
+                  ],
+                ),),
                 ListTile( title:  const Text('Home',), onTap: () async {
-                  MyHelpers.msg("You are home");
+                  MyHelpers.msg(message: "You are home");
                   },
                 ),
                 ListTile( title:  Text('${GlobalAccess.mode=="Guest"?"Sign In":"Sign Out"} ',),  onTap: () async { _gotoSignIn(context); },),
@@ -107,7 +119,8 @@ class _RootPageState extends State<RootPage> with WidgetsBindingObserver {
                     physics: const NeverScrollableScrollPhysics(),
                     children: [
                       GeoData.defaultMap==0? const MapView001():const MapView002Google(),
-                      const ViewBlank(),
+                      const Trips(),
+                      //const ViewBlank(),
                       const MainCards(),
                     ],
                   ),

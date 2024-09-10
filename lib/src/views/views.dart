@@ -105,17 +105,17 @@ class _View001State extends State<View001> {
     try {
       final apiDataResponse = await apiDataService.getList(); 
       if (apiDataResponse['status'] == 200 || apiDataResponse['status'] == 201) {
-         if (apiDataResponse['status'] == 201) MyHelpers.msg("Refreshed and Retried Successful.",sec:5,bcolor: Colors.lightBlueAccent); 
+         if (apiDataResponse['status'] == 201) MyHelpers.msg(message: "Refreshed and Retried Successful.",sec:5,backgroundColor: Colors.lightBlueAccent); 
         dataController.text = apiDataResponse['data'].map((user) => user['user_id'].toString()).join('\n'); 
       } else if (apiDataResponse['status'] == 500) { // Other Exceptions from Class
-        MyHelpers.msg("Connectivity [50x]"); 
+        MyHelpers.msg(message: "Connectivity [50x]"); 
       } else { 
         setState(() { Navigator.pushReplacementNamed(context,SigninPage.routeName, );}); 
-        MyHelpers.msg("Session Expired. Sign In");
+        MyHelpers.msg(message: "Session Expired. Sign In");
       }
     } catch (e, stacktrace) { // Other Exceptions from Widget
       if (AppConfig.shared.log>=1) logger.e("Connectivity #50xx (Data List): $e\n$stacktrace");
-      MyHelpers.msg("Connectivity [50xx]"); 
+      MyHelpers.msg(message: "Connectivity [50xx]"); 
     }
     }
 }

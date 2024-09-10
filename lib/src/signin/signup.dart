@@ -1,16 +1,15 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
-import 'package:flutter_spinkit/flutter_spinkit.dart';
-import 'package:fluttertoast/fluttertoast.dart';
-import '/src/models/auth_models.dart';
-import '/src/api/token.dart';
-import '/src/shared/appconfig.dart';
-import '/src/signin/signin.dart';
+import '/src/helpers/helpers.dart';
 import 'package:logger/logger.dart';
 import '../api/api_service.dart';
-import '../widgets/signinbutton.dart';
+import '../api/token.dart';
+import '../models/auth_models.dart';
+import '../shared/appconfig.dart';
+import '../widgets/defaultbutton.dart';
 import '../widgets/userinputformfield.dart';
+import 'signin.dart';
 
 class SignupPage extends StatefulWidget {
   static const routeName = '/signupPage';
@@ -35,6 +34,7 @@ class _SignupPageState extends State<SignupPage> {
   Widget build(BuildContext context) {
     final height = MediaQuery.of(context).size.height;
     final isKeyboardVisible = MediaQuery.of(context).viewInsets.bottom == 0;
+
     return SafeArea(
       child: Scaffold(
         body: GestureDetector(
@@ -48,12 +48,9 @@ class _SignupPageState extends State<SignupPage> {
                   children: [
                     Column(
                       children: [
-                        isKeyboardVisible?
-                        SizedBox(
-                          height: height * 0.12,
-                        ) : const SizedBox(height: 15,),
-                        isKeyboardVisible?
-                        Center(
+                        isKeyboardVisible? SizedBox(height: height * 0.12,) : const SizedBox(height: 15,),
+                        isKeyboardVisible
+                        ?Center(
                           child: ClipRRect(
                             borderRadius: BorderRadius.circular(100.0),
                             child:  const Image(
@@ -74,120 +71,66 @@ class _SignupPageState extends State<SignupPage> {
                           ),
                         ),
 
-                        SizedBox(
-                          height: height*0.03,
-                        ),
+                        SizedBox(height: height*0.03,),
                         Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            const Text(
-                              'User Name',
-                            ),
-                            const SizedBox(
-                              height: 5,
-                            ),
-                            MyTextField(
-                              obscureText: false,
-                              controller: _userNameController,
-                              validateKey: 'Username',
-                              hintText: 'User Name',
-                            ),
-                            const SizedBox(
-                              height: 10,
-                            ),
-                            const Text(
-                              'User ID',
-                            ),
-                            const SizedBox(
-                              height: 5,
-                            ),
-                            MyTextField(
-                              obscureText: false,
-                              controller: _useridController,
-                              validateKey: 'Userid',
-                              hintText: 'Email',
-                            ),
-                            const SizedBox(
-                              height: 10,
-                            ),
-                            const Text(
-                              'Password',
-                            ),
-                            const SizedBox(
-                              height: 5,
-                            ),
-                            MyTextField(
-                              obscureText: true,
-                              controller: _passwordController,
-                              validateKey: 'Password',
-                              hintText: 'Password',
-                            ),
+                            const Text('User ID',),
+                            const SizedBox(height: 5,),
+                            MyTextField(obscureText: false,controller: _useridController,validateKey: 'Userid',hintText: 'Email',),
                             const SizedBox(height: 10,),
-                            const Text(
-                              'Confirm Password',
-                            ),
-                            const SizedBox(
-                              height: 5,
-                            ),
-                            MyTextField(
-                              obscureText: true,
-                              controller: _confirmPasswordController,
-                              validateKey:  _passwordController.text == _confirmPasswordController.text?'confirm': 'unconfirm',
-                              hintText: 'Confirm Password',
+
+                            const Text('User Name',),
+                            const SizedBox(height: 5,),
+                            MyTextField(obscureText: false,controller: _userNameController,validateKey: 'Username',hintText: 'User Name',),
+                            const SizedBox(height: 10,),
+
+                            const Text('Password',),
+                            const SizedBox(height: 5,),
+                            MyTextField(obscureText: true,controller: _passwordController,validateKey: 'Password',hintText: 'Password',),
+                            const SizedBox(height: 10,),
+
+                            const Text('Confirm Password',),
+                            const SizedBox(height: 5,),
+                            MyTextField(obscureText: true,controller: _confirmPasswordController,validateKey:  _passwordController.text == _confirmPasswordController.text?'confirm': 'unconfirm',hintText: 'Confirm Password',
                             ),
                           ],
                         ),
                       ],
                     ),
-                    isKeyboardVisible
-                    ? Column(
+                    Column(
                       children: [
-                        SizedBox(
-                          height: height * 0.02,
-                        ),
+                        SizedBox(height: height * 0.02,),
                         Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        const Text("You already have an account?  "),
-                        InkWell(
-                          onTap: () {
-                            Navigator.pushReplacementNamed(
-                              context,
-                              SignIn.routeName,
-                            );
-                          },
-                          child: const Text(
-                            'Sign In',
-                            style: TextStyle(
-                                color: Color.fromARGB(255, 0, 106, 193),
-                                fontWeight: FontWeight.bold),
-                          ),
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          const Text("You already have an account?  "),
+                          InkWell(
+                            onTap: () {
+                              Navigator.pushReplacementNamed(context,SignIn.routeName);
+                            },
+                            child: const Text('Sign In',style: TextStyle(color: Color.fromARGB(255, 0, 106, 193),fontWeight: FontWeight.bold),),
                         ),
                       ],
                     ),
-                    SizedBox(
-                       height: height*0.025,
-                    ),
-                    loadingtime
-                        ? SpinKitCircle(
-                            duration: const Duration(seconds: 2),
-                            color: Colors.blue[300],
-                            size: 40.0,
-                          )
-                        : MyButton(
+                    SizedBox(height: height*0.025,),
+                        MyButton(
                             text: 'Sign Up',
-                            onTap: () async {
-                              //  passwordCheck(_passwordController.text);
-                              if (_formKey.currentState!.validate()) {
+                            onTap: () async { 
+                              {
                                 setState(() {
-                                  loadingtime = true;
-                                });
-                                await signup(context);
-                              }
-                            })
+                                  loadingtime
+                                  ? null
+                                  :_formKey.currentState!.validate()
+                                  ? { 
+                                    loadingtime = true,
+                                    signup(context),}
+                                  : null;
+                              });
+                            }
+                        }, loading: loadingtime,)
                       ],
                     )
-                    : const SizedBox()
                   ],
                 ),
               ),
@@ -198,9 +141,7 @@ class _SignupPageState extends State<SignupPage> {
     );
   }
 
-  signup(
-    BuildContext context,
-  ) async {
+  signup(BuildContext context) async {
     final email = _useridController.text;
     final name = _userNameController.text;
     final password = _passwordController.text;
@@ -220,21 +161,25 @@ class _SignupPageState extends State<SignupPage> {
       reqType: 1,
     );
     final response = await ApiService().userSignUp(req);
-
     if (response['status'] == 200) {
       final String msg = response['message'] ?? 'Please check your email';
-      Fluttertoast.showToast(msg: msg);
+    //  MyHelpers.msg(msg,sec: 3,bcolor: Colors.green);
+      MyHelpers.msg(message: msg , backgroundColor: Colors.green);
       setState(() {
         _useridController.clear();
         _userNameController.clear();
         _passwordController.clear();
         Navigator.pushReplacementNamed(context, SignIn.routeName);
       });
-    } else {
-      Fluttertoast.showToast(msg: response['message']??'Registration Failed');
+    } 
+     else {
+      MyHelpers.msg(message: response['message']??'Registration Failed' , backgroundColor: Colors.black );     
     }
+    
     setState(() {
       loadingtime = false;
     });
   }
+
+  
 }

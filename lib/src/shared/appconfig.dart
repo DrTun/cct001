@@ -10,6 +10,7 @@ class AppConfig {
   bool allowGuest = true;       // Allow Guest Access, edit here
   bool skipSignin = true ;      // Skip Signin Page, edit here
   int signinType = 1;          // 0= dummy, 1= AIM 2.0, 3=Keycloak, edit here
+  bool saveTrip = true;            // Save Trip to DB, edit here
   
   String appName = "";
   String appDesc = "";

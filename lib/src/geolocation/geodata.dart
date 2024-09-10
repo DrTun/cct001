@@ -31,7 +31,8 @@ class GeoData{
   }
 
   // GPS Data
-  static int counter=0;
+  static int counter=0;   // debugging purpose
+  List<LatLng> raws=[];  
 
   // Send to Server and local location updates
   static double currentLat=0; 
@@ -54,7 +55,7 @@ class GeoData{
   static bool useTimer=false;
   static double zoom=16;
   static int interval=1000;
-  static double disFilter=0;
+  static double distanceFilter=0;
   static double minDistance=10;
   static double maxDistance=30;
   static double oriThickness=3;
@@ -107,7 +108,7 @@ class GeoData{
     }
     return speed;
   }
-  static int totalTime(List<DateTime> dt){
+  static int tripDurationOf(List<DateTime> dt){
     if (dt.isEmpty) return 0;
     Duration difference = dt[dt.length-1].difference(dt[0]);
     return (difference.inSeconds).round();
@@ -174,6 +175,8 @@ class GeoData{
               logger.i("Keep: $dist1 $dist2 ");       
             }
           }
+        } else {
+          
         }
           MyStore.storePolyline(currentTrip.points,"points01");
           MyStore.storeDateTimeList(currentTrip.dtimeList, "dtimeList01");
@@ -181,7 +184,7 @@ class GeoData{
           MyStore.storeDateTimeList(currentTrip.dtimeListFixed, "dtimeList01Fixed");
 
           currentTrip.distance=totalDistance(currentTrip.pointsFixed);
-          currentTrip.duration=totalTime(currentTrip.dtimeListFixed);
+          currentTrip.duration=tripDurationOf(currentTrip.dtimeListFixed);
           currentTrip.currentSpeed = estimateSpeed(currentTrip.pointsFixed, currentTrip.dtimeListFixed, 5);
           currentTrip.distanceAmount = calculateAmount(currentTrip.distance, currentTrip.duration);
 
@@ -212,7 +215,7 @@ class GeoData{
     if (GeoData.currentTrip.started){
       tm = DateTime.now().difference(currentTrip.startTime).inSeconds;
     } else {
-      tm =totalTime(previousTrip.dtimeListFixed);
+      tm =tripDurationOf(previousTrip.dtimeListFixed);
     }
     return tm;
   }

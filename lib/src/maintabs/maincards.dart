@@ -45,7 +45,7 @@ class MainCardsState extends State<MainCards> {
                         onTap: () {
                           Navigator.pushNamed(context, MapView.routeName);
                         },
-                        child:mapcard( fsize: 42)),        
+                        child:mapcard(context, fsize: 42)),        
                         ),
                        StaggeredGridTile.count(
                         crossAxisCellCount: 4,mainAxisCellCount:2,

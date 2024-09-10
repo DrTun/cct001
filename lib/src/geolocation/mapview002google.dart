@@ -20,6 +20,7 @@ class MapView002GoogleState extends State<MapView002Google> {
   late LocationNotifier providerLocNoti ;
   BitmapDescriptor icRed = BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueRed);
   BitmapDescriptor icGreen = BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueGreen);
+  BitmapDescriptor icAzure = BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueAzure);
 
   @override
   void initState() {
@@ -33,8 +34,7 @@ class MapView002GoogleState extends State<MapView002Google> {
         completer.future.then(
           (controller) async {
             if (movingCount>5){
-                stillMoving=true;
-
+                stillMoving=true; 
                 GeoData.zoom = await controller.getZoomLevel();
                 controller.moveCamera(CameraUpdate.newCameraPosition(
                         CameraPosition(target: LatLng(GeoData.currentLat, GeoData.currentLng), zoom: GeoData.zoom,)
@@ -59,7 +59,7 @@ class MapView002GoogleState extends State<MapView002Google> {
               children: [
               GoogleMap(
                 myLocationEnabled: true,
-                myLocationButtonEnabled: false,
+                myLocationButtonEnabled: true,
                 markers: Set<Marker>.from(addMarkers()),
                 polylines: Set<Polyline>.from(addPolylines()),
                 mapType: MapType.normal,
@@ -85,7 +85,7 @@ class MapView002GoogleState extends State<MapView002Google> {
                     child: SizedBox( 
                   width: MediaQuery.of(context).size.width -15,
                           height: 150,
-                    child: mapcard(transparent: true, fcolor: Colors.lightGreenAccent, fsize: 32),
+                    child: mapcard(context,transparent: true, fcolor: Colors.lightGreenAccent, fsize: 32),
                     )
               ),
               Positioned( 
@@ -214,6 +214,13 @@ class MapView002GoogleState extends State<MapView002Google> {
                 );
         markers.add(start);
       }
+        // Marker here = Marker(
+        //           markerId: const MarkerId('Start'),
+        //           icon: icAzure,
+        //           position: LatLng(GeoData.currentLat, GeoData.currentLng),
+        //           infoWindow: const InfoWindow(title: 'Start', snippet: 'previous trip'),
+        //         );
+        // markers.add(here);
     }
     return markers;  
   }

@@ -47,7 +47,7 @@ void main() async {
     if (message.notification?.title!=null && message.notification?.body!=null) { 
       var t = message.notification!.title ;
       var b = message.notification!.body ;
-      MyHelpers.msg("Foreground Msg: $t $b"); 
+      MyHelpers.msg(message: "Foreground Msg: $t $b"); 
     }
   }); 
   FirebaseMessaging.onBackgroundMessage(firebaseMessagingBackgroundHandler);
@@ -80,7 +80,7 @@ Future<void> firebaseMessagingBackgroundHandler(RemoteMessage message) async {
     if (message.notification?.title!=null && message.notification?.body!=null) { 
       var t = message.notification!.title ;
       var b = message.notification!.body ;
-      MyHelpers.msg("BG Msg: $t $b"); 
+      MyHelpers.msg(message: "BG Msg: $t $b"); 
       logger.i("BG Msg: $t $b");
     }
 }

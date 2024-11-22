@@ -1,9 +1,9 @@
-import 'viewdata.dart';
-import 'viewsamplelist.dart';
+import 'view_data.dart';
+import 'view_sample_list.dart';
 
-import '../shared/appconfig.dart';
+import '../shared/app_config.dart';
 
-import '../signin/signinpage.dart';
+import '../signin/openid/signin_page.dart';
 
 import '../providers/mynotifier.dart';
 import 'package:flutter/material.dart';

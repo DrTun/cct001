@@ -1,9 +1,20 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 //  -------------------------------------    My Notifier (Property of Nirvasoft.com)
 class MyNotifier extends ChangeNotifier {
   MyNotifier() {
     _data01 = Data01('ID', 'NAME',false);
     _data02 = Data02('s1', 's1',false,0,0);
+    _profileImage = null;
+  }
+
+  File? _profileImage;
+  File? get profileImage => _profileImage;
+
+  void updateImage(File imagePath) {
+    _profileImage = imagePath;
+    notifyListeners();
   }
 
   late Data01 _data01;
@@ -13,7 +24,9 @@ class MyNotifier extends ChangeNotifier {
     _data01 = Data01(id, name,online);
     notifyListeners(); // Notify listeners that the data has changed
   } 
-
+  void notify() { 
+    notifyListeners(); // Notify listeners that the data has changed
+  } 
 
   late Data02 _data02;
   Data02 get data2 => _data02;

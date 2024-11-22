@@ -2,13 +2,13 @@ import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:logger/logger.dart'; 
 
-import '../shared/appconfig.dart'; 
-import '../shared/globaldata.dart';
+import '/src/shared/app_config.dart'; 
+import '/src/shared/global_data.dart';
 //  -------------------------------------    API (Property of Nirvasoft.com)
 class ApiAuthService {
   static String authURL = AppConfig.shared.authURL;     // config.env
   static String clientID = AppConfig.shared.clientID;   // config.env
-  static String secretKey = AppConfig.shared.secretKey; // dart define
+  static String secretKey = AppConfig.shared.secretKey1; // dart define
   final Logger logger = Logger();
   // 
   Future<Map<String, dynamic>> guestSignIn() async {
@@ -82,7 +82,7 @@ class ApiAuthService {
       GlobalAccess.resetSecToken();
       return false;
     } else {
-      GlobalAccess.updateUToken(GlobalAccess.userID,GlobalAccess.userName,apiAuthResponse['data']['user_token'],GlobalAccess.refreshToken);
+      GlobalAccess.updateUToken(GlobalAccess.userID,GlobalAccess.userName,apiAuthResponse['data']['user_token'],GlobalAccess.refreshToken,);
       GlobalAccess.updateSecToken();
       return true;
     }

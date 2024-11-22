@@ -1,17 +1,36 @@
 {
     "FLV": "prd",
-    "APP_NAME":"CCT1 Prd",
-    "APP_DESC":"CCT1 Prd",
+    "APP_NAME":"GRX Fleet",
+    "APP_DESC":"GRX Fleet 2.0",
+    "APP_VER":"2.0.11",
 
     "CLIENT_ID":"53bedecefeghijk01",
     "KEY1": "jRxaPLUjcm210BiPDey7kMM7",
 
-    "AUTH_URL": "http://152.42.168.10:8080/api",
-    "BASE_URL":"http://152.42.168.10:8080/api",
+    "AUTH_URL": "https://iam.omnicloudapi.com/api/auth",
+    "BASE_URL":"https://grx.omnicloudapi.com",
+    "BASE_URL_DEV":"http://152.42.168.10:4000",
+
+
+    "OPEN_ID_CLIENT_ID":"apisix",
+    "KEY3":"dl6JThA0EXCIR0B8WkkeHvHNs2XsQYXy",
+    
+    "OPEN_ID_AUTH_URL":"https://cloudkeycloak.mitcloud.com/realms/apisixkc/protocol/openid-connect",
+    "OPEN_ID_BASE_URL": "https://apisixcloud.mitcloud.com:9443",
+    "OPEN_ID_SIGNUP_URL":"https://cloudkeycloak.mitcloud.com/admin/realms/apisixkc/users",
+
+    "WEB_SOCKET_URL":"ws://grx.omnicloudapi.com/ws",
+    "XPASS_BASE_URL":"https://xpass.nirvasoft.com/autogateserver",
+    "XPASS_WEB_SOCKET_URL" : "wss://xpass.nirvasoft.com/autogateserver/ws",
+    
+    "GOOGLE_API_KEY":"AIzaSyC_Xwazp7oAjTpsTBGsaZ4Pi5oBbhfraco",
+    "GOOGLE_PLACE_URL":"https://maps.googleapis.com/maps/api/place/autocomplete/json",
+
+    "APP_URL_PLAYSTORE": "https://play.google.com/store/apps/details?id=com.nirvasoft.grx001",
 
     "DEMO_ID":"demo",
     "DEMO_PW":"1020304050",
 
     "LOG":"3",
-    "FCM":false
+    "FCM":true
   }

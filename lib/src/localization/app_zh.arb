@@ -1,0 +1,11 @@
+{
+  "@@locale": "zh",
+  "appTitle": "cct2",
+  "welcome": "欢迎",
+  "trips": "旅行",
+  "apps": "应用",
+  "setting": "设置",
+  "emptyTrip": "没有行程!",
+  "dashboard" : "仪表板",
+  "home": "首页"
+}

@@ -1,0 +1,23 @@
+{
+    "23" : "Connection Lost!",
+    "29" : "Request timed out.",
+    "201": "check_mail",
+    "202": "signin_success",
+    "203": "success",
+    "204": "password_success",
+    "205": "data_not_fount",
+    "401": "wrong_user_pw",
+    "402": "invalid_user_id",
+    "403": "missed_token",
+    "404": "unauthorized",
+    "405": "password_not_match",
+    "406": "user_exist",
+    "407": "token_error",
+    "408": "invalid",  
+    "409": "user_not_exist",
+    "410": "route_not_found",
+    "411": "request_field_required",
+    "412": "delete_user",
+    "500": "Other Exceptions",
+    "501": "server_error"
+}

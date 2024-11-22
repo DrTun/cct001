@@ -50,6 +50,13 @@ flutterfire configure \
   --ios-bundle-id=com.nirvasoft.???\
   --android-package-name=com.nirvasoft.???
 
+flutterfire configure \
+  --project=red-panda-mobile \
+  --out=lib/firebase_options.dart \
+  --ios-bundle-id=com.nirvasoft.grx001.dev\
+  --android-package-name=com.nirvasoft.grx001.dev
+  
+
 
 6) Flavor
 https://docs.flutter.dev/deployment/flavors
@@ -84,6 +91,10 @@ flutter pub outdated
 flutter pub cache repair
 flutter doctor
 
+
+
+pod install --repo-update
+
 dart fix --apply (be careful. pls back up)
 
 git clean -xfd                                                        
@@ -102,6 +113,10 @@ Key ID:6A9HF2BG9U
 Services:Apple Push Notifications service (APNs)
 Team ID: C88K3MQESJ
 
+
+
+Settings gradle
+id "org.jetbrains.kotlin.android" version "2.0.0" apply false
 
 TBC
 1) GPS / Map

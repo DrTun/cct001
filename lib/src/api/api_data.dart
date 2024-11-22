@@ -1,22 +1,27 @@
+import 'dart:async';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
-import 'package:logger/logger.dart'; 
+import 'package:logger/logger.dart';
+import '../modules/flaxi/helpers/log_model.dart';
+import '../modules/flaxi/helpers/log_service.dart';
 import 'api_auth.dart';
-import '../shared/globaldata.dart';
-import '../shared/appconfig.dart';
+import '../shared/global_data.dart';
+import '../shared/app_config.dart';
+
 //  -------------------------------------    API (Property of Nirvasoft.com)
 class ApiDataService {
   static String baseURL = AppConfig.shared.baseURL;
   final Logger logger = Logger();
-  
+
   Future<Map<String, dynamic>> getList() async {
     return getApiDataMap("user/list", "getList");
   }
 
   Future<Map<String, dynamic>> getApiDataMap(String path, String nick) async {
-    final url = Uri.parse("$baseURL/$path"); 
-    try {   
-      ApiAuthService.checkRefreshToken(); // check if token is expired on client side
+    final url = Uri.parse("$baseURL/$path");
+    try {
+      ApiAuthService
+          .checkRefreshToken(); // check if token is expired on client side
       final response1 = await http.get(
         url,
         headers: {
@@ -25,32 +30,52 @@ class ApiDataService {
         },
       );
       if (response1.statusCode == 200) {
-        return jsonDecode(response1.body); // Normal successful pass 
+        return jsonDecode(response1.body); // Normal successful pass
       } else {
         logger.e(">>> Expired by Server");
-        if (AppConfig.shared.log>=1) logger.e("Unauthorized Access (getList): ${response1.body}"); 
-        if (await ApiAuthService.refreshToken()){ // token refreshed
-            if (AppConfig.shared.log>=1) logger.e(">>> 1) Refreshed Succssfully");
-            final response2 = await http.get(
-              url,headers: {"Content-Type": "application/json",
-                "user_token": GlobalAccess.accessToken, },
-            );
-            if (response2.statusCode == 200) {
-                    if (AppConfig.shared.log>=1) logger.e(">>> 2) Retried Successfully");
-                    Map<String, dynamic> ret = jsonDecode(response2.body);
-                    ret["status"] = 201; // Refreshed and Retried successful
-                    return ret;
-            } else {
-              if (AppConfig.shared.log>=1) logger.e("Other Exceptions ($nick): retry faiiled");
-              return { "status": response2.statusCode,  "message": "Unauthorized Access ($nick) Retry failed!"  };
-            }
+        if (AppConfig.shared.log >= 1)
+          logger.e("Unauthorized Access (getList): ${response1.body}");
+        if (await ApiAuthService.refreshToken()) {
+          // token refreshed
+          if (AppConfig.shared.log >= 1)
+            logger.e(">>> 1) Refreshed Succssfully");
+          final response2 = await http.get(
+            url,
+            headers: {
+              "Content-Type": "application/json",
+              "user_token": GlobalAccess.accessToken,
+            },
+          );
+          if (response2.statusCode == 200) {
+            if (AppConfig.shared.log >= 1)
+              logger.e(">>> 2) Retried Successfully");
+            Map<String, dynamic> ret = jsonDecode(response2.body);
+            ret["status"] = 201; // Refreshed and Retried successful
+            return ret;
+          } else {
+            if (AppConfig.shared.log >= 1)
+              logger.e("Other Exceptions ($nick): retry faiiled");
+            return {
+              "status": response2.statusCode,
+              "message": "Unauthorized Access ($nick) Retry failed!"
+            };
+          }
         } else {
-          if (AppConfig.shared.log>=1) logger.e("Other Exceptions ($nick): refresh failed!");
-          return { "status": response1.statusCode,  "message": "Unauthorized Access ($nick) Refresh failed!"  };
+          if (AppConfig.shared.log >= 1)
+            logger.e("Other Exceptions ($nick): refresh failed!");
+          return {
+            "status": response1.statusCode,
+            "message": "Unauthorized Access ($nick) Refresh failed!"
+          };
         }
       }
     } catch (e, stacktrace) {
-      if (AppConfig.shared.log>=1) logger.e("Other Exceptions ($nick): $e\n$stacktrace");
+      LogService.writeLog(LogModel(
+          errorMessage: e.toString(),
+          stackTrace: stacktrace.toString(),
+          timestamp: DateTime.now().toIso8601String()));
+      if (AppConfig.shared.log >= 1)
+        logger.e("Other Exceptions ($nick): $e\n$stacktrace");
       return {"status": 500, "message": "Other Exceptions ($nick): $e"};
     }
   }

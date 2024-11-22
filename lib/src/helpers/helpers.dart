@@ -1,7 +1,7 @@
 import 'dart:convert';
-
 import 'package:confirm_dialog/confirm_dialog.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:intl/intl.dart';
@@ -9,16 +9,24 @@ import 'package:latlong2/latlong.dart';
 import 'package:logger/logger.dart';
 import 'package:prompt_dialog/prompt_dialog.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:uuid/uuid.dart';
-
-import '../geolocation/geodata.dart';
-import '../sqflite/sqf_trip_helpers.dart';
-import '../sqflite/sqf_trip_model.dart';
+import '../modules/flaxi/api_data_models/driver_register_models.dart';
+import '../modules/flaxi/api_data_models/groups_models.dart';
+import '../modules/flaxi/api_data_models/rateby_groups_models.dart';
+import '../geolocation/geo_data.dart';
+import '../modules/flaxi/helpers/extras_helper.dart';
+import '../modules/flaxi/helpers/log_model.dart';
+import '../modules/flaxi/helpers/log_service.dart';
+import '../sqflite/extras_model.dart';
+import '../sqflite/trips_database_helper.dart';
+import '../sqflite/trip_model.dart';
 //  -------------------------------------    Helpers (Property of Nirvasoft.com)
 
 final logger = Logger();
-
+ExtrasData extrasData = ExtrasData.curExtrasData;
 class MyHelpers {
+
+  
+
   static void msg({
     required String message,
     int? sec,
@@ -51,6 +59,23 @@ class MyHelpers {
       textCancel: const Text('Cancel'),
     );
     return result;
+  }
+
+  Future<String> getMessageFromCode(String messageCode) async {
+    try {
+      String jsonMessageCode =
+          await rootBundle.loadString('lib/src/message/messagecode.json');
+      final Map<String, dynamic> messages = jsonDecode(jsonMessageCode);
+
+      String jsonResonse =
+          await rootBundle.loadString('lib/src/message/message_response.json');
+      final Map<String, dynamic> messageresponse = jsonDecode(jsonResonse);
+
+      return messageresponse[messages[messageCode]] ??
+          'Unknown error'; // Return message or 'Unknown error' if not found
+    } catch (e) {
+      return 'Error loading messages';
+    }
   }
 
   static Future<int?> getInt(
@@ -116,6 +141,12 @@ class MyHelpers {
     return formattedNumber;
   }
 
+  static String formatInt(int number) {
+    NumberFormat numberFormat = NumberFormat("#,##0");
+    String formattedNumber = numberFormat.format(number);
+    return formattedNumber;
+  }
+
   static String ymdhmsDateFormat() {
     final DateTime now = DateTime.now();
     final formatter = DateFormat('yyyyMMdd HH:mm:ss');
@@ -125,6 +156,31 @@ class MyHelpers {
   static String ymdDateFormat(DateTime now) {
     final formatter = DateFormat('yyyyMMdd');
     return formatter.format(now);
+  }
+
+  static String ymdDateFormatdashboard(DateTime now) {
+    final formatter = DateFormat('yyyy-MM-dd');
+    return formatter.format(now);
+  }
+
+  static String ymdDateFormatapi(String date) {
+    DateTime originalDateTime = DateTime.parse(date);
+    String formattedDate =
+        DateFormat('dd/MM/yyyy    hh:mm ').format(originalDateTime);
+    return formattedDate;
+  }
+
+  static String ymdDateFormatTran(String date) {
+    DateTime originalDateTime = DateTime.parse(date);
+    String formattedDate = DateFormat('dd/MM/yyyy').format(originalDateTime);
+    return formattedDate;
+  }
+
+  static String ymdDateFormatTranTime(String date) {
+    DateTime originalDateTime = DateTime.parse(date).toLocal();
+    String formattedDate =
+        (DateFormat('hh:mm a').format(originalDateTime));
+    return formattedDate;
   }
 
   static String formatTripDate(String date) {
@@ -145,9 +201,20 @@ class MyHelpers {
     String hoursStr = hours > 0 ? '$hours hr${hours > 1 ? 's' : ''} ' : '';
     String minutesStr =
         minutes > 0 ? '$minutes min${minutes > 1 ? 's' : ''} ' : '';
-    String secondsStr = secs > 0 ? '$secs sec${secs > 1 ? 's' : ''} ' : '';
+    String secondsStr = (hours == 0 && minutes == 0 && secs > 0)
+        ? '$secs sec${secs > 1 ? 's' : ''} '
+        : '';
 
     return (hoursStr + minutesStr + secondsStr).trim();
+  }
+
+  static String formatWaitingTime(int min) {
+    int hours = min ~/ 60;
+    int minutes = ((min * 60) % 3600) ~/ 60;
+    String hoursStr = hours > 0 ? '$hours hr${hours > 1 ? 's' : ''} ' : '';
+    String minutesStr =
+        minutes > 0 ? '$minutes min${minutes > 1 ? 's' : ''} ' : '';
+    return (hoursStr + minutesStr).trim();
   }
 
   static List<String> dateTimeListToStringList(List<DateTime> dateTimeList) {
@@ -156,7 +223,8 @@ class MyHelpers {
 }
 
 class MySecure {
-  final FlutterSecureStorage storage = const FlutterSecureStorage();
+  final FlutterSecureStorage storage = const FlutterSecureStorage(
+      aOptions: AndroidOptions(encryptedSharedPreferences: true));
   writeSecureData(String key, String value) async {
     await storage.write(key: key, value: value);
   }
@@ -175,6 +243,100 @@ class MyStore {
   static dynamic prefs;
   static Future<void> init() async {
     prefs = await SharedPreferences.getInstance();
+  }
+
+  static Future<void> storeMapType() async {
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+    await prefs.setInt('maptype', GeoData.mapType);
+  }
+
+  static Future<void> getMapType() async {
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+    int? maptype = prefs.getInt('maptype');
+    if (maptype != null) {
+      GeoData.mapType = maptype;
+    }
+  }
+
+  static Future<void> storeSignInDetails(
+      int signInType, DateTime signInDateTime) async {
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+    await prefs.setInt('signintype', signInType);
+    String formattedDateTime = signInDateTime.toIso8601String();
+    await prefs.setString('signindatetime', formattedDateTime);
+  }
+
+  static Future<void> clearSignInDetails() async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.remove('signintype');
+    await prefs.remove('signindatetime');
+  }
+
+  static Future<void> saveCurTripID(String value) async {
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+    await prefs.setString('curtripstatus', value);
+  }
+
+  static Future<String?> getCurTripID() async {
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+    final value = prefs.getString('curtripstatus');
+    logger.i(value);
+    return value;
+  }
+
+  static Future<Group?> retriveDrivergroup(String fname) async {
+    final String? driverGroupJson = MyStore.prefs.getString(fname);
+    if (driverGroupJson != null) {
+      Map<String, dynamic> driverGroupMap = jsonDecode(driverGroupJson);
+      Group driverGroup = Group.fromJson(driverGroupMap);
+      return driverGroup;
+    }
+    return null;
+  }
+
+  static Future<void> storeDriverRegister(
+      DriverRegisterResponse data, String fname) async {
+    String driverRegister = jsonEncode(data.toJson());
+    await MyStore.prefs.setString(fname, driverRegister);
+  }
+
+  static Future<void> storeDrivergroup(Group data, String fname) async {
+    String drivergroupJson = jsonEncode(data.toJson());
+    await MyStore.prefs.setString(fname, drivergroupJson);
+  }
+
+  static Future<void> storeDriverGroupList(List<Group> gp, String fname) async {
+    String allGroup = jsonEncode(gp.map((v) => v.toJson()).toList());
+    await MyStore.prefs.setString(fname, allGroup);
+  }
+
+  static Future<List<Group>?> retrieveGroupList(String fname) async {
+    final String? data = MyStore.prefs.getString(fname);
+    if (data != null) {
+      List<dynamic> groupListData = jsonDecode(data);
+      List<Group> rateDataList = groupListData
+          .map((groupdata) => Group.fromJson(groupdata as Map<String, dynamic>))
+          .toList();
+      return rateDataList;
+    }
+    return null;
+  }
+
+  static Future<void> storeRatebyGroup(List<Rate> data, String fname) async {
+    String ratebyGroup = jsonEncode(data.map((v) => v.toJson()).toList());
+    await MyStore.prefs.setString(fname, ratebyGroup);
+  }
+
+  static Future<List<Rate>?> retrieveRatebyGroup(String fname) async {
+    final String? data = MyStore.prefs.getString(fname);
+    if (data != null) {
+      List<dynamic> rateGroupData = jsonDecode(data);
+      List<Rate> rateDataList = rateGroupData
+          .map((ratedata) => Rate.fromjson(ratedata as Map<String, dynamic>))
+          .toList();
+      return rateDataList;
+    }
+    return null;
   }
 
   static Future<void> storePolyline(List<LatLng> points, String fname) async {
@@ -229,41 +391,163 @@ class MyStore {
       return DateTime.parse(dateTimeString);
     }).toList();
   }
+
+  static Future<void> saveRateScheme(Map<String, dynamic> scheme) async {
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+    String jsonString = jsonEncode(scheme);
+    await prefs.setString('selectedRateScheme', jsonString);
+  }
+
+  static Future<Map<String, dynamic>?> getRateScheme() async {
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+    String? jsonString = prefs.getString('selectedRateScheme');
+    if (jsonString != null) {
+      return jsonDecode(jsonString) as Map<String, dynamic>;
+    } else {
+      return {}; // Handle case where no data is stored
+    }
+  }
+
+  static Future<void> saveExtrasList(List<Extra> extras) async {
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+
+    // Convert the list of Extra objects to a list of Maps
+    List<String> extrasJsonList =
+        extras.map((extra) => jsonEncode(extra.toJson())).toList();
+
+    // Store the list of JSON strings in SharedPreferences
+    await prefs.setStringList('extras', extrasJsonList);
+  }
+
+  static Future<List<Extra>> getExtrasList() async {
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+
+    // Retrieve the list of JSON strings from SharedPreferences
+    List<String>? extrasJsonList = prefs.getStringList('extras');
+
+    if (extrasJsonList != null) {
+      // Convert the list of JSON strings back to a list of Extra objects
+      return extrasJsonList
+          .map((jsonStr) => Extra.fromJson(jsonDecode(jsonStr)))
+          .toList();
+    }
+
+    return [];
+  }
+
+
+  static Future<void> saveSelectedExtras() async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setStringList(
+      'selectedExtras',
+      extrasData.selectedExtras.map((e) => e.toString()).toList(),
+    );
+  }
+  
+
+  static Future<void> clearExtraList() async {
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+    await prefs.remove('extras');
+    await prefs.remove('selectedExtras');
+    
+  }
 }
 
 class MyTripDBOperator {
   final db = TripsDatabaseHelper.instance;
 
-  Future<void> saveTripToDB() async {
-    var uuid = const Uuid().v4();
-    String date = MyHelpers.ymdDateFormat(DateTime.now());
-    List<String> dateTimeList =
-        MyHelpers.dateTimeListToStringList(GeoData.previousTrip.dtimeListFixed);
-    List<String> orgDateTimeList =
-        MyHelpers.dateTimeListToStringList(GeoData.previousTrip.dtimeList);
+  Future<void> saveTripToDB(TripModel trip) async {
+    try {
+      await db.insertTrip(trip);
+    } catch (error) {
+      LogService.writeLog(LogModel(
+          errorMessage: error.toString(),
+          stackTrace: '',
+          timestamp: DateTime.now().toIso8601String()));
+      logger.e(error);
+    }
+  }
 
-    TripModel trip = TripModel(
-      tripId: uuid,
-      startTime: GeoData.previousTrip.dtimeListFixed.first.toString(),
-      endTime: DateTime.now().toString(),
-      route: GeoData.previousTrip.pointsFixed,
-      originalRoute: GeoData.previousTrip.points,
-      dateTimeList: dateTimeList,
-      originalDateTimeList: orgDateTimeList,
-      tripStatus:
-          'posted', // saved (can add fees etc) , posted (cant edit data. can print receipt)
-      tripDuration: GeoData.previousTrip.duration.toString(),
-      distance: GeoData.previousTrip.distance.toString(),
-      orgDistance:
-          GeoData.totalDistance(GeoData.previousTrip.points).toString(),
-      startLocName: "", //default empty for now
-      endLocName: "", //default empty for now
-      totalAmount: "", //default empty for now
-      rate: "", //default value for now
-      initial: "", // default value for now
-      createdDate: date,
-    );
-    logger.i(trip.toJson());
-    await db.insertTrip(trip);
+  Future<void> saveExtrasToDB(List<Extra> extraList, String tripID) async {
+    try {
+      for (var extra in extraList) {
+        int amount = int.parse(extra.amount);
+        int qty = extra.qty;
+        int total = amount * qty;
+        if (total > 0) {
+          ExtrasModel extrasModel = ExtrasModel(
+              tripID: tripID,
+              name: extra.name,
+              amount: extra.amount,
+              type: extra.type,
+              subTotal: total.toString(),
+              qty: extra.qty.toString());
+          await db.insertExtras(extrasModel);
+          logger.i("Extras ${extrasModel.toJson()}");
+        }
+      }
+    } catch (error) {
+      logger.e(error);
+    }
+  }
+
+  Future<void> saveWaitingChargeToDB(String tripID, int wt) async {
+    if (wt == 1) {
+      try {
+        String name = 'Waiting Charges';
+        String amount = GeoData.wchargebyGroup.toString();
+        String type = '0';
+        String qty = '';
+        int total = GeoData.waitingCharge;
+        if (total > 0) {
+          ExtrasModel extrasModel = ExtrasModel(
+              tripID: tripID,
+              name: name,
+              amount: amount,
+              type: type,
+              subTotal: total.toString(),
+              qty: qty);
+          await db.insertExtras(extrasModel);
+          logger.i("Extras ${extrasModel.toJson()}");
+        }
+      } catch (error) {
+        logger.e(error);
+      }
+    } else {
+      {
+        try {
+          String name = 'Waiting Time';
+          String amount = GeoData.wchargebyGroup.toString();
+          String type = '0';
+          String qty = '';
+          int total = GeoData.waitcount;
+          if (GeoData.waitcount > 0) {
+            ExtrasModel extrasModel = ExtrasModel(
+                tripID: tripID,
+                name: name,
+                amount: amount,
+                type: type,
+                subTotal: total.toString(),
+                qty: qty);
+            await db.insertExtras(extrasModel);
+            logger.i("Extras ${extrasModel.toJson()}");
+          }
+        } catch (error) {
+          logger.e(error);
+        }
+      }
+    }
+  }
+
+  Future<void> updateCloudStatus(String tripID, String newStatus) async {
+    try {
+      await db.updateCloudStatus(tripID, newStatus);
+    } catch (error) {
+      LogService.writeLog(LogModel(
+          errorMessage: error.toString(),
+          stackTrace: '',
+          timestamp: DateTime.now().toIso8601String()));
+      logger.e(error);
+    }
   }
 }

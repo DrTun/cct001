@@ -1,7 +1,8 @@
 {
     "FLV": "staging",
-    "APP_NAME":"CCT UAT",
-    "APP_DESC":"CCT UAT",
+    "APP_NAME":"GRX Fleet UAT",
+    "APP_DESC":"GRX Fleet UAT",
+    "APP_VER":"2.0.4",
 
     "CLIENT_ID":"53bedecefeghijk01",
     "KEY1": "jRxaPLUjcm210BiPDey7kMM7",

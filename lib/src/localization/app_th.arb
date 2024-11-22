@@ -1,0 +1,11 @@
+{
+  "@@locale": "th",
+  "appTitle": "cct2",
+  "welcome": "ยินดีต้อนรับ",
+  "trips": "การเดินทาง",
+  "apps": "แอพ",
+  "setting": "การตั้งค่า",
+    "emptyTrip": "ไม่มีการเดินทาง!",
+  "dashboard" :"แดชบอร์ด",
+  "home": "หน้าแรก"
+}
